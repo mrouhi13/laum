@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mython</title>
+</head>
+<body>
+
+<form action="{% url 'webapp:list' %}" method="get" autocomplete="off">
+    <input type="text" name="q"/>
+    <input type="submit" value="Search"/>
+</form>
+
+{% if data_list %}
+    <ul>
+        {% for d in data_list %}
+            <li><a href="/{{ d.id }}/">{{ d.title }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No data are available.</p>
+{% endif %}
+</body>
+</html>

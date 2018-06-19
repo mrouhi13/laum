@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if data %}
+    <p>{{ data.title }}</p>
+    <p>{{ data.subtitle }}</p>
+    <p>{{ data.ann_date }}</p>
+    <p>{{ data.content }}</p>
+    <p>{{ data.image }}</p>
+    <p>{{ data.image_caption }}</p>
+    <p>{{ data.tage }}</p>
+    <p>{{ data.reference }}</p>
+    <p>{{ data.updated_on }}</p>
+{% else %}
+    <p>No data are available.</p>
+{% endif %}
+</body>
+</html>
