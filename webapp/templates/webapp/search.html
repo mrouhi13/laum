@@ -1,0 +1,15 @@
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading mb-5">تمام دنیا این‌جاست!</h1>
+        <form class="my-2 my-lg-0" action="{% url 'webapp:list' %}" method="get"
+              autocomplete="off">
+            <div class="form-group">
+                <input class="form-control input-search input-shadow" type="search" placeholder=""
+                       name="q" dir="auto" aria-label="جست‌وجو">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-outline-primary btn-search my-3" type="submit">جست‌وجو</button>
+            </div>
+        </form>
+    </div>
+</section>

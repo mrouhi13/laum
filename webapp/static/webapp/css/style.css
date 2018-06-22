@@ -1,0 +1,183 @@
+/* Fonts */
+@font-face {
+    font-family: 'Vazir-Light';
+    src: url('../fonts/vazir/Vazir-Light.eot');
+    src: url('../fonts/vazir/Vazir-Light.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Light.woff2') format('woff2'), url('../fonts/vazir/Vazir-Light.woff') format('woff'), url('../fonts/vazir/Vazir-Light.ttf') format('truetype')
+}
+
+@font-face {
+    font-family: 'Vazir-Thin';
+    src: url('../fonts/vazir/Vazir-Thin.eot');
+    src: url('../fonts/vazir/Vazir-Thin.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Thin.woff2') format('woff2'), url('../fonts/vazir/Vazir-Thin.woff') format('woff'), url('../fonts/vazir/Vazir-Thin.ttf') format('truetype')
+}
+
+@font-face {
+    font-family: 'Vazir-Medium';
+    src: url('../fonts/vazir/Vazir-Medium.eot');
+    src: url('../fonts/vazir/Vazir-Medium.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Medium.woff2') format('woff2'), url('../fonts/vazir/Vazir-Medium.woff') format('woff'), url('../fonts/vazir/Vazir-Medium.ttf') format('truetype')
+}
+
+@font-face {
+    font-family: 'Vazir-Bold';
+    src: url('../fonts/vazir/Vazir-Bold.eot');
+    src: url('../fonts/vazir/Vazir-Bold.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Bold.woff2') format('woff2'), url('../fonts/vazir/Vazir-Bold.woff') format('woff'), url('../fonts/vazir/Vazir-Bold.ttf') format('truetype')
+}
+
+/* Restyle Tags */
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: Vazir-Medium, sans-serif;
+    background-color: #f8f9fa;
+    direction: rtl;
+    display: table;
+    width: 100%;
+}
+
+/* Links */
+a,
+a:focus,
+a:hover {
+    /*color: #002f54;*/
+    color: #f6f7f8;
+}
+
+input, textarea, select {
+    outline: none;
+}
+
+/* Jumbotron */
+:root {
+    --jumbotron-padding-y: 3rem;
+}
+
+.jumbotron {
+    padding-top: var(--jumbotron-padding-y);
+    padding-bottom: 2rem;
+    margin-bottom: 0;
+    background-color: #f8f9fa;
+}
+
+@media (min-width: 768px) {
+    .jumbotron {
+        padding-top: calc(var(--jumbotron-padding-y) * 2);
+    }
+}
+
+.jumbotron p:last-child {
+    margin-bottom: 0;
+}
+
+.jumbotron-heading {
+    font-weight: 300;
+    color: #002f54;
+}
+
+.jumbotron .container {
+    max-width: 40rem;
+}
+
+/* Footer */
+footer {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+footer p {
+    margin-bottom: .25rem;
+}
+
+.footer {
+    display: table-row;
+    height: 1px;
+}
+
+.footer > div {
+    padding: 10px;
+    text-align: center;
+}
+
+/* Custom */
+.box-shadow {
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.box-shadow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.box-shadow:hover::before {
+    opacity: 1;
+}
+
+/* Navbar */
+.navbar-shadow {
+    position: relative;
+    box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Search Input */
+.input-search {
+    height: 50px;
+    border-color: transparent;
+    border-radius: 0;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 0 rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.input-search:focus {
+    color: #002f54;
+    background-color: #fff;
+    border-color: transparent;
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(0, 0, 0, 0.08);
+}
+
+.input-search:hover {
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(0, 0, 0, 0.08);
+}
+
+/* Search Button */
+.btn-search {
+    height: 50px;
+    width: 110px;
+    color: #ddc735;
+    border-color: #ddc735;
+}
+
+.btn-search:hover {
+    color: #fff;
+    background-color: #ddc735;
+    border-color: #ddc735;
+}
+
+.btn-search.focus, .btn-search:focus {
+    box-shadow: 0 0 0 0.2rem rgba(221, 199, 53, 0.5);
+}
+
+.btn-search:not(:disabled):not(.disabled):active {
+    color: #fff;
+    background-color: #ddc735;
+    border-color: #ddc735;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled):active:focus {
+    box-shadow: 0 0 0 0.2rem rgba(221, 199, 53, 0.5);
+}
+
+/* New Page */
+.new-page-icon {
+    position: relative;
+    top: 2px;
+}

@@ -1,6 +1,11 @@
 from django.views import generic
+from django.shortcuts import render
 
 from .models import Data
+
+
+def index(request):
+    return render(request, 'webapp/index.html')
 
 
 class DataListView(generic.ListView):

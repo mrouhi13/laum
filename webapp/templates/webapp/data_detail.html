@@ -1,22 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-{% if data %}
-    <p>{{ data.title }}</p>
-    <p>{{ data.subtitle }}</p>
-    <p>{{ data.ann_date }}</p>
-    <p>{{ data.content }}</p>
-    <p>{{ data.image }}</p>
-    <p>{{ data.image_caption }}</p>
-    <p>{{ data.tage }}</p>
-    <p>{{ data.reference }}</p>
-    <p>{{ data.updated_on }}</p>
-{% else %}
-    <p>No data are available.</p>
-{% endif %}
-</body>
-</html>
+{% extends "webapp/base.html" %}
+{% load static %}
+{% block content %}
+    {% if data %}
+        <article class="single-content">
+            <div class="related-photo">
+                <figure>
+                    <img src="" alt="{{ data.title }}">
+                </figure>
+            </div>
+            <div class="mini-explanation">
+                <h2>{{ data.title }}</h2>
+                <time>{{ data.ann_date }}</time>
+                <p>{{ data.content }}</p>
+                <div class="tags">
+                    {{ data.tage }}
+                    <span class="mistaken-side">
+                <a class="mistaken-report" href="#">Something wrong?</a>
+            </span>
+                </div>
+            </div>
+        </article>
+    {% else %}
+        <p>No data are available.</p>
+    {% endif %}
+{% endblock %}

@@ -1,24 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mython</title>
-</head>
-<body>
-
-<form action="{% url 'webapp:list' %}" method="get" autocomplete="off">
-    <input type="text" name="q"/>
-    <input type="submit" value="Search"/>
-</form>
-
-{% if data_list %}
-    <ul>
-        {% for d in data_list %}
-            <li><a href="/{{ d.id }}/">{{ d.title }}</a></li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No data are available.</p>
-{% endif %}
-</body>
-</html>
+{% extends "webapp/base.html" %}
+{% load static %}
+{% block content %}
+    {% include "webapp/header.html" %}
+    <main role="main">
+        {% include "webapp/search.html" %}
+        <div class="album py-5 bg-light">
+            <div class="container">
+                <div class="row justify-content-center">
+                    {% if data_list %}
+                        {% for d in data_list %}
+                            <div class="col-md-3">
+                                {#                                <a href="/{{ d.id }}/">#}
+                                <div class="card mb-4 box-shadow">
+                                    <img class="card-img-top"
+                                         data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+                                         alt="Thumbnail [100%x225]"
+                                         style="height: 225px; width: 100%; display: block;"
+                                         src=""
+                                         data-holder-rendered="true">
+                                    <div class="card-body">
+                                        <p class="card-text">{{ d.content }}...</p>
+                                    </div>
+                                </div>
+                                {#                                </a>#}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+    {% include "webapp/footer.html" %}
+{% endblock %}
