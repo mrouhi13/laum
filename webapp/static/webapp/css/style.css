@@ -55,7 +55,7 @@ input, textarea, select {
 
 .jumbotron {
     padding-top: var(--jumbotron-padding-y);
-    padding-bottom: 2rem;
+    padding-bottom: var(--jumbotron-padding-y);
     margin-bottom: 0;
     background-color: #f8f9fa;
 }
@@ -63,6 +63,11 @@ input, textarea, select {
 @media (min-width: 768px) {
     .jumbotron {
         padding-top: calc(var(--jumbotron-padding-y) * 2);
+    }
+
+    .jumbotron-inline {
+        padding-top: var(--jumbotron-padding-y);
+        padding-bottom: var(--jumbotron-padding-y);
     }
 }
 
@@ -137,6 +142,10 @@ footer p {
     transition: box-shadow 0.3s ease-in-out;
 }
 
+.inline-search.input-search {
+    width: 80%;
+}
+
 .input-search:focus {
     color: #002f54;
     background-color: #fff;
@@ -150,9 +159,10 @@ footer p {
 
 /* Search Button */
 .btn-search {
-    height: 50px;
+    height: 49px;
     width: 110px;
     color: #ddc735;
+    border-radius: 0;
     border-color: #ddc735;
 }
 
@@ -176,8 +186,109 @@ footer p {
     box-shadow: 0 0 0 0.2rem rgba(221, 199, 53, 0.5);
 }
 
+/* Result Page */
+.title-block {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: #002f54;
+    color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 18px;
+}
+
+.content-block {
+    color: #002f54;
+}
+
 /* New Page */
 .new-page-icon {
     position: relative;
     top: 2px;
+}
+
+/* Content Page */
+.page-header {
+    padding: 15px;
+    color: #002f54;
+    margin-bottom: 3rem;
+}
+
+.page-main-title {
+    margin-bottom: 1rem;
+}
+
+.header-divider {
+    border-right: 10px solid #ddc735;
+    height: 23px;
+    position: relative;
+    display: inline-block;
+    margin: 0 4px;
+    top: 4px;
+}
+
+.page-title {
+    display: inline;
+}
+
+.page-subtitle {
+    display: inline;
+    padding-right: 7px;
+    position: absolute;
+    padding-top: 14px;
+    color: #728299;
+    font-size: 15px;
+}
+
+.page-date {
+    padding-right: 24px;
+    font-size: 15px;
+}
+
+.page-content {
+    line-height: 28px;
+    text-align: justify;
+    color: #002f54;
+    margin-bottom: 4rem;
+    padding: 15px;
+}
+
+.meta-tag {
+    background-color: #002f54;
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 3px;
+    font-size: 15px;
+}
+
+.page-footer {
+    line-height: 28px;
+    text-align: justify;
+    color: #002f54;
+    margin-bottom: 4rem;
+    padding: 15px;
+}
+
+.meta-data {
+    color: #728299;
+}
+
+.content-image-frame {
+    margin: 15px;
+    border: 2px solid #eee;
+}
+
+.content-image {
+    width: 100%;
+    height: 350px;
+    border: 10px solid #fff;
+
+}
+
+.content-image-caption {
+    margin: 15px;
+    text-align: center;
+    color: #002f54;
 }

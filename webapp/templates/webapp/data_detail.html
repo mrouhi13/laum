@@ -1,26 +1,51 @@
 {% extends "webapp/base.html" %}
 {% load static %}
 {% block content %}
-    {% if data %}
-        <article class="single-content">
-            <div class="related-photo">
-                <figure>
-                    <img src="" alt="{{ data.title }}">
-                </figure>
+    {% include "webapp/header.html" %}
+    <main role="main">
+        {% include "webapp/search_inline.html" %}
+        <div class="container">
+            <div class="row justify-content-center">
+                {% if data %}
+                    <div class="row">
+                        <div class="col-sm-7 text-right">
+                            <div class="page-header">
+                                <div class="page-main-title">
+                                    <span class="header-divider"></span>
+                                    <h3 class="page-title">{{ data.title }}</h3>
+                                    <h5 class="page-subtitle">{{ data.subtitle }}</h5>
+                                </div>
+                                <div class="page-date">
+                                    <p>{{ data.ann_date }}</p>
+                                </div>
+                            </div>
+                            <div class="page-content">
+                                <p>{{ data.content }}</p>
+                                <span class="meta-tag">
+                                    <small>{{ data.tags }}</small>
+                                </span>
+                            </div>
+                            <div class="page-footer">
+                                <span class="meta-data">
+                                    <small> نوشته شده توسط {{ data.author }} در تاریخ {{ data.created_on }}</small>
+                                </span>
+                                <span class="font-italic meta-data">
+                                    <small>منبع {{ data.reference }}</small>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="content-image-frame">
+                                <img class="content-image" alt="{{ data.image.filename }}" src="{{ data.image }}">
+                            </div>
+                            <p class="content-image-caption">{{ data.image_caption }}</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>No data are available.</p>
+                {% endif %}
             </div>
-            <div class="mini-explanation">
-                <h2>{{ data.title }}</h2>
-                <time>{{ data.ann_date }}</time>
-                <p>{{ data.content }}</p>
-                <div class="tags">
-                    {{ data.tage }}
-                    <span class="mistaken-side">
-                <a class="mistaken-report" href="#">Something wrong?</a>
-            </span>
-                </div>
-            </div>
-        </article>
-    {% else %}
-        <p>No data are available.</p>
-    {% endif %}
+        </div>
+    </main>
+    {% include "webapp/footer.html" %}
 {% endblock %}
