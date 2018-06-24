@@ -7,47 +7,47 @@
         <div class="container">
             <div class="row justify-content-center">
                 {% if data %}
-                    <div class="row">
-                        <div class="col-sm-7 text-right">
-                            <div class="page-header">
-                                <div class="page-main-title">
-                                    <span class="header-divider"></span>
-                                    <h3 class="page-title">{{ data.title }}</h3>
-                                    <h5 class="page-subtitle">{{ data.subtitle }}</h5>
-                                </div>
-                                <div class="page-date">
-                                    <p>{{ data.ann_date }}</p>
-                                </div>
+                    <div class="col-sm-7 text-right">
+                        <div class="page-header">
+                            <div class="page-main-title">
+                                <div class="header-vertical-divider"></div>
+                                <h3 class="page-title">{{ data.title }}</h3>
+                                <h5 class="page-subtitle">{{ data.subtitle }}</h5>
                             </div>
-                            <div class="page-content">
-                                <p>{{ data.content }}</p>
-                                <span class="meta-tag">
-                                    <small>{{ data.tags }}</small>
-                                </span>
-                            </div>
-                            <div class="page-footer">
-                                <span class="meta-data">
-                                    <small> نوشته شده توسط {{ data.author }} در تاریخ {{ data.created_on }}</small>
-                                </span>
-                                <span class="font-italic meta-data">
-                                    <small>منبع {{ data.reference }}</small>
-                                </span>
+                            <div class="page-date">
+                                <p>{{ data.ann_date }}</p>
                             </div>
                         </div>
-                        <div class="col-sm-5">
+                        <div class="mobile-mode">
                             <div class="content-image-frame position-relative">
                                 <img class="content-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
                             </div>
                             <div class="content-image-caption">
-                                <span class="position-relative fas-top">
-                                    <i class="fas fa-level-down-alt fa-rotate-90 fa-lg"></i>
-                                </span>
                                 &nbsp;{{ data.image_caption }}
                             </div>
+                            <div class="harder-horizontal-divider"></div>
+                        </div>
+                        <div class="page-content">
+                            <p>{{ data.content }}</p>
+                            <span class="meta-tag">
+                                    <small>{{ data.tags }}</small>
+                                </span>
+                        </div>
+                        <div class="page-footer">
+                            <span class="meta-data">
+                                <small>آخرین به‌روزرسانی {{ data.updated_on }}</small>
+                            </span>
                         </div>
                     </div>
-                {% else %}
-                    <p>No data are available.</p>
+                    <div class="col-sm-5 desktop-mode">
+                        <div class="content-image-frame position-relative">
+                            <img class="content-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
+                        </div>
+                        <div class="content-image-caption">
+                            &nbsp;{{ data.image_caption }}
+                            <div class="harder-horizontal-divider"></div>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
         </div>
