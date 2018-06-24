@@ -78,16 +78,14 @@ input, textarea, select {
     .jumbotron-inline {
         padding-top: 2rem;
     }
+
+    .jumbotron-heading {
+        font-size: 1.9rem;
+    }
 }
 
 .jumbotron p:last-child {
     margin-bottom: 0;
-}
-
-@media (max-width: 736px) {
-    .jumbotron-heading {
-        font-size: 2.3rem;
-    }
 }
 
 .jumbotron .container {
@@ -153,7 +151,7 @@ footer p {
 
 .inline-search.input-search {
     width: 80%;
-    padding-left: 65px;
+    padding-left: 72px;
 }
 
 .input-search:focus {
@@ -174,41 +172,60 @@ footer p {
     color: #fff;
     border-radius: 2px;
     background-color: #002f54;
-    border-color: #002f54;
+    border-color: transparent;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 0 rgba(0, 0, 0, 0.08);
 }
 
 .btn-search:hover {
     color: #fff;
     background-color: #ddc735;
-    border-color: #ddc735;
+    border-color: transparent;
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(0, 0, 0, 0.08);
 }
 
 .btn-search.focus, .btn-search:focus {
-    box-shadow: 0 0 0 0.2rem rgba(221, 199, 53, 0.5);
+    box-shadow: none;
 }
 
 .btn-search:not(:disabled):not(.disabled):active {
     color: #fff;
     background-color: #ddc735;
-    border-color: #ddc735;
+    border-color: transparent;
 }
 
 .btn-search:not(:disabled):not(.disabled):active:focus {
-    box-shadow: 0 0 0 0.2rem rgba(221, 199, 53, 0.5);
+    box-shadow: none;
 }
 
 .btn-search-inline {
     position: absolute;
     width: 60px;
     height: 58px;
-    left: 69px;
+    left: 81px;
     top: 1px;
     border-radius: 2px 0 0 2px;
 }
 
-@media (max-width: 500px) {
+/* Index Page */
+.random-pages {
+    padding-top: 3rem;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .remove-container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .navbar-brand {
+        margin-right: 0;
+    }
+
+    .nav-link {
+        padding-left: 0;
+    }
+
     .inline-search.input-search {
         width: 100%;
         padding-left: 72px;
@@ -218,18 +235,12 @@ footer p {
         left: 0;
         top: -7px;
     }
-}
 
-/* Index Page */
-.random-pages {
-    padding-top: 3rem;
-}
-
-@media (max-width: 500px) {
-    .random-pages {
+    .page {
         padding-top: 0;
     }
 }
+
 /* Result Page */
 .title-block {
     position: absolute;
@@ -255,7 +266,6 @@ footer p {
 .page-header {
     padding: 15px;
     color: #002f54;
-    margin-bottom: 3rem;
 }
 
 .page-main-title {

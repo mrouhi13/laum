@@ -4,12 +4,12 @@
     {% include "webapp/includes/header.html" %}
     <main role="main">
         {% include "webapp/includes/search_inline.html" %}
-        <div class="album py-5">
+        <div class="page">
             <div class="container">
                 <div class="row justify-content-center">
                     {% if data_list %}
                         {% for d in data_list %}
-                            <div class="col-md-3">
+                            <div class="col-md-5 col-lg-4 col-xl-3">
                                 <a href="/{{ d.id }}/">
                                     <div class="card mb-4 box-shadow">
                                         <div class="position-relative">
@@ -21,7 +21,8 @@
                                             <div class="title-block">{{ d.title }}</div>
                                         </div>
                                         <div class="card-body text-justify">
-                                            <p class="card-text text-truncate content-block">{{ d.content }}</p>
+                                            <p class="card-text content-block">
+                                                {{ d.content|truncatechars:40 }}</p>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <small class="text-muted">{{ d.tags }}</small>
                                             </div>
