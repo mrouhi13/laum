@@ -1,9 +1,9 @@
 {% extends "webapp/base.html" %}
 {% load static %}
 {% block content %}
-    {% include "webapp/header.html" %}
+    {% include "webapp/includes/header.html" %}
     <main role="main">
-        {% include "webapp/search_inline.html" %}
+        {% include "webapp/includes/search_inline.html" %}
         <div class="container">
             <div class="row justify-content-center">
                 {% if data %}
@@ -35,10 +35,15 @@
                             </div>
                         </div>
                         <div class="col-sm-5">
-                            <div class="content-image-frame">
+                            <div class="content-image-frame position-relative">
                                 <img class="content-image" alt="{{ data.image.filename }}" src="{{ data.image }}">
                             </div>
-                            <p class="content-image-caption">{{ data.image_caption }}</p>
+                            <div class="content-image-caption">
+                                <span class="new-page-icon">
+                                    <i class="fas fa-level-down-alt fa-rotate-90 fa-lg"></i>
+                                </span>
+                                {{ data.image_caption }}
+                            </div>
                         </div>
                     </div>
                 {% else %}
@@ -47,5 +52,5 @@
             </div>
         </div>
     </main>
-    {% include "webapp/footer.html" %}
+    {% include "webapp/includes/footer.html" %}
 {% endblock %}

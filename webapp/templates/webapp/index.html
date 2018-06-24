@@ -1,10 +1,10 @@
 {% extends "webapp/base.html" %}
 {% load static %}
 {% block content %}
-    {% include "webapp/header.html" %}
+    {% include "webapp/includes/header.html" %}
     <main role="main">
-        {% include "webapp/search.html" %}
-        <div class="album py-5 bg-light">
+        {% include "webapp/includes/search.html" %}
+        <div class="random-pages">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-3">
@@ -44,5 +44,5 @@
             </div>
         </div>
     </main>
-    {% include "webapp/footer.html" %}
+    {% include "webapp/includes/footer.html" %}
 {% endblock %}

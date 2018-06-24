@@ -1,10 +1,10 @@
 {% extends "webapp/base.html" %}
 {% load static %}
 {% block content %}
-    {% include "webapp/header.html" %}
+    {% include "webapp/includes/header.html" %}
     <main role="main">
-        {% include "webapp/search_inline.html" %}
-        <div class="album py-5 bg-light">
+        {% include "webapp/includes/search_inline.html" %}
+        <div class="album py-5">
             <div class="container">
                 <div class="row justify-content-center">
                     {% if data_list %}
@@ -12,15 +12,14 @@
                             <div class="col-md-3">
                                 <a href="/{{ d.id }}/">
                                     <div class="card mb-4 box-shadow">
-                                        <dive class="position-relative">
+                                        <div class="position-relative">
                                             <img class="card-img-top"
-                                                 data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
                                                  alt="{{ d.image.filename }}"
-                                                 style="height: 225px; width: 100%; display: block;"
+                                                 style="width: 100%; display: block;"
                                                  src="{{ d.image }}"
                                                  data-holder-rendered="true">
                                             <div class="title-block">{{ d.title }}</div>
-                                        </dive>
+                                        </div>
                                         <div class="card-body text-justify">
                                             <p class="card-text text-truncate content-block">{{ d.content }}</p>
                                             <div class="d-flex justify-content-between align-items-center">
@@ -36,5 +35,5 @@
             </div>
         </div>
     </main>
-    {% include "webapp/footer.html" %}
+    {% include "webapp/includes/footer.html" %}
 {% endblock %}
