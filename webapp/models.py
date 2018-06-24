@@ -8,7 +8,7 @@ class Data(models.Model):
     subtitle = models.CharField(_('subtitle'), max_length=128, null=True)
     content = models.TextField(_('content'), max_length=384)
     ann_date = models.CharField(_('anniversary date'), max_length=128, null=True)
-    image = models.ImageField(_('image'), upload_to='photos', null=True)
+    image = models.ImageField(_('image'), upload_to='images', null=True)
     image_caption = models.CharField(_('image caption'), max_length=128, null=True)
     tags = models.CharField(_('tags'), max_length=128)
     reference = models.CharField(_('reference'), max_length=128, null=True)
