@@ -1,0 +1,76 @@
+<div class="modal fade" id="newPage" tabindex="-1" role="dialog" aria-labelledby="newPage" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newPageTitle">
+                    <i class="far fa-file-alt"></i>
+                    &nbsp;&nbsp;ایجاد صفحه‌ی جدید
+                </h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="title">عنوان</label>
+                                <input type="text" class="form-control" id="title" placeholder="جلال‌الدین محمد بلخی">
+                            </div>
+                            <div class="form-group">
+                                <label for="subtitle">زیرعنوان</label>
+                                <input type="text" class="form-control" id="subtitle" placeholder="معروف به مولانا، مولوی و رومی">
+                            </div>
+                            <div class="form-group">
+                                <label for="anniversaryDate">تاریخ</label>
+                                <input type="text" class="form-control" id="anniversaryDate"
+                                       placeholder="۱۵ مهر ۵۸۶ - ۴ دی ۶۵۲ خورشیدی">
+                            </div>
+                            <div class="form-group">
+                                <label for="tag">برچسب</label>
+                                <input type="text" class="form-control" id="tag" placeholder="شاعر، مثنوی، ...">
+                            </div>
+                        </div>
+                        <div class=" col-md-6">
+                            <div class="form-group">
+                                <label for="content">محتوا</label>
+                                <textarea class="form-control" id="content"
+                  placeholder="مولوی زاده‌ی بلخ خوارزمشاهیان (خراسان در ایران بزرگ، افغانستان کنونی) یا وخش بود و..."
+                                          rows="12"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="inputCity">آپلود عکس</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="image">
+                                    <label class="custom-file-label" for="image"></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageCaption">توضیح عکس</label>
+                                <input type="text" class="form-control" id="imageCaption"
+                                       placeholder="نگاره‌ای پندارین از مولانا">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="reference">منبع</label>
+                                <input type="text" class="form-control" id="reference"
+                                       placeholder="شرح زندگانی مولوی، به قلم بدیع‌الزمان فروزانفر">
+                            </div>
+                            <div class="form-group">
+                                <label for="author">ایمیل نویسنده</label>
+                                <input type="text" class="form-control" id="author" placeholder="youremail@example.com">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                <button type="button" class="btn btn-primary">ذخیره</button>
+            </div>
+        </div>
+    </div>
+</div>
