@@ -30,25 +30,42 @@ html, body {
 
 body {
     font-family: Vazir-Medium, sans-serif;
-    /*background-color: #f8f9fa;*/
     direction: rtl;
     display: table;
     width: 100%;
-
     background: linear-gradient(90deg, #f2f2f2 20px, transparent 1%) center, linear-gradient(#f2f2f2 20px, transparent 1%) center, #ccc;
     background-size: 22px 22px;
 }
 
-/* Links */
 a,
 a:focus,
 a:hover {
-    /*color: #002f54;*/
-    color: #f6f7f8;
+    color: #fff;
+    outline: none;
 }
 
 input, textarea, select {
     outline: none;
+}
+
+/* Custom Class */
+.fas-top {
+    top: 2px;
+}
+
+.header-vertical-divider {
+    border-right: 10px solid #ddc735;
+    height: 23px;
+    position: relative;
+    display: inline-block;
+    margin: 0 4px;
+    top: 4px;
+}
+
+.harder-horizontal-divider {
+    margin: 10px auto;
+    border-top: 6px solid #ddc735;
+    width: 100px;
 }
 
 /* Jumbotron */
@@ -63,29 +80,12 @@ input, textarea, select {
     background-color: transparent;
 }
 
-@media (min-width: 768px) {
-    .jumbotron {
-        padding-top: calc(var(--jumbotron-padding-y) * 2);
-    }
-
-    .jumbotron-inline {
-        padding-top: var(--jumbotron-padding-y);
-        padding-bottom: var(--jumbotron-padding-y);
-    }
-}
-
-@media (max-width: 767px) {
-    .jumbotron-inline {
-        padding-top: 2rem;
-    }
-
-    .jumbotron-heading {
-        font-size: 1.9rem;
-    }
-}
-
 .jumbotron p:last-child {
     margin-bottom: 0;
+}
+
+.jumbotron-heading {
+    font-weight: 300;
 }
 
 .jumbotron .container {
@@ -112,7 +112,7 @@ footer p {
     text-align: center;
 }
 
-/* Custom */
+/* Shadow */
 .box-shadow {
     cursor: pointer;
     position: relative;
@@ -136,12 +136,15 @@ footer p {
 }
 
 /* Navbar */
-.navbar-shadow {
-    position: relative;
+.navbar {
     box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.5);
 }
 
 /* Search Input */
+.form-inline .form-control {
+    width: 100% !important;
+}
+
 .input-search {
     height: 60px;
     border-color: transparent;
@@ -149,9 +152,8 @@ footer p {
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 0 rgba(0, 0, 0, 0.08);
 }
 
-.inline-search.input-search {
-    width: 80%;
-    padding-left: 72px;
+.input-search-inline {
+    padding-left: 79px;
 }
 
 .input-search:focus {
@@ -167,9 +169,8 @@ footer p {
 
 /* Search Button */
 .btn-search {
-    height: 49px;
-    width: 110px;
-    color: #fff;
+    height: 50px;
+    width: 120px;
     border-radius: 2px;
     background-color: #002f54;
     border-color: transparent;
@@ -177,20 +178,18 @@ footer p {
 }
 
 .btn-search:hover {
-    color: #fff;
     background-color: #ddc735;
     border-color: transparent;
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(0, 0, 0, 0.08);
 }
 
-.btn-search.focus, .btn-search:focus {
-    box-shadow: none;
-}
-
 .btn-search:not(:disabled):not(.disabled):active {
-    color: #fff;
     background-color: #ddc735;
     border-color: transparent;
+}
+
+.btn-search.focus, .btn-search:focus {
+    box-shadow: none;
 }
 
 .btn-search:not(:disabled):not(.disabled):active:focus {
@@ -201,35 +200,25 @@ footer p {
     position: absolute;
     width: 60px;
     height: 58px;
-    left: 81px;
+    left: 16px;
     top: 1px;
     border-radius: 2px 0 0 2px;
-}
-
-/* Index Page */
-.random-pages {
-    padding-top: 3rem;
+    box-shadow: 2px 0 2px 0;
 }
 
 /* Result Page */
-.title-block {
+.content-title {
     position: absolute;
     bottom: 20px;
     right: 20px;
     background-color: #002f54;
-    color: white;
     padding-left: 20px;
     padding-right: 20px;
     font-size: 18px;
 }
 
-.content-block {
+.content-body {
     color: #002f54;
-}
-
-/* New Page */
-.fas-top {
-    top: 2px;
 }
 
 /* Content Page */
@@ -238,24 +227,8 @@ footer p {
     color: #002f54;
 }
 
-.page-main-title {
+.page-title-section {
     margin-bottom: 1rem;
-}
-
-.header-vertical-divider {
-    border-right: 10px solid #ddc735;
-    height: 23px;
-    position: relative;
-    display: inline-block;
-    margin: 0 4px;
-    top: 4px;
-}
-
-.harder-horizontal-divider {
-    margin: 10px auto;
-    border-top: 6px solid #ddc735;
-    width: 100px;
-    position: relative;
 }
 
 .page-title {
@@ -280,43 +253,38 @@ footer p {
     line-height: 28px;
     text-align: justify;
     color: #002f54;
-    margin-bottom: 4rem;
     padding: 15px;
 }
 
-.meta-tag {
+.page-tag {
     background-color: #002f54;
-    color: white;
+    color: #fff;
     padding-left: 10px;
     padding-right: 10px;
-    margin: 3px;
     font-size: 15px;
 }
 
 .page-footer {
     line-height: 28px;
-    text-align: justify;
-    color: #002f54;
-    margin-bottom: 4rem;
     padding: 15px;
 }
 
-.meta-data {
+.page-meta-data {
     color: #728299;
 }
 
-.content-image-frame {
+.page-image-frame {
     margin: 15px;
     border: 2px solid #eee;
 }
 
-.content-image {
+.page-image {
     width: 100%;
     height: auto;
     border: 10px solid #fff;
 }
 
-.content-image-caption {
+.page-image-caption {
     margin: 15px;
     text-align: center;
     color: #002f54;
@@ -330,9 +298,27 @@ footer p {
     display: block;
 }
 
-/* Responsive */
-@media (max-width: 576px) {
-    .remove-container {
+/* Modal */
+.modal-footer > :not(:first-child) {
+    margin-right: .25rem;
+}
+
+.modal-footer > :not(:last-child) {
+    margin-left: .25rem;
+}
+
+/* Responsivity */
+@media all and (max-width: 1024px) {
+    .jumbotron {
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    .jumbotron-inline {
+        padding-top: 2rem;
+    }
+
+    .jumbotron .container {
         padding-left: 0;
         padding-right: 0;
     }
@@ -342,20 +328,15 @@ footer p {
     }
 
     .nav-link {
+        padding-right: 0;
         padding-left: 0;
     }
 
-    .inline-search.input-search {
-        width: 100%;
-        padding-left: 72px;
-    }
-
     .btn-search-inline {
-        left: 0;
-        top: -7px;
+        left: 1px;
     }
 
-    .page {
+    .random-page {
         padding-top: 0;
     }
 
@@ -370,5 +351,23 @@ footer p {
 
     .desktop-mode {
         display: none;
+    }
+}
+
+@media all and (min-width: 768px) {
+    .jumbotron {
+        padding-top: calc(var(--jumbotron-padding-y) * 2);
+        padding-bottom: calc(var(--jumbotron-padding-y) * 2);
+    }
+
+    .jumbotron-inline {
+        padding-top: var(--jumbotron-padding-y);
+        padding-bottom: var(--jumbotron-padding-y);
+    }
+}
+
+@media all and (max-width: 320px) {
+    .jumbotron-heading {
+        font-size: 2.2rem;
     }
 }

@@ -1,56 +1,50 @@
 {% extends "webapp/base.html" %}
 {% load static %}
 {% block content %}
-    {% include "webapp/includes/header.html" %}
-    <main role="main">
-        {% include "webapp/includes/search_inline.html" %}
-        <div class="container">
-            <div class="row justify-content-center">
-                {% if data %}
-                    <div class="col-sm-7 text-right">
-                        <div class="page-header">
-                            <div class="page-main-title">
-                                <div class="header-vertical-divider"></div>
-                                <h3 class="page-title">{{ data.title }}</h3>
-                                <h5 class="page-subtitle">{{ data.subtitle }}</h5>
-                            </div>
-                            <div class="page-date">
-                                <p>{{ data.ann_date }}</p>
-                            </div>
-                        </div>
-                        <div class="mobile-mode">
-                            <div class="content-image-frame position-relative">
-                                <img class="content-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
-                            </div>
-                            <div class="content-image-caption">
-                                &nbsp;{{ data.image_caption }}
-                            </div>
-                            <div class="harder-horizontal-divider"></div>
-                        </div>
-                        <div class="page-content">
-                            <p>{{ data.content }}</p>
-                            <span class="meta-tag">
-                                    <small>{{ data.tags }}</small>
-                                </span>
-                        </div>
-                        <div class="page-footer">
-                            <span class="meta-data">
-                                <small>آخرین به‌روزرسانی {{ data.updated_on }}</small>
-                            </span>
-                        </div>
+    {% include "webapp/includes/search_inline.html" %}
+    <div class="row justify-content-center">
+        {% if data %}
+            <div class="col-lg-7 col-md-10 col-sm-12 text-right">
+                <div class="page-header">
+                    <div class="page-title-section">
+                        <div class="header-vertical-divider"></div>
+                        <h3 class="page-title">{{ data.title }}</h3>
+                        <h5 class="page-subtitle">{{ data.subtitle }}</h5>
                     </div>
-                    <div class="col-sm-5 desktop-mode">
-                        <div class="content-image-frame position-relative">
-                            <img class="content-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
-                        </div>
-                        <div class="content-image-caption">
-                            &nbsp;{{ data.image_caption }}
-                            <div class="harder-horizontal-divider"></div>
-                        </div>
+                    <div class="page-date">
+                        <p>{{ data.ann_date }}</p>
                     </div>
-                {% endif %}
+                </div>
+                <div class="mobile-mode">
+                    <div class="page-image-frame position-relative">
+                        <img class="page-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
+                    </div>
+                    <div class="page-image-caption">
+                        &nbsp;{{ data.image_caption }}
+                    </div>
+                    <div class="harder-horizontal-divider"></div>
+                </div>
+                <div class="page-content">
+                    <p>{{ data.content }}</p>
+                    <span class="page-tag">
+                        <small>{{ data.tags }}</small>
+                    </span>
+                </div>
+                <div class="page-footer">
+                    <span class="page-meta-data">
+                        <small>آخرین به‌روزرسانی {{ data.updated_on }}</small>
+                    </span>
+                </div>
             </div>
-        </div>
-    </main>
-    {% include "webapp/includes/footer.html" %}
+            <div class="col-lg-5 desktop-mode">
+                <div class="page-image-frame">
+                    <img class="page-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
+                </div>
+                <div class="page-image-caption">
+                    &nbsp;{{ data.image_caption }}
+                    <div class="harder-horizontal-divider"></div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
