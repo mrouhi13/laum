@@ -47,6 +47,9 @@ a:hover {
 input, textarea, select {
     outline: none;
 }
+label {
+    float: right;
+}
 
 /* Custom Class */
 .fas-top {
@@ -202,8 +205,7 @@ footer p {
     height: 58px;
     left: 16px;
     top: 1px;
-    border-radius: 2px 0 0 2px;
-    box-shadow: 2px 0 2px 0;
+    border-radius: 1px 0 0 1px;
 }
 
 /* Result Page */
@@ -267,10 +269,17 @@ footer p {
 .page-footer {
     line-height: 28px;
     padding: 15px;
+    color: #728299;
 }
 
-.page-meta-data {
-    color: #728299;
+.page-report-link {
+    color: #002f54;
+    font-size: 12px;
+}
+
+.page-report-link:hover, .page-report-link:focus {
+    color: #002f54;
+    text-decoration: none;
 }
 
 .page-image-frame {

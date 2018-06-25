@@ -31,8 +31,12 @@
                     </span>
                 </div>
                 <div class="page-footer">
-                    <span class="page-meta-data">
-                        <small>آخرین به‌روزرسانی {{ data.updated_on }}</small>
+                    <a class="page-report-link" href="#" data-toggle="modal" data-target="#reportProblem">
+                        <i class="fas fa-edit"></i>
+                        &nbsp;گزارش خطا
+                    </a>
+                    <span class="font-italic">
+                        <small>(آخرین به‌روزرسانی {{ data.updated_on|date:"M d, Y" }})</small>
                     </span>
                 </div>
             </div>
