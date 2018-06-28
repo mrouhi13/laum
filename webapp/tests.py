@@ -14,6 +14,15 @@ def create_test_data():
         Data.objects.create(title=title, content='', tags='', pid=title)
 
 
+class IndexViewTests(TestCase):
+    def test_index(self):
+        """
+        Nothing to display.
+        """
+        response = self.client.get(reverse('webapp:index'))
+        self.assertEqual(response.status_code, 200)
+
+
 class DataListViewTests(TestCase):
     def test_search_without_query_string(self):
         """
@@ -21,7 +30,6 @@ class DataListViewTests(TestCase):
         """
         response = self.client.get(reverse('webapp:list'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No data are available.")
         self.assertQuerysetEqual(response.context['data_list'], [])
 
     def test_search_with_empty_query_string(self):
@@ -31,7 +39,6 @@ class DataListViewTests(TestCase):
         create_test_data()
         response = self.client.get(reverse('webapp:list'), data={'q': ''})
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No data are available.")
         self.assertQuerysetEqual(response.context['data_list'], [])
 
     def test_search_with_no_result(self):
@@ -41,7 +48,6 @@ class DataListViewTests(TestCase):
         create_test_data()
         response = self.client.get(reverse('webapp:list'), data={'q': 'Mari'})
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No data are available.")
         self.assertQuerysetEqual(response.context['data_list'], [])
 
     def test_search_with_result_with_exact_query_string(self):
