@@ -241,6 +241,11 @@ footer div {
 }
 
 /* Content Page */
+.content {
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+}
+
 .page-header {
     padding: 15px;
 }
@@ -396,6 +401,10 @@ footer div {
 
     .result-count {
         padding: 1rem .75rem;
+    }
+
+    .content {
+        padding-top: 2rem;
     }
 
     .content-image-frame {
