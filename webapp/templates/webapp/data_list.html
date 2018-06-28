@@ -2,8 +2,8 @@
 {% load static %}
 {% block content %}
     {% include "webapp/includes/search_inline.html" %}
-    <div class="row justify-content-center">
-        {% if data_list %}
+    {% if data_list %}
+        <div class="row justify-content-center">
             {% for d in data_list %}
                 <div class="col-md-5 col-lg-4 col-xl-3">
                     <a href="/{{ d.id }}/">
@@ -27,6 +27,29 @@
                     </a>
                 </div>
             {% endfor %}
-        {% endif %}
-    </div>
+        </div>
+        <nav class="display-flex justify-content-center p-2" aria-label="پیمایش صفحه‌ها">
+            <ul class="pagination pr-0">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="قبلی" tabindex="-1">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">قبلی</span>
+                    </a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">
+                        ۱
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">۲</a></li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="بعدی" tabindex="-1">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">بعدی</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
 {% endblock %}
