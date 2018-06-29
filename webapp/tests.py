@@ -1,16 +1,17 @@
 from django.test import TestCase
 from django.urls import reverse
 
+from .forms import SearchForm
 from .models import Data
 
 
-def create_test_data():
+def create_test_data(n):
     """
     Create a data with the given `title`.
     """
     titles_list = ['Linux', 'Python', 'Django', 'Pycharm', 'Majid']
 
-    for title in titles_list:
+    for title in titles_list[:n]:
         Data.objects.create(title=title, content='', tags='', pid=title)
 
 
@@ -30,42 +31,47 @@ class DataListViewTests(TestCase):
         """
         response = self.client.get(reverse('webapp:list'))
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['count'], 0)
         self.assertQuerysetEqual(response.context['data_list'], [])
 
     def test_search_with_empty_query_string(self):
         """
         An appropriate message is displayed.
         """
-        create_test_data()
+        create_test_data(5)
         response = self.client.get(reverse('webapp:list'), data={'q': ''})
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['count'], 0)
         self.assertQuerysetEqual(response.context['data_list'], [])
 
     def test_search_with_no_result(self):
         """
         If result found, show the result else an appropriate message is displayed.
         """
-        create_test_data()
+        create_test_data(5)
         response = self.client.get(reverse('webapp:list'), data={'q': 'Mari'})
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['count'], 0)
         self.assertQuerysetEqual(response.context['data_list'], [])
 
     def test_search_with_result_with_exact_query_string(self):
         """
         If result found, show the result else an appropriate message is displayed.
         """
-        create_test_data()
+        create_test_data(5)
         response = self.client.get(reverse('webapp:list'), data={'q': 'Majid'})
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['count'], 1)
         self.assertQuerysetEqual(response.context['data_list'], ['<Data: Majid>'])
 
     def test_search_with_result_with_partial_query_string(self):
         """
         If result found, show the result else an appropriate message is displayed.
         """
-        create_test_data()
+        create_test_data(5)
         response = self.client.get(reverse('webapp:list'), data={'q': 'py'})
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['count'], 2)
         self.assertQuerysetEqual(response.context['data_list'], ['<Data: Python>', '<Data: Pycharm>'])
 
 
@@ -74,7 +80,7 @@ class DataDetailViewTests(TestCase):
         """
         If data found, show the content.
         """
-        create_test_data()
+        create_test_data(5)
         data = self.client.get(reverse('webapp:list'), data={'q': 'python'})
         response = self.client.get(reverse('webapp:detail', args=(data.context['data_list'][0].id,)))
         self.assertEqual(response.status_code, 200)
@@ -86,3 +92,72 @@ class DataDetailViewTests(TestCase):
         """
         response = self.client.get(reverse('webapp:detail', args=(1,)))
         self.assertEqual(response.status_code, 404)
+
+
+class SearchFormTest(TestCase):
+    def test_without_data(self):
+        """
+        Return empty dict.
+        """
+        form = SearchForm()
+
+        self.assertEqual(form.data, {})
+        self.assertFalse(form.is_valid())
+
+    def test_with_empty_string(self):
+        """
+        Return q with empty string.
+        """
+        form = SearchForm(data={'q': ''})
+
+        self.assertEqual(form.data, {'q': ''})
+        self.assertFalse(form.is_valid())
+
+    def test_with_string(self):
+        """
+        Return q with it's data.
+        """
+        form = SearchForm(data={'q': 'django'})
+
+        self.assertEqual(form.data, {'q': 'django'})
+        self.assertTrue(form.is_valid())
+
+
+class DataModelTests(TestCase):
+    def test_random_pages_with_no_data(self):
+        """
+        Return empty queryset.
+        """
+        random_data = Data.objects.get_random_data()
+
+        self.assertIs(len(random_data), 0)
+
+    def test_random_pages_with_less_than_three_data(self):
+        """
+        Return a queryset with 2 objects.
+        """
+        create_test_data(2)
+
+        random_data = Data.objects.get_random_data()
+
+        self.assertIs(len(random_data), 2)
+
+    def test_random_pages_with_exact_three_three_data(self):
+        """
+        Return a queryset with 3 objects.
+        """
+        create_test_data(3)
+
+        random_data = Data.objects.get_random_data()
+
+        self.assertIs(len(random_data), 3)
+
+    def test_random_pages_with_more_than_three_data(self):
+        """
+        Return a queryset with 3 objects.
+        """
+        create_test_data(5)
+
+        random_data = Data.objects.get_random_data()
+
+        self.assertIs(len(random_data), 3)
