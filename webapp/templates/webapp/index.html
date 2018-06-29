@@ -3,37 +3,21 @@
 {% block content %}
     {% include "webapp/includes/search.html" %}
     <div class="random-page">
-        <div class="row justify-content-center">
-            <div class="col-md-3">
-                <a href="#">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top"
-                             alt="Thumbnail [100%x225]" style="width: 100%; display: block;"
-                             src="{% static 'webapp/images/martin.jpg' %}"
-                             data-holder-rendered="true">
+        {% if random_data %}
+            <div class="row justify-content-center">
+                {% for data in random_data %}
+                    <div class="col-md-3">
+                        <a href="/{{ data.id }}/">
+                            <div class="card mb-4 box-shadow">
+                                <img class="card-img-top"
+                                     alt="{{ data.title }}" style="width: 100%; display: block;"
+                                     src="/{{ data.image }}"
+                                     data-holder-rendered="true">
+                            </div>
+                        </a>
                     </div>
-                </a>
+                {% endfor %}
             </div>
-            <div class="col-md-3">
-                <a href="#">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top"
-                             alt="Thumbnail [100%x225]"
-                             src="{% static 'webapp/images/madonna.jpg' %}"
-                             data-holder-rendered="true" style="width: 100%; display: block;">
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a href="#">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top"
-                             alt="Thumbnail [100%x225]"
-                             src="{% static 'webapp/images/bob.jpg' %}"
-                             data-holder-rendered="true" style="width: 100%; display: block;">
-                    </div>
-                </a>
-            </div>
-        </div>
+        {% endif %}
     </div>
 {% endblock %}
