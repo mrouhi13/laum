@@ -12,7 +12,7 @@ def create_test_data(n):
     titles_list = ['Linux', 'Python', 'Django', 'Pycharm', 'Majid']
 
     for title in titles_list[:n]:
-        Data.objects.create(title=title, content='', tags='', pid=title)
+        Data.objects.create(title=title, content='')
 
 
 class IndexViewTests(TestCase):
@@ -82,7 +82,7 @@ class DataDetailViewTests(TestCase):
         """
         create_test_data(5)
         data = self.client.get(reverse('webapp:list'), data={'q': 'python'})
-        response = self.client.get(reverse('webapp:detail', args=(data.context['data_list'][0].id,)))
+        response = self.client.get(reverse('webapp:detail', args=(data.context['data_list'][0].pid,)))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Python')
 
