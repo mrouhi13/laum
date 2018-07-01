@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # Defaults
+    # Default
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     # Third Party
     'widget_tweaks',
 
-    # local
+    # Local
     'webapp',
 ]
 
@@ -128,6 +128,22 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+
+# Media files (Images, Documents,...)
+
 MEDIA_URL = '/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# Restframewrok settings
+
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'webapp.exception.exception_handler',
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_VERSION': 'default',
+    'ALLOWED_VERSIONS': [],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
