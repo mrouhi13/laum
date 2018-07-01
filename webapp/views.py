@@ -48,5 +48,6 @@ class DataListView(generic.ListView, FormView):
 
 class DataDetailView(generic.DetailView, FormView):
     model = Data
+    slug_field = 'pid'
     form_class = SearchForm
     template_name = 'webapp/data_detail.html'

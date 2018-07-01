@@ -26,14 +26,16 @@
                 </div>
                 <div class="page-content">
                     <p>{{ data.content }}</p>
-                    <a href="#">
+                    {% for tag in data.tag.values %}
+                        <a class="ml-1" href="{% url 'webapp:list' %}?q={{ tag.name }}">
                         <span class="page-tag">
-                            <small>{{ data.tags }}</small>
+                            <small>#{{ tag.name }}</small>
                         </span>
-                    </a>
+                        </a>
+                    {% endfor %}
                 </div>
                 <div class="page-footer">
-                    <a class="page-report-link" href="#" data-toggle="modal" data-target="#reportProblem">
+                    <a class="page-report-link" href="#" data-toggle="modal" data-target="#reportProblemModal">
                         <i class="fas fa-edit"></i>
                         &nbsp;گزارش خطا
                     </a>
