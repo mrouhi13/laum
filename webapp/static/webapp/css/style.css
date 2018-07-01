@@ -371,6 +371,50 @@ footer div {
     border-color: #ddc735;
 }
 
+/* Tooltip */
+.invalid-tooltip {
+    left: 0;
+}
+
+/* Alerts */
+.ui-pnotify.custom .ui-pnotify-text {
+    text-align: center;
+    display: block;
+}
+
+.ui-pnotify.custom .ui-pnotify-container {
+    background-image: none !important;
+    border: none !important;
+    border-radius: .25rem !important;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+.ui-pnotify.custom .ui-pnotify-title, .ui-pnotify.custom .ui-pnotify-text {
+    font-size: 0.85rem !important;
+    text-rendering: geometricPrecision !important;
+}
+
+.brighttheme-notice {
+    background-color: #ffffa2;
+    color: #4f4f00
+}
+
+.brighttheme-info {
+    background-color: #8fcedd;
+    color: #012831
+}
+
+.brighttheme-success {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.brighttheme-error {
+    background-color: #F44336;
+    color: #fff;
+}
+
 /* Responsivity */
 @media all and (max-width: 1024px) {
     .jumbotron {
