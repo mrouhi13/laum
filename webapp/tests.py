@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from .forms import SearchForm
 from .models import Data
+from .templatetags.webapp_extras import topersian
 
 
 def create_test_data(n):
@@ -161,3 +162,65 @@ class DataModelTests(TestCase):
         random_data = Data.objects.get_random_data()
 
         self.assertIs(len(random_data), 3)
+
+
+class ToPersianFilterTests(TestCase):
+    def test_with_english_text_and_no_digits(self):
+        """
+        No change.
+        """
+        original_text = 'Text with no digits.'
+        converted_text = 'Text with no digits.'
+        result = topersian(original_text)
+
+        self.assertEqual(result, converted_text)
+
+    def test_with_english_text_and_digits(self):
+        """
+        Convert digits to persian.
+        """
+        original_text = 'Text with digit: 1234567890'
+        converted_text = 'Text with digit: ۱۲۳۴۵۶۷۸۹۰'
+        result = topersian(original_text)
+
+        self.assertEqual(result, converted_text)
+
+    def test_with_english_text_and_persian_digits(self):
+        """
+        No change
+        """
+        original_text = 'Text with digit: ۱۲۳۴۵۶۷۸۹۰'
+        converted_text = 'Text with digit: ۱۲۳۴۵۶۷۸۹۰'
+        result = topersian(original_text)
+
+        self.assertEqual(result, converted_text)
+
+    def test_with_persian_text_and_no_digits(self):
+        """
+        No cange.
+        """
+        original_text = 'متن آزمایشی بدون عدد.'
+        converted_text = 'متن آزمایشی بدون عدد.'
+        result = topersian(original_text)
+
+        self.assertEqual(result, converted_text)
+
+    def test_with_persian_text_and_digits(self):
+        """
+        No change.
+        """
+        original_text = 'متن آزمایشی با عدد: ۱۲۳۴۵۶۷۸۹۰'
+        converted_text = 'متن آزمایشی با عدد: ۱۲۳۴۵۶۷۸۹۰'
+        result = topersian(original_text)
+
+        self.assertEqual(result, converted_text)
+
+    def test_with_persian_text_and_english_digits(self):
+        """
+        Convert digits to persian.
+        """
+        original_text = 'متن آزمایشی با عدد: 1234567890'
+        converted_text = 'متن آزمایشی با عدد: ۱۲۳۴۵۶۷۸۹۰'
+        result = topersian(original_text)
+
+        self.assertEqual(result, converted_text)
