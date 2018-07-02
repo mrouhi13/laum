@@ -1,3 +1,5 @@
+import re
+
 from django import template
 from django.template.defaultfilters import stringfilter
 
@@ -8,6 +10,13 @@ register = template.Library()
 @stringfilter
 def topersian(value):
     persian_nums = ('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
-    number = str(value)
+    original_text = str(value)
+    convertd_text = ''
 
-    return ''.join(persian_nums[int(digit)] for digit in number)
+    for char in original_text:
+        if re.search('\d+', char):
+            convertd_text += persian_nums[int(char)]
+        else:
+            convertd_text += char
+
+    return convertd_text
