@@ -13,6 +13,7 @@ let csrftoken = Cookies.get('csrftoken');
 let domain = window.location.origin + '/';
 const apiBaseUrl = 'webapp/v1/';
 const newPageUrl = domain + apiBaseUrl + 'data/create/';
+const reportUrl = domain + apiBaseUrl + 'report/create/';
 
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -84,7 +85,7 @@ function csrfSafeMethod(method) {
                 }
             },
             success: function () {
-                myStack.text = 'اطلاعات با موفقیت ارسال شد.';
+                myStack.text = 'اطلاعات با موفقیت ارسال شد';
                 myStack.type = 'success';
 
                 PNotify.removeAll();
@@ -94,8 +95,61 @@ function csrfSafeMethod(method) {
                 $('#newPageModal').modal('toggle');
             },
             error: function (error) {
-                myStack.text = error.message;
-                myStack.type = 'error';
+                if (error.status === 500) {
+                    myStack.text = 'خطای سمت سرور';
+                    myStack.type = 'error';
+                } else {
+                    myStack.text = error.responseJSON.message;
+                    myStack.type = 'error';
+                }
+
+                PNotify.removeAll();
+
+                new PNotify(myStack);
+            }
+        })
+    });
+
+    $('#reportModal').submit(function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        let data = new FormData();
+
+        data.append('body', $('#body').val());
+        data.append('reporter', $('#reporter').val());
+        data.append('data', $('#id').val());
+
+        $.ajax({
+            type: 'POST',
+            url: reportUrl,
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                }
+            },
+            success: function () {
+                myStack.text = 'گزارش با موفقیت ارسال شد';
+                myStack.type = 'success';
+
+                PNotify.removeAll();
+
+                new PNotify(myStack);
+
+                $('#reportModal').modal('toggle');
+            },
+            error: function (error) {
+                if (error.status === 500) {
+                    myStack.text = 'خطای سمت سرور';
+                    myStack.type = 'error';
+                } else {
+                    myStack.text = error.responseJSON.message;
+                    myStack.type = 'error';
+                }
 
                 PNotify.removeAll();
 
