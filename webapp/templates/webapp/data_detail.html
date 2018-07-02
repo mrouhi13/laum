@@ -1,5 +1,6 @@
 {% extends "webapp/base.html" %}
 {% load static %}
+{% load webapp_extras %}
 {% block content %}
     {% include "webapp/includes/search_inline.html" %}
     <div class="row justify-content-center content">
@@ -28,19 +29,19 @@
                     <p>{{ data.content }}</p>
                     {% for tag in data.tag.values %}
                         <a class="ml-1" href="{% url 'webapp:list' %}?q={{ tag.name }}">
-                        <span class="page-tag">
-                            <small>#{{ tag.name }}</small>
-                        </span>
+                            <span class="page-tag">
+                                <small>#{{ tag.name }}</small>
+                            </span>
                         </a>
                     {% endfor %}
                 </div>
                 <div class="page-footer">
-                    <a class="page-report-link" href="#" data-toggle="modal" data-target="#reportProblemModal">
+                    <a class="page-report-link" href="#" data-toggle="modal" data-target="#reportModal">
                         <i class="fas fa-edit"></i>
                         &nbsp;گزارش خطا
                     </a>
                     <span class="font-italic">
-                        <small>(آخرین به‌روزرسانی {{ data.updated_on|date:"M d, Y" }})</small>
+                        <small>(آخرین به‌روزرسانی {{ data.updated_on|date:"M d, Y"|topersian }})</small>
                     </span>
                 </div>
             </div>

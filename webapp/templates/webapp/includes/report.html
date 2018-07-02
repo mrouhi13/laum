@@ -1,0 +1,34 @@
+<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="#reportForm" class="needs-validation" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation"></i>
+                        &nbsp;گزارش خطا
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group position-relative">
+                        <textarea class="form-control" id="body"
+                                  placeholder="مثال: قسمت توضیحات عکس غلط نگارشی دارد."
+                                  rows="5" required></textarea>
+                        <div class="invalid-tooltip">این فیلد اجباری است</div>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label for="email">ایمیل</label>
+                        <input type="email" class="form-control text-left direction-left" id="reporter"
+                               placeholder="youremail@example.com" required>
+                        <div class="invalid-tooltip">ایمیل معتبر وارد کنید</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="id" value="{{ data.pid }}">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                    <button type="submit" class="btn btn-primary">ارسال</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
