@@ -78,6 +78,14 @@ label {
     width: 100px;
 }
 
+.direction-left {
+    direction: ltr;
+}
+
+.custom-file-label {
+    padding-right: 94px;
+}
+
 /* Jumbotron */
 :root {
     --jumbotron-padding-y: 3rem;
@@ -262,9 +270,9 @@ footer div {
     display: inline;
     padding-right: 7px;
     position: absolute;
-    padding-top: 14px;
+    padding-top: 16px;
     color: #728299;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .page-date {
