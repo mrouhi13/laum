@@ -1,5 +1,5 @@
 from webapp.generics import CreateAPIView
-from .serializers import DataSerializer
+from .serializers import DataSerializer, ReportSerializer
 
 
 class DataCreateView(CreateAPIView):
@@ -7,3 +7,10 @@ class DataCreateView(CreateAPIView):
     API endpoint that allows all users to add new page.
     """
     serializer_class = DataSerializer
+
+
+class ReportCreateView(CreateAPIView):
+    """
+    API endpoint that allows all users to add report.
+    """
+    serializer_class = ReportSerializer
