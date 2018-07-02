@@ -36,7 +36,7 @@ class DataManager(models.Manager):
 
 
 class Data(models.Model):
-    tag = models.ManyToManyField('Tag', related_name='tags', related_query_name="tag")
+    tag = models.ManyToManyField('Tag', verbose_name='برچسب‌ها', related_name='tags', related_query_name='tag')
     pid = models.CharField(_('شناسه‌ی عمومی'), max_length=13, unique=True, default=generate_new_pid)
     title = models.CharField(_('عنوان'), max_length=128)
     subtitle = models.CharField(_('زیرعنوان'), max_length=128, blank=True, default='')
@@ -45,16 +45,16 @@ class Data(models.Model):
     image = models.ImageField(_('تضویر'), upload_to='images', blank=True, default='')
     image_caption = models.CharField(_('توضیح تصویر'), max_length=128, blank=True, default='')
     reference = models.CharField(_('منبع'), max_length=128, blank=True, default='')
-    author = models.EmailField(_('نویسنده'), max_length=254, blank=True, default='')
-    status = models.BooleanField(_('وضعیت'), default=False)
+    author = models.EmailField(_('ایمیل نویسنده'), max_length=254, blank=True, default='')
+    is_active = models.BooleanField(_('فعال باشد'), default=False)
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
     created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
 
     objects = DataManager()
 
     class Meta:
-        verbose_name = "صفحه"
-        verbose_name_plural = "صفحه"
+        verbose_name = 'صفحه'
+        verbose_name_plural = 'صفحه‌ها'
         ordering = ['created_on']
 
     def __str__(self):
@@ -63,15 +63,38 @@ class Data(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(_('نام'), max_length=128)
-    status = models.BooleanField(_('وضعیت'), default=False)
+    is_active = models.BooleanField(_('فعال باشد'), default=False)
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
     created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
 
-    objects = DataManager()
-
     class Meta:
-        verbose_name = "برچسب"
-        verbose_name_plural = "برچسب‌ها"
+        verbose_name = 'برچسب'
+        verbose_name_plural = 'برچسب‌ها'
 
     def __str__(self):
         return self.name
+
+
+class Report(models.Model):
+    STATUS_IS_PENDING = 'pending'
+    STATUS_IS_PROCESSED = 'processed'
+    STATUS_IS_DENIED = 'denied'
+    STATUS_CHOICES = (
+        (STATUS_IS_PENDING, _('در انتظار')),
+        (STATUS_IS_PROCESSED, _('رسیدگی شده')),
+        (STATUS_IS_DENIED, _('رد شده')),
+    )
+
+    data = models.ForeignKey('Data', to_field='pid', verbose_name='صفحه', on_delete=models.CASCADE)
+    body = models.TextField(_('متن گزارش'), max_length=1024)
+    reporter = models.EmailField(_('ایمیل گزارش‌دهنده'), max_length=254)
+    status = models.CharField(_('وضعیت رسیدگی'), max_length=32, choices=STATUS_CHOICES, default=STATUS_IS_PENDING)
+    updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
+    created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'گزارش'
+        verbose_name_plural = 'گزارش‌ها'
+
+    def __str__(self):
+        return self.data.title
