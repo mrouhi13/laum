@@ -4,6 +4,8 @@ import string
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from .templatetags.webapp_extras import tojalali, topersian
+
 
 def generate_new_pid(n=12):
     new_pid_passed = False
@@ -41,12 +43,12 @@ class Data(models.Model):
     title = models.CharField(_('عنوان'), max_length=128)
     subtitle = models.CharField(_('زیرعنوان'), max_length=128, blank=True, default='')
     content = models.TextField(_('محتوا'), max_length=1024)
-    ann_date = models.CharField(_('تاریخ'), max_length=128, blank=True, default='')
+    event = models.CharField(_('رویداد مهم'), max_length=128, blank=True, default='')
     image = models.ImageField(_('تضویر'), upload_to='images', blank=True, default='')
     image_caption = models.CharField(_('توضیح تصویر'), max_length=128, blank=True, default='')
     reference = models.CharField(_('منبع'), max_length=128, blank=True, default='')
     author = models.EmailField(_('ایمیل نویسنده'), max_length=254, blank=True, default='')
-    is_active = models.BooleanField(_('فعال باشد'), default=False)
+    is_active = models.BooleanField(_('فعال'), default=False)
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
     created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
 
@@ -60,19 +62,19 @@ class Data(models.Model):
     def __str__(self):
         return self.title
 
+    def jalali_updated_on(self):
+        jalali_date = tojalali(self.updated_on.strftime('%Y-%m-%d'))
+        return topersian(jalali_date)
 
-class Tag(models.Model):
-    name = models.CharField(_('نام'), max_length=128)
-    is_active = models.BooleanField(_('فعال باشد'), default=False)
-    updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
-    created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
+    jalali_updated_on.admin_order_field = 'updated_on'
+    jalali_updated_on.short_description = 'آخرین به‌روزرسانی'
 
-    class Meta:
-        verbose_name = 'برچسب'
-        verbose_name_plural = 'برچسب‌ها'
+    def jalali_created_on(self):
+        jalali_date = tojalali(self.created_on.strftime('%Y-%m-%d'))
+        return topersian(jalali_date)
 
-    def __str__(self):
-        return self.name
+    jalali_created_on.admin_order_field = 'created_on'
+    jalali_created_on.short_description = 'تاریخ ایجاد'
 
 
 class Report(models.Model):
@@ -98,3 +100,45 @@ class Report(models.Model):
 
     def __str__(self):
         return self.data.title
+
+    def jalali_updated_on(self):
+        jalali_date = tojalali(self.updated_on.strftime('%Y-%m-%d'))
+        return topersian(jalali_date)
+
+    jalali_updated_on.admin_order_field = 'updated_on'
+    jalali_updated_on.short_description = 'آخرین به‌روزرسانی'
+
+    def jalali_created_on(self):
+        jalali_date = tojalali(self.created_on.strftime('%Y-%m-%d'))
+        return topersian(jalali_date)
+
+    jalali_created_on.admin_order_field = 'created_on'
+    jalali_created_on.short_description = 'تاریخ ایجاد'
+
+
+class Tag(models.Model):
+    name = models.CharField(_('نام'), max_length=128)
+    is_active = models.BooleanField(_('فعال'), default=False)
+    updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
+    created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'برچسب'
+        verbose_name_plural = 'برچسب‌ها'
+
+    def __str__(self):
+        return self.name
+
+    def jalali_updated_on(self):
+        jalali_date = tojalali(self.updated_on.strftime('%Y-%m-%d'))
+        return topersian(jalali_date)
+
+    jalali_updated_on.admin_order_field = 'updated_on'
+    jalali_updated_on.short_description = 'آخرین به‌روزرسانی'
+
+    def jalali_created_on(self):
+        jalali_date = tojalali(self.created_on.strftime('%Y-%m-%d'))
+        return topersian(jalali_date)
+
+    jalali_created_on.admin_order_field = 'created_on'
+    jalali_created_on.short_description = 'تاریخ ایجاد'
