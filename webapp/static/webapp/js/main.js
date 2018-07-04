@@ -66,7 +66,7 @@ function csrfSafeMethod(method) {
 
         data.append('title', $('#title').val());
         data.append('subtitle', $('#subtitle').val());
-        data.append('ann_date', $('#anniversaryDate').val());
+        data.append('event', $('#event').val());
         data.append('content', $('#content').val());
         data.append('image_caption', $('#imageCaption').val());
         data.append('reference', $('#reference').val());
