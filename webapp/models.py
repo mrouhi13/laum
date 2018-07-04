@@ -118,7 +118,7 @@ class Report(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(_('نام'), max_length=128)
-    is_active = models.BooleanField(_('فعال'), default=False)
+    is_active = models.BooleanField(_('فعال'), default=True)
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
     created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
 

@@ -14,9 +14,9 @@ def index(request):
 
 
 class DataListView(generic.ListView, FormView):
-    template_name = 'webapp/data_list.html'
     model = Data
     form_class = SearchForm
+    template_name = 'webapp/data_list.html'
     context_object_name = 'data_list'
     paginate_by = 8
 
@@ -32,7 +32,7 @@ class DataListView(generic.ListView, FormView):
         data_list = []
 
         if self.request.GET.get('q'):
-            data_list = Data.objects.filter(title__icontains=self.request.GET['q'])
+            data_list = Data.objects.filter(title__icontains=self.request.GET['q'], is_active=True)
 
         return data_list
 
@@ -51,3 +51,9 @@ class DataDetailView(generic.DetailView, FormView):
     slug_field = 'pid'
     form_class = SearchForm
     template_name = 'webapp/data_detail.html'
+
+    def get_queryset(self):
+        pid = self.kwargs.get(self.slug_url_kwarg)
+        data_detail = Data.objects.filter(pid=pid, is_active=True)
+
+        return data_detail
