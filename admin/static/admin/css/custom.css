@@ -1,0 +1,37 @@
+/* Fonts */
+@font-face {
+    font-family: 'Vazir-Light';
+    src: url('../fonts/vazir/Vazir-Light.eot');
+    src: url('../fonts/vazir/Vazir-Light.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Light.woff2') format('woff2'), url('../fonts/vazir/Vazir-Light.woff') format('woff'), url('../fonts/vazir/Vazir-Light.ttf') format('truetype')
+}
+
+@font-face {
+    font-family: 'Vazir-Thin';
+    src: url('../fonts/vazir/Vazir-Thin.eot');
+    src: url('../fonts/vazir/Vazir-Thin.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Thin.woff2') format('woff2'), url('../fonts/vazir/Vazir-Thin.woff') format('woff'), url('../fonts/vazir/Vazir-Thin.ttf') format('truetype')
+}
+
+@font-face {
+    font-family: 'Vazir-Medium';
+    src: url('../fonts/vazir/Vazir-Medium.eot');
+    src: url('../fonts/vazir/Vazir-Medium.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Medium.woff2') format('woff2'), url('../fonts/vazir/Vazir-Medium.woff') format('woff'), url('../fonts/vazir/Vazir-Medium.ttf') format('truetype')
+}
+
+@font-face {
+    font-family: 'Vazir-Bold';
+    src: url('../fonts/vazir/Vazir-Bold.eot');
+    src: url('../fonts/vazir/Vazir-Bold.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Bold.woff2') format('woff2'), url('../fonts/vazir/Vazir-Bold.woff') format('woff'), url('../fonts/vazir/Vazir-Bold.ttf') format('truetype')
+}
+
+/* Restyle Tags */
+body {
+    font-family: 'Vazir-Medium', 'Roboto', 'Lucida Grande', 'DejaVu Sans', 'Bitstream Vera Sans', Verdana, Arial, sans-serif;
+}
+
+td, th {
+    font-family: 'Vazir-Medium', 'Roboto', 'Lucida Grande', Verdana, Arial, sans-serif;
+}
+
+input, textarea, select, .form-row p, form .button {
+    font-family: 'Vazir-Medium', 'Roboto', 'Lucida Grande', Verdana, Arial, sans-serif;
+}
