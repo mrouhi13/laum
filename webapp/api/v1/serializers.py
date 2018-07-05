@@ -12,4 +12,4 @@ class DataSerializer(serializers.ModelSerializer):
 class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
-        fields = ('data','body', 'reporter')
+        fields = ('data', 'body', 'reporter')
