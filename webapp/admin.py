@@ -28,14 +28,14 @@ class ReportAdmin(admin.ModelAdmin):
 
 
 class TagAdmin(admin.ModelAdmin):
-    readonly_fields = ('jalali_updated_on', 'jalali_created_on')
+    readonly_fields = ('keyword', 'jalali_updated_on', 'jalali_created_on')
     fieldsets = [
-        ('اطلاعات اصلی', {'fields': ['name', 'is_active']}),
+        ('اطلاعات اصلی', {'fields': ['name', 'keyword', 'is_active']}),
         ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']}),
     ]
-    list_display = ('name', 'is_active', 'jalali_updated_on', 'jalali_created_on')
+    list_display = ('name', 'keyword', 'is_active', 'jalali_updated_on', 'jalali_created_on')
     list_filter = ['is_active', 'updated_on', 'created_on']
-    search_fields = ['name', ]
+    search_fields = ['name', 'keyword']
 
 
 admin.site.register(Data, DataAdmin)
