@@ -17,8 +17,18 @@
                     </div>
                 </div>
                 <div class="mobile-mode">
-                    <div class="page-image-frame position-relative">
-                        <img class="page-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
+                    <div class="mb-4 image-frame p-3">
+                        <div class="page-thumbnail">
+                            {% if data.image == '' %}
+                                <div class="page-thumbnail" style="height: 250px">
+                                    <i class="far fa-image fa-3x"></i>
+                                </div>
+                            {% else %}
+                                <div class="page-thumbnail">
+                                    <img class="page-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
                     <div class="page-image-caption">
                         &nbsp;{{ data.image_caption }}
@@ -41,13 +51,21 @@
                         &nbsp;گزارش خطا
                     </a>
                     <span class="font-italic">
-                        <small>(آخرین به‌روزرسانی {{ data.jalali_update_on }})</small>
+                        <small>(آخرین به‌روزرسانی {{ data.jalali_updated_on }})</small>
                     </span>
                 </div>
             </div>
             <div class="col-lg-5 desktop-mode">
-                <div class="page-image-frame">
-                    <img class="page-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
+                <div class="mb-4 image-frame p-3">
+                    {% if data.image == '' %}
+                        <div class="page-thumbnail" style="height: 250px">
+                            <i class="far fa-image fa-3x"></i>
+                        </div>
+                    {% else %}
+                        <div class="page-thumbnail">
+                            <img class="page-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="page-image-caption">
                     &nbsp;{{ data.image_caption }}

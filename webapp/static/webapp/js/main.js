@@ -22,6 +22,14 @@ function csrfSafeMethod(method) {
 (function () {
     'use strict';
 
+    $(window).resize(function () {
+        resizeImage();
+    });
+
+    $(document).ready(function () {
+        resizeImage();
+    });
+
     window.addEventListener('load', function () {
         let forms = document.getElementsByClassName('needs-validation');
 
@@ -158,3 +166,22 @@ function csrfSafeMethod(method) {
         })
     });
 })();
+
+function resizeImage() {
+    let image = new Image();
+    let frame = $('.thumbnail');
+
+    $('.thumbnail img').each(function () {
+        image.src = $(this).attr('src');
+        let image_ratio = image.naturalWidth / image.naturalHeight;
+        let frame_ratio = frame.width() / frame.height();
+
+        if ((image_ratio > 1.0 && image_ratio > frame_ratio) || (image_ratio <= 1.0 && image_ratio >= frame_ratio)) {
+            $(this).css('width', 'auto');
+            $(this).css('height', '100%');
+        } else if ((image_ratio <= 1.0 && image_ratio < frame_ratio) || (image_ratio > 1.0 && image_ratio <= frame_ratio)) {
+            $(this).css('width', '100%');
+            $(this).css('height', 'auto');
+        }
+    });
+}
