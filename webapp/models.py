@@ -2,6 +2,8 @@ import random
 import string
 
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from .templatetags.webapp_extras import tojalali, topersian
@@ -25,11 +27,17 @@ def generate_new_pid(n=12):
 class DataManager(models.Manager):
     def get_random_data(self):
         data_count = self.count()
+        random_data = list()
 
-        if data_count < 3:
-            random_data = self.all()
+        if self.filter(is_active=True).count() <= 3:
+            random_data = self.filter(is_active=True)
         else:
-            random_data = [self.get(id=i) for i in random.sample(range(1, data_count + 1), 3)]
+            while len(random_data) < 3:
+                remaining_count = 3 - len(random_data)
+                random_ids = random.sample(range(1, data_count + 1), remaining_count)
+
+                for i in random_ids:
+                    random_data += self.filter(id=i, is_active=True)
 
         return random_data
 
@@ -38,17 +46,22 @@ class DataManager(models.Manager):
 
 
 class Data(models.Model):
-    tag = models.ManyToManyField('Tag', verbose_name='برچسب‌ها', related_name='tags', related_query_name='tag')
+    tag = models.ManyToManyField('Tag', verbose_name='برچسب‌ها', related_name='tags', related_query_name='tag',
+                                 blank=True)
     pid = models.CharField(_('شناسه‌ی عمومی'), max_length=13, unique=True, default=generate_new_pid)
     title = models.CharField(_('عنوان'), max_length=128)
     subtitle = models.CharField(_('زیرعنوان'), max_length=128, blank=True, default='')
     content = models.TextField(_('محتوا'), max_length=1024)
-    event = models.CharField(_('رویداد مهم'), max_length=128, blank=True, default='')
-    image = models.ImageField(_('تضویر'), upload_to='images', blank=True, default='')
-    image_caption = models.CharField(_('توضیح تصویر'), max_length=128, blank=True, default='')
-    reference = models.CharField(_('منبع'), max_length=128, blank=True, default='')
+    event = models.CharField(_('رویداد مهم'), max_length=128, blank=True, default='',
+                             help_text='تاریخ یک رویداد مهم برای موضوع وارد شده به همراه محل وقوع.')
+    image = models.ImageField(_('تصویر'), upload_to='images', blank=True, default='')
+    image_caption = models.CharField(_('توضیح تصویر'), max_length=128, blank=True, default='',
+                                     help_text='مکان و موقعیت گرفتن عکس به همراه معرفی افراد حاضر در عکس.')
+    reference = models.CharField(_('منبع'), max_length=128, blank=True, default='',
+                                 help_text='نام کتاب، روزنامه، مجله یا آدرس سایت، بلاگ و... به همراه نام نویسنده')
     author = models.EmailField(_('ایمیل نویسنده'), max_length=254, blank=True, default='')
-    is_active = models.BooleanField(_('فعال'), default=False)
+    is_active = models.BooleanField(_('فعال'), default=False,
+                                    help_text='مشخص می‌کند که این صفحه در لیست نتایج قابل دیدن باشد یا نه.')
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
     created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
 
@@ -117,8 +130,10 @@ class Report(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(_('نام'), max_length=128)
-    is_active = models.BooleanField(_('فعال'), default=True)
+    name = models.CharField(_('نام'), max_length=128, unique=True, blank=True, null=True)
+    keyword = models.CharField(_('کلیدواژه'), max_length=128)
+    is_active = models.BooleanField(_('فعال'), default=True,
+                                    help_text='مشخص می‌کند که این برچسب قابل استفاده باشد یا نه.')
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
     created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
 
@@ -142,3 +157,8 @@ class Tag(models.Model):
 
     jalali_created_on.admin_order_field = 'created_on'
     jalali_created_on.short_description = 'تاریخ ایجاد'
+
+
+@receiver(pre_save, sender=Tag)
+def generate_keyword(sender, instance, **kwargs):
+    instance.keyword = instance.name.replace(' ', '_').lower()
