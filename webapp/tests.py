@@ -8,12 +8,22 @@ from .templatetags.webapp_extras import topersian
 
 def create_test_data(n):
     """
-    Create a data with the given `title`.
+    Create data with the given `title`.
     """
-    titles_list = ['Linux', 'Python', 'Django', 'Pycharm', 'Majid']
+    titles_list = ['Linux', 'Python', 'Django', 'Peon']
 
     for title in titles_list[:n]:
         Data.objects.create(title=title, content='')
+
+
+def create_test_active_data(n):
+    """
+    Create test data with the given `title` and active.
+    """
+    titles_list = ['Mari', 'Pycharm', 'Mezzo', 'Majid']
+
+    for title in titles_list[:n]:
+        Data.objects.create(title=title, content='', is_active=True)
 
 
 class IndexViewTests(TestCase):
@@ -31,6 +41,7 @@ class DataListViewTests(TestCase):
         Nothing to display.
         """
         response = self.client.get(reverse('webapp:list'))
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 0)
         self.assertQuerysetEqual(response.context['data_list'], [])
@@ -39,8 +50,11 @@ class DataListViewTests(TestCase):
         """
         An appropriate message is displayed.
         """
-        create_test_data(5)
+        create_test_data(4)
+        create_test_active_data(4)
+
         response = self.client.get(reverse('webapp:list'), data={'q': ''})
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 0)
         self.assertQuerysetEqual(response.context['data_list'], [])
@@ -49,8 +63,11 @@ class DataListViewTests(TestCase):
         """
         If result found, show the result else an appropriate message is displayed.
         """
-        create_test_data(5)
-        response = self.client.get(reverse('webapp:list'), data={'q': 'Mari'})
+        create_test_data(4)
+        create_test_active_data(4)
+
+        response = self.client.get(reverse('webapp:list'), data={'q': 'ubuntu'})
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 0)
         self.assertQuerysetEqual(response.context['data_list'], [])
@@ -59,8 +76,11 @@ class DataListViewTests(TestCase):
         """
         If result found, show the result else an appropriate message is displayed.
         """
-        create_test_data(5)
+        create_test_data(4)
+        create_test_active_data(4)
+
         response = self.client.get(reverse('webapp:list'), data={'q': 'Majid'})
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 1)
         self.assertQuerysetEqual(response.context['data_list'], ['<Data: Majid>'])
@@ -69,11 +89,27 @@ class DataListViewTests(TestCase):
         """
         If result found, show the result else an appropriate message is displayed.
         """
-        create_test_data(5)
+        create_test_data(4)
+        create_test_active_data(4)
+
         response = self.client.get(reverse('webapp:list'), data={'q': 'py'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['count'], 1)
+        self.assertQuerysetEqual(response.context['data_list'], ['<Data: Pycharm>'])
+
+    def test_search_with_not_active_pages_include(self):
+        """
+        If result found, show the result else an appropriate message is displayed.
+        """
+        create_test_data(4)
+        create_test_active_data(4)
+
+        response = self.client.get(reverse('webapp:list'), data={'q': 'ma'})
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 2)
-        self.assertQuerysetEqual(response.context['data_list'], ['<Data: Python>', '<Data: Pycharm>'])
+        self.assertQuerysetEqual(response.context['data_list'], ['<Data: Mari>', '<Data: Majid>'])
 
 
 class DataDetailViewTests(TestCase):
@@ -81,11 +117,32 @@ class DataDetailViewTests(TestCase):
         """
         If data found, show the content.
         """
-        create_test_data(5)
-        data = self.client.get(reverse('webapp:list'), data={'q': 'python'})
+        create_test_data(4)
+        create_test_active_data(4)
+
+        data = self.client.get(reverse('webapp:list'), data={'q': 'pycharm'})
         response = self.client.get(reverse('webapp:detail', args=(data.context['data_list'][0].pid,)))
+
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Python')
+        self.assertContains(response, 'Pycharm')
+
+    def test_data_with_id_exist_but_not_active(self):
+        """
+        If data found, show only active the content.
+        """
+        create_test_data(4)
+        create_test_active_data(4)
+
+        data = self.client.get(reverse('webapp:list'), data={'q': 'python'}).context['data_list']
+
+        pid = '0'
+
+        if data:
+            pid = data[0].pid
+
+        response = self.client.get(reverse('webapp:detail', args=(pid,)))
+
+        self.assertEqual(response.status_code, 404)
 
     def test_data_without_id_exist(self):
         """
@@ -137,7 +194,8 @@ class DataModelTests(TestCase):
         """
         Return a queryset with 2 objects.
         """
-        create_test_data(2)
+        create_test_data(4)
+        create_test_active_data(2)
 
         random_data = Data.objects.get_random_data()
 
@@ -147,7 +205,8 @@ class DataModelTests(TestCase):
         """
         Return a queryset with 3 objects.
         """
-        create_test_data(3)
+        create_test_data(4)
+        create_test_active_data(3)
 
         random_data = Data.objects.get_random_data()
 
@@ -157,7 +216,8 @@ class DataModelTests(TestCase):
         """
         Return a queryset with 3 objects.
         """
-        create_test_data(5)
+        create_test_data(4)
+        create_test_active_data(4)
 
         random_data = Data.objects.get_random_data()
 
@@ -197,7 +257,7 @@ class ToPersianFilterTests(TestCase):
 
     def test_with_persian_text_and_no_digits(self):
         """
-        No cange.
+        No change.
         """
         original_text = 'متن آزمایشی بدون عدد.'
         converted_text = 'متن آزمایشی بدون عدد.'
