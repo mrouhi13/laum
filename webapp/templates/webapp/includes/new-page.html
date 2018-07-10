@@ -4,7 +4,7 @@
             <form id="#newPageForm" class="needs-validation" novalidate>
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        <i class="far fa-file-alt"></i>
+                        <i class="far fa-file-alt fa-sm"></i>
                         &nbsp;ایجاد صفحه‌ی جدید
                     </h5>
                 </div>
@@ -14,21 +14,24 @@
                             <div class="form-group position-relative">
                                 <label for="title">عنوان *</label>
                                 <input type="text" class="form-control" id="title" placeholder="جلال‌الدین محمد بلخی"
-                                       required>
-                                <div class="invalid-tooltip">این فیلد اجباری است</div>
+                                       pattern=".{3,64}" required>
+                                <div class="invalid-tooltip">این فیلد اجباری است و باید بیش‌تر از ۳ حرف باشد</div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group position-relative">
                                 <label for="subtitle">زیرعنوان</label>
                                 <input type="text" class="form-control" id="subtitle"
-                                       placeholder="معروف به مولانا">
+                                       placeholder="معروف به مولانا" pattern=".{0}|.{3,32}">
+                                <div class="invalid-tooltip">باید خالی یا بیش‌تر از ۳ حرف باشد</div>
                             </div>
-                            <div class="form-group text-right">
+                            <div class="form-group position-relative text-right">
                                 <label for="event">رویداد مهم</label>
                                 <input type="text" class="form-control" id="event"
-                                       placeholder="۵۸۶ - ۶۵۲ خورشیدی زاده‌ی بلخ" aria-describedby="eventHelpLine">
+                                       placeholder="۵۸۶ - ۶۵۲ خورشیدی زاده‌ی بلخ" aria-describedby="eventHelpLine"
+                                       pattern=".{0}|.{3,32}">
                                 <small id="eventHelpLine" class="text-muted">
                                     تاریخ یک رویداد مهم به همراه محل وقوع.
                                 </small>
+                                <div class="invalid-tooltip">باید خالی یا بیش‌تر از ۳ حرف باشد</div>
                             </div>
                             <div class="form-group">
                                 <label for="inputCity">آپلود عکس</label>
@@ -37,13 +40,15 @@
                                     <label class="custom-file-label text-truncate direction-left" for="image"></label>
                                 </div>
                             </div>
-                            <div class="form-group text-right">
+                            <div class="form-group position-relative text-right">
                                 <label for="imageCaption">توضیح عکس</label>
                                 <input type="text" class="form-control" id="imageCaption"
-                                       placeholder="نگاره‌ای پندارین از مولانا" aria-describedby="imageCaptionHelpLine">
+                                       placeholder="نگاره‌ای پندارین از مولانا"
+                                       aria-describedby="imageCaptionHelpLine" pattern=".{0}|.{3,64}">
                                 <small id="imageCaptionHelpLine" class="text-muted">
                                     مکان و موقعیت گرفتن عکس به همراه معرفی افراد حاضر در عکس.
                                 </small>
+                                <div class="invalid-tooltip">باید خالی یا بیش‌تر از ۳ حرف باشد</div>
                             </div>
                         </div>
                         <div class=" col-md-6">
@@ -51,21 +56,22 @@
                                 <label for="content">محتوا *</label>
                                 <textarea class="form-control" id="content"
                                           placeholder="مولوی زاده‌ی بلخ خوارزمشاهیان (خراسان در ایران بزرگ، افغانستان کنونی) یا وخش بود و..."
-                                          rows="17" required></textarea>
-                                <div class="invalid-tooltip">این فیلد اجباری است</div>
+                                          rows="17" minlength="3" maxlength="1024" required></textarea>
+                                <div class="invalid-tooltip">این فیلد اجباری است و باید بیش‌تر از ۳ حرف باشد</div>
                             </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-6">
-                            <div class="form-group text-right">
+                            <div class="form-group position-relative text-right">
                                 <label for="reference">منبع</label>
                                 <input type="text" class="form-control" id="reference"
                                        placeholder="شرح زندگانی مولوی، به قلم بدیع‌الزمان فروزانفر"
-                                       aria-describedby="referenceHelpLine">
+                                       aria-describedby="referenceHelpLine" pattern=".{0}|.{3,64}">
                                 <small id="referenceHelpLine" class="text-muted">
                                     نام کتاب، روزنامه، مجله یا آدرس سایت، بلاگ و... به همراه نام نویسنده
                                 </small>
+                                <div class="invalid-tooltip">باید خالی یا بیش‌تر از ۳ حرف باشد</div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -80,7 +86,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                    <button type="submit" class="btn btn-primary">ذخیره</button>
+                    <button type="submit" class="btn btn-primary" id="submitPage">ارسال</button>
                 </div>
             </form>
         </div>

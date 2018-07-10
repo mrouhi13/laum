@@ -1,26 +1,20 @@
 /* Fonts */
 @font-face {
-    font-family: 'Vazir-Light';
-    src: url('../fonts/vazir/Vazir-Light.eot');
-    src: url('../fonts/vazir/Vazir-Light.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Light.woff2') format('woff2'), url('../fonts/vazir/Vazir-Light.woff') format('woff'), url('../fonts/vazir/Vazir-Light.ttf') format('truetype')
+    font-family: 'Shabnam';
+    src: url('../fonts/shabnam/Shabnam.eot');
+    src: url('../fonts/shabnam/Shabnam.eot?#iefix') format('embedded-opentype'), url('../fonts/shabnam/Shabnam.woff2') format('woff2'), url('../fonts/shabnam/Shabnam.woff') format('woff'), url('../fonts/shabnam/Shabnam.ttf') format('truetype')
 }
 
 @font-face {
-    font-family: 'Vazir-Thin';
-    src: url('../fonts/vazir/Vazir-Thin.eot');
-    src: url('../fonts/vazir/Vazir-Thin.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Thin.woff2') format('woff2'), url('../fonts/vazir/Vazir-Thin.woff') format('woff'), url('../fonts/vazir/Vazir-Thin.ttf') format('truetype')
+    font-family: 'Shabnam-Light';
+    src: url('../fonts/shabnam/Shabnam-Light.eot');
+    src: url('../fonts/shabnam/Shabnam-Light.eot?#iefix') format('embedded-opentype'), url('../fonts/shabnam/Shabnam-Light.woff2') format('woff2'), url('../fonts/shabnam/Shabnam-Light.woff') format('woff'), url('../fonts/shabnam/Shabnam-Light.ttf') format('truetype')
 }
 
 @font-face {
-    font-family: 'Vazir-Medium';
-    src: url('../fonts/vazir/Vazir-Medium.eot');
-    src: url('../fonts/vazir/Vazir-Medium.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Medium.woff2') format('woff2'), url('../fonts/vazir/Vazir-Medium.woff') format('woff'), url('../fonts/vazir/Vazir-Medium.ttf') format('truetype')
-}
-
-@font-face {
-    font-family: 'Vazir-Bold';
-    src: url('../fonts/vazir/Vazir-Bold.eot');
-    src: url('../fonts/vazir/Vazir-Bold.eot?#iefix') format('embedded-opentype'), url('../fonts/vazir/Vazir-Bold.woff2') format('woff2'), url('../fonts/vazir/Vazir-Bold.woff') format('woff'), url('../fonts/vazir/Vazir-Bold.ttf') format('truetype')
+    font-family: 'Shabnam-Bold';
+    src: url('../fonts/shabnam/Shabnam-Bold.eot');
+    src: url('../fonts/shabnam/Shabnam-Bold.eot?#iefix') format('embedded-opentype'), url('../fonts/shabnam/Shabnam-Bold.woff2') format('woff2'), url('../fonts/shabnam/Shabnam-Bold.woff') format('woff'), url('../fonts/shabnam/Shabnam-Bold.ttf') format('truetype')
 }
 
 /* Restyle Tags */
@@ -29,7 +23,7 @@ html, body {
 }
 
 body {
-    font-family: Vazir-Medium, sans-serif;
+    font-family: Shabnam, sans-serif;
     color: #353a40;
     direction: rtl;
     display: table;
@@ -201,7 +195,6 @@ footer li:first-child {
 }
 
 .thumbnail i, .page-thumbnail i {
-    text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
     color: #ccc !important;
 }
 
@@ -408,10 +401,6 @@ footer li:first-child {
 }
 
 /* Modal */
-.modal-open {
-    position: relative;
-}
-
 .modal-footer > :not(:first-child) {
     margin-right: .25rem;
 }
