@@ -44,7 +44,17 @@ function csrfSafeMethod(method) {
         });
     }, false);
 
-    $('.modal').on('hidden.bs.modal', function () {
+    let my_modal = $('.modal');
+
+    my_modal.on('shown.bs.modal', function () {
+        $('html').toggleClass('freeze-page');
+        $('body').toggleClass('freeze-page');
+    });
+
+    my_modal.on('hidden.bs.modal', function () {
+        $('html').toggleClass('freeze-page');
+        $('body').toggleClass('freeze-page');
+
         $(this).find('form')[0].reset();
         $('form').removeClass('needs-validation was-validated');
         $('#image').next('.custom-file-label').html('');

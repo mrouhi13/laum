@@ -49,6 +49,12 @@ label {
 }
 
 /* Custom Class */
+.freeze-page {
+    overflow: hidden;
+    height: 100%;
+    position: relative;
+}
+
 .fas-reglage {
     top: 2px;
 }
@@ -363,8 +369,9 @@ footer li:first-child {
 }
 
 .page-report-link {
-    color: #353a40;
+    color: #353a40 !important;
     font-size: 12px;
+    cursor: pointer;
 }
 
 .page-report-link:hover, .page-report-link:focus {
