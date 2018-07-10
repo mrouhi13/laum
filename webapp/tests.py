@@ -223,6 +223,20 @@ class DataModelTests(TestCase):
 
         self.assertIs(len(random_data), 3)
 
+    def test_random_pages_uniqueness(self):
+        """
+        Return a queryset with 3 unique objects.
+        """
+        create_test_data(4)
+        create_test_active_data(4)
+
+        random_data = Data.objects.get_random_data()
+
+        self.assertNotEqual(random_data[0].id, random_data[1].id)
+        self.assertNotEqual(random_data[1].id, random_data[2].id)
+        self.assertNotEqual(random_data[0].id, random_data[2].id)
+        self.assertIs(len(random_data), 3)
+
 
 class ToPersianFilterTests(TestCase):
     def test_with_english_text_and_no_digits(self):

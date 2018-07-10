@@ -31,6 +31,7 @@ class DataManager(models.Manager):
 
         if self.filter(is_active=True).count() <= 3:
             random_data = self.filter(is_active=True)
+            random_data = list(random_data)
         else:
             while len(random_data) < 3:
                 remaining_count = 3 - len(random_data)
@@ -38,6 +39,11 @@ class DataManager(models.Manager):
 
                 for i in random_ids:
                     random_data += self.filter(id=i, is_active=True)
+
+                    data_set = set(random_data)
+                    random_data = list(data_set)
+
+        random.shuffle(random_data)
 
         return random_data
 
