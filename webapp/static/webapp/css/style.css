@@ -409,7 +409,7 @@ footer li:first-child {
 
 /* Modal */
 .modal-open {
-    position: fixed;
+    position: relative;
 }
 
 .modal-footer > :not(:first-child) {
