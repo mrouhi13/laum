@@ -1,7 +1,7 @@
-{% extends "webapp/base.html" %}
+{% extends 'webapp/base.html' %}
 {% load static %}
 {% block content %}
-    {% include "webapp/includes/search_inline.html" %}
+    {% include 'webapp/includes/search_inline.html' %}
     {% if data_list %}
         <div class="row justify-content-center">
             {% for data in data_list %}
@@ -31,7 +31,7 @@
                 </div>
             {% endfor %}
         </div>
-        {% include "webapp/includes/pagination.html" %}
+        {% include 'webapp/includes/pagination.html' %}
     {% else %}
         <div class="row no-result-message align-items-center">
             <div class="col text-center mb-4">

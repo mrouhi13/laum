@@ -19,7 +19,7 @@
 </head>
 
 <body>
-{% include "webapp/includes/header.html" %}
+{% include 'webapp/includes/header.html' %}
 <main role="main">
     <div class="container">
         {% block content %} {% endblock %}
@@ -27,7 +27,7 @@
         {% include 'webapp/includes/report.html' %}
     </div>
 </main>
-{% include "webapp/includes/footer.html" %}
+{% include 'webapp/includes/footer.html' %}
 
 <script type="text/javascript" src="{% static 'webapp/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'webapp/vendor/bootstrap/js/bootstrap.min.js' %}"></script>

@@ -71,7 +71,7 @@ class Gregorian:
         # Check the validity of input date
         try:
             datetime.datetime(year, month, day)
-        except:
+        except():
             raise Exception("Invalid Date")
 
         self.gregorian_year = year
