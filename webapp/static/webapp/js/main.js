@@ -48,6 +48,14 @@ function csrfSafeMethod(method) {
         $(this).find('form')[0].reset();
         $('form').removeClass('needs-validation was-validated');
         $('#image').next('.custom-file-label').html('');
+
+        let submit_page = $('#submitPage');
+        submit_page.prop('disabled', false);
+        submit_page.html('ارسال');
+
+        let submit_report = $('#submitReport');
+        submit_report.prop('disabled', false);
+        submit_report.html('ارسال');
     });
 
     $('#searchForm').submit(function () {
@@ -64,6 +72,12 @@ function csrfSafeMethod(method) {
     $('#newPageModal').submit(function (event) {
         event.stopPropagation();
         event.preventDefault();
+
+        let submit_page = $('#submitPage');
+        submit_page.prop('disabled', true);
+        submit_page.html('');
+        submit_page.append('<span class="position-relative fas-reglage"><i class="fas fa-spinner' +
+            ' fa-spin"></i></span>');
 
         let data = new FormData();
         let image = $('#image')[0].files;
@@ -114,6 +128,10 @@ function csrfSafeMethod(method) {
                 PNotify.removeAll();
 
                 new PNotify(myStack);
+
+                let submit_page = $('#submitPage');
+                submit_page.prop('disabled', false);
+                submit_page.html('ارسال');
             }
         })
     });
@@ -121,6 +139,12 @@ function csrfSafeMethod(method) {
     $('#reportModal').submit(function (event) {
         event.stopPropagation();
         event.preventDefault();
+
+        let submit_report = $('#submitReport');
+        submit_report.prop('disabled', true);
+        submit_report.html('');
+        submit_report.append('<span class="position-relative fas-reglage"><i class="fas fa-spinner' +
+            ' fa-spin"></i></span>');
 
         let data = new FormData();
 
@@ -162,6 +186,10 @@ function csrfSafeMethod(method) {
                 PNotify.removeAll();
 
                 new PNotify(myStack);
+
+                let submit_report = $('#submitReport');
+                submit_report.prop('disabled', false);
+                submit_report.html('ارسال');
             }
         })
     });
