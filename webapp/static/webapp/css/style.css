@@ -401,6 +401,10 @@ footer li:first-child {
 }
 
 /* Modal */
+.modal-open footer {
+    display: table-cell;
+}
+
 .modal-footer > :not(:first-child) {
     margin-right: .25rem;
 }
