@@ -30,7 +30,7 @@ html, body {
 
 body {
     font-family: Vazir-Medium, sans-serif;
-    color: #002f54;
+    color: #353a40;
     direction: rtl;
     display: table;
     width: 100%;
@@ -112,15 +112,47 @@ label {
 
 /* Footer */
 footer {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
     display: table-row;
     height: 1px;
+    color: #999;
+    background-color: #353a40;
+    box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.5);
 }
 
 footer div {
     margin-bottom: .5rem;
     text-align: center;
+    font-size: .7rem;
+}
+
+footer ul {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+footer ul a {
+    color: #999;
+}
+
+footer .license-text a {
+    text-decoration: underline;
+}
+
+.footer-link {
+    list-style: none;
+    border-left: 1px solid #606060;
+    display: inline;
+    padding-left: 10px;
+    padding-right: 5px;
+}
+
+footer li:last-child {
+    border: none;
+}
+
+footer li:first-child {
+    padding-right: 0;
 }
 
 /* Shadow */
@@ -190,11 +222,11 @@ footer div {
 }
 
 .form-control {
-    color: #002f54;
+    color: #353a40;
 }
 
 .form-control:focus {
-    color: #002f54;
+    color: #353a40;
 }
 
 .input-search {
@@ -222,7 +254,7 @@ footer div {
     height: 50px;
     width: 120px;
     border-radius: .25rem;
-    background-color: #002f54;
+    background-color: #353a40;
     border-color: transparent;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 0 rgba(0, 0, 0, 0.08);
 }
@@ -260,14 +292,14 @@ footer div {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    background-color: #002f54;
+    background-color: #353a40;
     padding-left: 20px;
     padding-right: 20px;
     font-size: 18px;
 }
 
 .content-body {
-    color: #002f54;
+    color: #353a40;
 }
 
 .card {
@@ -287,7 +319,7 @@ footer div {
 
 /* Content Page */
 .content {
-    padding-top: 4rem;
+    padding-top: 2rem;
     padding-bottom: 2rem;
 }
 
@@ -324,7 +356,7 @@ footer div {
 }
 
 .page-tag {
-    background-color: #002f54;
+    background-color: #353a40;
     color: #fff;
     padding-left: 10px;
     padding-right: 10px;
@@ -338,12 +370,12 @@ footer div {
 }
 
 .page-report-link {
-    color: #002f54;
+    color: #353a40;
     font-size: 12px;
 }
 
 .page-report-link:hover, .page-report-link:focus {
-    color: #002f54;
+    color: #353a40;
     text-decoration: none;
 }
 
@@ -376,6 +408,10 @@ footer div {
 }
 
 /* Modal */
+.modal-open {
+    position: fixed;
+}
+
 .modal-footer > :not(:first-child) {
     margin-right: .25rem;
 }
@@ -400,18 +436,18 @@ footer div {
 }
 
 .page-item.active .page-link {
-    background-color: #002f54;
-    border-color: #002f54;
+    background-color: #353a40;
+    border-color: #353a40;
 }
 
 .page-link {
-    color: #002f54;
+    color: #353a40;
     background-color: #fff;
     border: none;
 }
 
 .page-link:focus {
-    color: #002f54;
+    color: #353a40;
     box-shadow: none;
 }
 
