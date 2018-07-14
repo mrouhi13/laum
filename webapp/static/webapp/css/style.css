@@ -49,12 +49,6 @@ label {
 }
 
 /* Custom Class */
-.freeze-page {
-    overflow: hidden;
-    height: 100%;
-    position: relative;
-}
-
 .fas-reglage {
     top: 2px;
 }
@@ -408,10 +402,6 @@ footer li:first-child {
 }
 
 /* Modal */
-.modal-open footer {
-    display: table-cell;
-}
-
 .modal-footer > :not(:first-child) {
     margin-right: .25rem;
 }
