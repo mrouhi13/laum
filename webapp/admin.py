@@ -43,6 +43,6 @@ admin.site.register(Report, ReportAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.unregister(Group)
 
-admin.site.site_header = 'مدیریت مایتون'
-admin.site.site_title = 'مدیریت مایتون'
-admin.site.index_title = 'مدیریت مایتون'
+admin.site.site_header = 'مدیریت لام'
+admin.site.site_title = 'مدیریت لام'
+admin.site.index_title = 'مدیریت لام'
