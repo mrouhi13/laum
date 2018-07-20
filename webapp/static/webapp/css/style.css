@@ -17,6 +17,12 @@
     src: url('../fonts/shabnam/Shabnam-Bold.eot?#iefix') format('embedded-opentype'), url('../fonts/shabnam/Shabnam-Bold.woff2') format('woff2'), url('../fonts/shabnam/Shabnam-Bold.woff') format('woff'), url('../fonts/shabnam/Shabnam-Bold.ttf') format('truetype')
 }
 
+@font-face {
+    font-family: 'Lalehzar';
+    src: url('../fonts/lalehzar/Lalehzar-Regular.ttf');
+    url('../fonts/lalehzar/Lalehzar-Regular.ttf') format('truetype')
+}
+
 /* Restyle Tags */
 html, body {
     height: 100%;
@@ -86,9 +92,9 @@ label {
 
 .jumbotron {
     padding-top: calc(var(--jumbotron-padding-y) * 2);
-    /*padding-bottom: calc(var(--jumbotron-padding-y) * 2);*/
     margin-bottom: 0;
     background-color: transparent;
+    font-family: Lalehzar, sans-serif;
 }
 
 .jumbotron p:last-child {
@@ -205,6 +211,7 @@ footer li:first-child {
 
 /* Navbar */
 .navbar {
+    font-family: Lalehzar, sans-serif;
     box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.5);
 }
 
@@ -492,10 +499,6 @@ footer li:first-child {
 
 /* Responsivity */
 @media all and (max-width: 1024px) {
-    .jumbotron {
-        padding: var(--jumbotron-padding-y) 0 1rem 0;
-    }
-
     .jumbotron .container {
         padding-left: 0;
         padding-right: 0;
@@ -540,14 +543,8 @@ footer li:first-child {
     }
 }
 
-@media all and (min-width: 576px) {
-    .jumbotron {
-        padding: 2rem;
-    }
-}
-
 @media all and (max-width: 375px) {
     .jumbotron-heading {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 }
