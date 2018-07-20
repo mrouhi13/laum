@@ -20,7 +20,7 @@
 @font-face {
     font-family: 'Lalehzar';
     src: url('../fonts/lalehzar/Lalehzar-Regular.ttf');
-    url('../fonts/lalehzar/Lalehzar-Regular.ttf') format('truetype')
+url('../fonts/lalehzar/Lalehzar-Regular.ttf') format('truetype')
 }
 
 /* Restyle Tags */
@@ -94,11 +94,10 @@ label {
     padding-top: calc(var(--jumbotron-padding-y) * 2);
     margin-bottom: 0;
     background-color: transparent;
-    font-family: Lalehzar, sans-serif;
 }
 
-.jumbotron p:last-child {
-    margin-bottom: 0;
+.jumbotron h1 {
+    font-family: Lalehzar, sans-serif;
 }
 
 .jumbotron-heading {
@@ -107,6 +106,12 @@ label {
 
 .jumbotron .container {
     max-width: 40rem;
+}
+
+/* Header */
+.slogan-text {
+    font-size: 70%;
+    margin-top: 9px
 }
 
 /* Footer */
@@ -543,8 +548,12 @@ footer li:first-child {
     }
 }
 
-@media all and (max-width: 375px) {
+@media all and (max-width: 411px) {
     .jumbotron-heading {
         font-size: 1.8rem;
+    }
+    
+    .slogan-text {
+        display: none;
     }
 }
