@@ -7,7 +7,7 @@ from .models import Data, Tag, Report
 class DataAdmin(admin.ModelAdmin):
     readonly_fields = ('pid', 'jalali_updated_on', 'jalali_created_on')
     fieldsets = [
-        ('اطلاعات اصلی', {'fields': ['pid', 'title', 'content', 'event', 'image', 'image_caption']}),
+        ('اطلاعات اصلی', {'fields': ['pid', 'title', 'subtitle', 'content', 'event', 'image', 'image_caption']}),
         ('اطلاعات تکمیلی', {'fields': ['tag', 'reference', 'author', 'is_active']}),
         ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']}),
     ]
