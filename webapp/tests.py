@@ -1,9 +1,13 @@
+import datetime
+
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase
 
 from .forms import SearchForm
-from .models import Data
-from .templatetags.webapp_extras import topersian
+from .models import Data, Tag, generate_new_pid
+from .templatetags.webapp_extras import topersian, tojalali
 
 
 def create_test_data(n):
@@ -237,6 +241,46 @@ class DataModelTests(TestCase):
         self.assertNotEqual(random_data[0].id, random_data[2].id)
         self.assertIs(len(random_data), 3)
 
+    def test_a_new_pid(self):
+        """
+        Generate a new pid with 13 characters length.
+        """
+        new_pid = generate_new_pid()
+
+        self.assertEqual(len(new_pid), 13)
+
+
+class TagModelTests(TestCase):
+    def test_single_word_tag_name(self):
+        """
+        The single-word names keyword are one.
+        """
+        new_tag = Tag.objects.create(name='test')
+
+        new_tag.save()
+
+        self.assertEqual(new_tag.keyword, 'test')
+
+    def test_with_two_word_tag_name_with_space(self):
+        """
+        The space of two word names convert to underscore (_).
+        """
+        new_tag = Tag.objects.create(name='test tag')
+
+        new_tag.save()
+
+        self.assertEqual(new_tag.keyword, 'test_tag')
+
+    def test_with_two_word_tag_name_with_underscore(self):
+        """
+        The more than two word names with underscore is same.
+        """
+        new_tag = Tag.objects.create(name='new test_tag')
+
+        new_tag.save()
+
+        self.assertEqual(new_tag.keyword, 'new_test_tag')
+
 
 class ToPersianFilterTests(TestCase):
     def test_with_english_text_and_no_digits(self):
@@ -298,3 +342,185 @@ class ToPersianFilterTests(TestCase):
         result = topersian(original_text)
 
         self.assertEqual(result, converted_text)
+
+
+class ToJalaliFilterTests(TestCase):
+    def test_with_empty_date(self):
+        """
+        Return none.
+        """
+        date = ''
+        jalali_date = tojalali(date)
+        self.assertEqual(jalali_date, None)
+
+    def test_with_none_date(self):
+        """
+        Return none.
+        """
+        date = None
+        jalali_date = tojalali(date)
+        self.assertEqual(jalali_date, None)
+
+    def test_with_incorrect_date_format(self):
+        """
+        Return none.
+        """
+        date = '201822'
+        jalali_date = tojalali(date)
+        self.assertEqual(jalali_date, None)
+
+    def test_with_correct_date_format(self):
+        """
+        Return date in Jalali format.
+        """
+        date = datetime.date(2019, 2, 2)
+        jalali_date = tojalali(date)
+        self.assertEqual(jalali_date, '13 بهمن، 1397')
+
+
+class DataCreateApiTest(APITestCase):
+    def test_with_no_required_field(self):
+        """
+        Check required fields.
+        """
+        url = reverse('webapp:api.v1:create-data')
+        data = {}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Data.objects.count(), 0)
+
+    def test_with_one_empty_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('webapp:api.v1:create-data')
+        data = {'title': ''}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Data.objects.count(), 0)
+
+    def test_with_one_filled_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('webapp:api.v1:create-data')
+        data = {'title': 'test'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Data.objects.count(), 0)
+
+    def test_with_empty_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('webapp:api.v1:create-data')
+        data = {'title': '', 'content': ''}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Data.objects.count(), 0)
+
+    def test_with_required_field(self):
+        """
+        Create a data record if required field is filled.
+        """
+        url = reverse('webapp:api.v1:create-data')
+        data = {'title': 'test', 'content': 'test content'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Data.objects.count(), 1)
+
+    def test_with_required_field_and_email(self):
+        """
+        Validate email and send a mail to author.
+        """
+        url = reverse('webapp:api.v1:create-data')
+        data = {'title': 'test', 'content': 'test content', 'email': 'go.mezzo@icloud.com'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Data.objects.count(), 1)
+
+    def test_with_required_field_and_incorrect_email(self):
+        """
+        Validate email and return 400 Bad Request status if not valid.
+        """
+        url = reverse('webapp:api.v1:create-data')
+        data = {'title': 'test', 'content': 'test content', 'author': 'go.mezzo'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Data.objects.count(), 0)
+
+
+class ReportApiTest(APITestCase):
+    def test_with_no_required_field(self):
+        """
+        Check required fields.
+        """
+        url = reverse('webapp:api.v1:create-report')
+        data = {}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Data.objects.count(), 0)
+
+    def test_with_one_empty_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('webapp:api.v1:create-report')
+        data = {'body': ''}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Data.objects.count(), 0)
+
+    def test_with_one_filled_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('webapp:api.v1:create-report')
+        data = {'body': 'test'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Data.objects.count(), 0)
+
+    def test_with_empty_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('webapp:api.v1:create-report')
+        data = {'body': '', 'reporter': ''}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Data.objects.count(), 0)
+
+    def test_with_required_field_and_email(self):
+        """
+        Validate email and send a mail to author.
+        """
+        create_test_data(1)
+
+        data = Data.objects.get(id=1)
+
+        url = reverse('webapp:api.v1:create-report')
+        data = {'data': data.pid, 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Data.objects.count(), 1)
+
+    def test_with_required_field_and_incorrect_email(self):
+        """
+        Create a data record if required field is filled.
+        """
+        url = reverse('webapp:api.v1:create-report')
+        data = {'body': 'test', 'reporter': 'go.mezzo'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Data.objects.count(), 0)
+
+    def test_with_required_field_and_incorrect_pid(self):
+        """
+        Validate email and send a mail to author.
+        """
+        url = reverse('webapp:api.v1:create-report')
+        data = {'data': '123', 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Data.objects.count(), 0)
