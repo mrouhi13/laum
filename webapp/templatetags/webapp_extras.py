@@ -1,4 +1,5 @@
 import re
+import datetime
 
 from django import template
 from django.template.defaultfilters import stringfilter
@@ -25,10 +26,12 @@ def topersian(value):
 
 
 @register.filter
-@stringfilter
 def tojalali(date):
-    jalali_string = jalali.Gregorian(date).persian_tuple()
-    month_name = getjalalimonthname(jalali_string[1])
+    if type(date) is datetime.date:
+        jalali_string = jalali.Gregorian(date).persian_tuple()
+        month_name = getjalalimonthname(jalali_string[1])
+    else:
+        return None
 
     return '{0} {1}، {2}'.format(jalali_string[2], month_name, jalali_string[0])
 
