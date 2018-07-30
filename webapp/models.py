@@ -10,16 +10,15 @@ from .templatetags.webapp_extras import tojalali, topersian
 
 
 def generate_new_pid(n=12):
-    new_pid_passed = False
     new_pid = ''
-    prefix_string = '0'
+    prefix_string = 'a'
 
-    while not new_pid_passed:
+    while new_pid == '':
         postfix_string = ''.join(random.choices(string.ascii_letters + string.digits, k=n))
         new_pid = '%s%s' % (prefix_string, postfix_string)
 
-        if not Data.objects.is_pid_exists(new_pid):
-            new_pid_passed = True
+        if Data.objects.is_pid_exists(new_pid):
+            new_pid = ''
 
     return new_pid
 
