@@ -12,12 +12,9 @@ class DataCreateView(CreateAPIView):
     def perform_create(self, serializer):
         data = serializer.save()
 
-        to = ''
+        to = data.author
 
-        if serializer.is_valid():
-            to = serializer.validated_data['author']
-
-        if not to == '':
+        if to is not None:
             page_title = data.title
             page_pid = data.pid
 
@@ -38,12 +35,9 @@ class ReportCreateView(CreateAPIView):
     def perform_create(self, serializer):
         super(ReportCreateView, self).perform_create(serializer)
 
-        to = ''
+        to = serializer.validated_data['reporter']
 
-        if serializer.is_valid():
-            to = serializer.validated_data['reporter']
-
-        if not to == '':
+        if to is not None:
             page_title = serializer.validated_data['data'].title
             page_pid = serializer.validated_data['data'].pid
 
