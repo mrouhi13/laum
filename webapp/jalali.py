@@ -51,7 +51,7 @@ class Gregorian:
                 if m:
                     [year, month, day] = [int(m.group(1)), int(m.group(2)), int(m.group(3))]
                 else:
-                    raise Exception("Invalid Input String")
+                    raise ValueError("Invalid Input String")
             elif type(date) is datetime.date:
                 [year, month, day] = [date.year, date.month, date.day]
             elif type(date) is tuple:
@@ -60,19 +60,19 @@ class Gregorian:
                 month = int(month)
                 day = int(day)
             else:
-                raise Exception("Invalid Input Type")
+                raise ValueError("Invalid Input Type")
         elif len(date) == 3:
             year = int(date[0])
             month = int(date[1])
             day = int(date[2])
         else:
-            raise Exception("Invalid Input")
+            raise ValueError("Invalid Input")
 
         # Check the validity of input date
         try:
             datetime.datetime(year, month, day)
         except():
-            raise Exception("Invalid Date")
+            raise ValueError("Invalid Date")
 
         self.gregorian_year = year
         self.gregorian_month = month
@@ -129,24 +129,24 @@ class Persian:
                 if m:
                     [year, month, day] = [int(m.group(1)), int(m.group(2)), int(m.group(3))]
                 else:
-                    raise Exception("Invalid Input String")
+                    raise ValueError("Invalid Input String")
             elif type(date) is tuple:
                 year, month, day = date
                 year = int(year)
                 month = int(month)
                 day = int(day)
             else:
-                raise Exception("Invalid Input Type")
+                raise ValueError("Invalid Input Type")
         elif len(date) == 3:
             year = int(date[0])
             month = int(date[1])
             day = int(date[2])
         else:
-            raise Exception("Invalid Input")
+            raise ValueError("Invalid Input")
 
         # Check validity of date. TODO better check (leap years)
         if year < 1 or month < 1 or month > 12 or day < 1 or day > 31 or (month > 6 and day == 31):
-            raise Exception("Incorrect Date")
+            raise ValueError("Incorrect Date")
 
         self.persian_year = year
         self.persian_month = month
