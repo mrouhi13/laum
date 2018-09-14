@@ -35,7 +35,7 @@ class IndexViewTests(TestCase):
         """
         Nothing to display.
         """
-        response = self.client.get(reverse('webapp:index'))
+        response = self.client.get(reverse('web_app:index'))
         self.assertEqual(response.status_code, 200)
 
 
@@ -44,7 +44,7 @@ class DataListViewTests(TestCase):
         """
         Nothing to display.
         """
-        response = self.client.get(reverse('webapp:list'))
+        response = self.client.get(reverse('web_app:list'))
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 0)
@@ -57,7 +57,7 @@ class DataListViewTests(TestCase):
         create_test_data(4)
         create_test_active_data(4)
 
-        response = self.client.get(reverse('webapp:list'), data={'q': ''})
+        response = self.client.get(reverse('web_app:list'), data={'q': ''})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 0)
@@ -70,7 +70,7 @@ class DataListViewTests(TestCase):
         create_test_data(4)
         create_test_active_data(4)
 
-        response = self.client.get(reverse('webapp:list'), data={'q': 'ubuntu'})
+        response = self.client.get(reverse('web_app:list'), data={'q': 'ubuntu'})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 0)
@@ -83,7 +83,7 @@ class DataListViewTests(TestCase):
         create_test_data(4)
         create_test_active_data(4)
 
-        response = self.client.get(reverse('webapp:list'), data={'q': 'Majid'})
+        response = self.client.get(reverse('web_app:list'), data={'q': 'Majid'})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 1)
@@ -96,7 +96,7 @@ class DataListViewTests(TestCase):
         create_test_data(4)
         create_test_active_data(4)
 
-        response = self.client.get(reverse('webapp:list'), data={'q': 'py'})
+        response = self.client.get(reverse('web_app:list'), data={'q': 'py'})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 1)
@@ -109,7 +109,7 @@ class DataListViewTests(TestCase):
         create_test_data(4)
         create_test_active_data(4)
 
-        response = self.client.get(reverse('webapp:list'), data={'q': 'ma'})
+        response = self.client.get(reverse('web_app:list'), data={'q': 'ma'})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 2)
@@ -124,8 +124,8 @@ class DataDetailViewTests(TestCase):
         create_test_data(4)
         create_test_active_data(4)
 
-        data = self.client.get(reverse('webapp:list'), data={'q': 'pycharm'})
-        response = self.client.get(reverse('webapp:detail', args=(data.context['data_list'][0].pid,)))
+        data = self.client.get(reverse('web_app:list'), data={'q': 'pycharm'})
+        response = self.client.get(reverse('web_app:detail', args=(data.context['data_list'][0].pid,)))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Pycharm')
@@ -137,14 +137,14 @@ class DataDetailViewTests(TestCase):
         create_test_data(4)
         create_test_active_data(4)
 
-        data = self.client.get(reverse('webapp:list'), data={'q': 'python'}).context['data_list']
+        data = self.client.get(reverse('web_app:list'), data={'q': 'python'}).context['data_list']
 
         pid = '0'
 
         if data:
             pid = data[0].pid
 
-        response = self.client.get(reverse('webapp:detail', args=(pid,)))
+        response = self.client.get(reverse('web_app:detail', args=(pid,)))
 
         self.assertEqual(response.status_code, 404)
 
@@ -152,7 +152,7 @@ class DataDetailViewTests(TestCase):
         """
         Return a 404 not found.
         """
-        response = self.client.get(reverse('webapp:detail', args=(1,)))
+        response = self.client.get(reverse('web_app:detail', args=(1,)))
         self.assertEqual(response.status_code, 404)
 
 
@@ -383,7 +383,7 @@ class DataCreateApiTest(APITestCase):
         """
         Check required fields.
         """
-        url = reverse('webapp:api.v1:create-data')
+        url = reverse('web_app:api.v1:create-data')
         data = {}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -393,7 +393,7 @@ class DataCreateApiTest(APITestCase):
         """
         Check required fields and return error if one or more is empty.
         """
-        url = reverse('webapp:api.v1:create-data')
+        url = reverse('web_app:api.v1:create-data')
         data = {'title': ''}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -403,7 +403,7 @@ class DataCreateApiTest(APITestCase):
         """
         Check required fields and return error if one or more is empty.
         """
-        url = reverse('webapp:api.v1:create-data')
+        url = reverse('web_app:api.v1:create-data')
         data = {'title': 'test'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -413,7 +413,7 @@ class DataCreateApiTest(APITestCase):
         """
         Check required fields and return error if one or more is empty.
         """
-        url = reverse('webapp:api.v1:create-data')
+        url = reverse('web_app:api.v1:create-data')
         data = {'title': '', 'content': ''}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -423,7 +423,7 @@ class DataCreateApiTest(APITestCase):
         """
         Create a data record if required field is filled.
         """
-        url = reverse('webapp:api.v1:create-data')
+        url = reverse('web_app:api.v1:create-data')
         data = {'title': 'test', 'content': 'test content'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -433,7 +433,7 @@ class DataCreateApiTest(APITestCase):
         """
         Validate email and send a mail to author.
         """
-        url = reverse('webapp:api.v1:create-data')
+        url = reverse('web_app:api.v1:create-data')
         data = {'title': 'test', 'content': 'test content', 'email': 'go.mezzo@icloud.com'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -443,7 +443,7 @@ class DataCreateApiTest(APITestCase):
         """
         Validate email and return 400 Bad Request status if not valid.
         """
-        url = reverse('webapp:api.v1:create-data')
+        url = reverse('web_app:api.v1:create-data')
         data = {'title': 'test', 'content': 'test content', 'author': 'go.mezzo'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -455,7 +455,7 @@ class ReportApiTest(APITestCase):
         """
         Check required fields.
         """
-        url = reverse('webapp:api.v1:create-report')
+        url = reverse('web_app:api.v1:create-report')
         data = {}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -465,7 +465,7 @@ class ReportApiTest(APITestCase):
         """
         Check required fields and return error if one or more is empty.
         """
-        url = reverse('webapp:api.v1:create-report')
+        url = reverse('web_app:api.v1:create-report')
         data = {'body': ''}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -475,7 +475,7 @@ class ReportApiTest(APITestCase):
         """
         Check required fields and return error if one or more is empty.
         """
-        url = reverse('webapp:api.v1:create-report')
+        url = reverse('web_app:api.v1:create-report')
         data = {'body': 'test'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -485,7 +485,7 @@ class ReportApiTest(APITestCase):
         """
         Check required fields and return error if one or more is empty.
         """
-        url = reverse('webapp:api.v1:create-report')
+        url = reverse('web_app:api.v1:create-report')
         data = {'body': '', 'reporter': ''}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -499,7 +499,7 @@ class ReportApiTest(APITestCase):
 
         data = Data.objects.get(id=1)
 
-        url = reverse('webapp:api.v1:create-report')
+        url = reverse('web_app:api.v1:create-report')
         data = {'data': data.pid, 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -509,7 +509,7 @@ class ReportApiTest(APITestCase):
         """
         Create a data record if required field is filled.
         """
-        url = reverse('webapp:api.v1:create-report')
+        url = reverse('web_app:api.v1:create-report')
         data = {'body': 'test', 'reporter': 'go.mezzo'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -519,7 +519,7 @@ class ReportApiTest(APITestCase):
         """
         Validate email and send a mail to author.
         """
-        url = reverse('webapp:api.v1:create-report')
+        url = reverse('web_app:api.v1:create-report')
         data = {'data': '123', 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

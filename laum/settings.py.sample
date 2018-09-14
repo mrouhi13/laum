@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
 
     # Local
-    'webapp',
+    'web_app',
 ]
 
 MIDDLEWARE = [
@@ -144,7 +144,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Rest framework settings
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'webapp.exception.exception_handler',
+    'EXCEPTION_HANDLER': 'web_app.exception.exception_handler',
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'DEFAULT_VERSION': 'default',
     'ALLOWED_VERSIONS': [],

@@ -1,7 +1,7 @@
 {% load widget_tweaks %}
 {% load webapp_extras %}
 <section class="jumbotron text-center pt-4 pb-3">
-    <form id="searchForm" class="form-inline my-2 my-lg-0" action="{% url 'webapp:list' %}" method="get"
+    <form id="searchForm" class="form-inline my-2 my-lg-0" action="{% url 'web_app:list' %}" method="get"
           autocomplete="off" novalidate>
         <div class="container position-relative">
             {% render_field form.q id="q" class="form-control input-search input-search-inline" dir="auto" aria-label="جست‌وجو" %}

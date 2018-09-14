@@ -3,7 +3,7 @@ import re
 from django import template
 from django.template.defaultfilters import stringfilter
 
-from webapp import jalali
+from web_app import jalali
 
 register = template.Library()
 

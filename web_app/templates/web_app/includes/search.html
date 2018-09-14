@@ -2,7 +2,7 @@
 <section class="jumbotron text-center">
     <div class="container">
         <h1 class="jumbotron-heading mb-5">این‌جا چراغـی روشن است!</h1>
-        <form id="searchForm" class="my-2 my-lg-0" action="{% url 'webapp:list' %}" method="get" autocomplete="off"
+        <form id="searchForm" class="my-2 my-lg-0" action="{% url 'web_app:list' %}" method="get" autocomplete="off"
               novalidate>
             <div class="form-group">
                 {% render_field form.q id="q" class="form-control input-search" dir="auto" aria-label="جست‌وجو" %}

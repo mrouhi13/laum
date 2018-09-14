@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from webapp.models import Data, Report
+from web_app.models import Data, Report
 
 
 class DataSerializer(serializers.ModelSerializer):

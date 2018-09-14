@@ -1,8 +1,8 @@
-{% extends 'webapp/base.html' %}
+{% extends 'web_app/base.html' %}
 {% load static %}
 {% load webapp_extras %}
 {% block content %}
-    {% include 'webapp/includes/search_inline.html' %}
+    {% include 'web_app/includes/search_inline.html' %}
     <div class="row justify-content-center content">
         {% if data %}
             <div class="col-lg-7 col-md-10 col-sm-12 text-right">
@@ -38,7 +38,7 @@
                 <div class="page-content">
                     <p>{{ data.content }}</p>
                     {% for tag in data.tag.values %}
-                        <a class="ml-1" href="{% url 'webapp:list' %}?q={{ tag.name }}">
+                        <a class="ml-1" href="{% url 'web_app:list' %}?q={{ tag.name }}">
                             <span class="page-tag">
                                 <small>#{{ tag.name }}</small>
                             </span>

@@ -10,13 +10,13 @@ def index(request):
     search_form = SearchForm()
     random_data = Data.objects.get_random_data()
 
-    return render(request, 'webapp/index.html', {'form': search_form, 'random_data': random_data})
+    return render(request, 'web_app/index.html', {'form': search_form, 'random_data': random_data})
 
 
 class DataListView(generic.ListView, FormView):
     model = Data
     form_class = SearchForm
-    template_name = 'webapp/data_list.html'
+    template_name = 'web_app/data_list.html'
     context_object_name = 'data_list'
     paginate_by = 8
 
@@ -50,7 +50,7 @@ class DataDetailView(generic.DetailView, FormView):
     model = Data
     slug_field = 'pid'
     form_class = SearchForm
-    template_name = 'webapp/data_detail.html'
+    template_name = 'web_app/data_detail.html'
 
     def get_queryset(self):
         pid = self.kwargs.get(self.slug_url_kwarg)

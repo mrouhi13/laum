@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class WebappConfig(AppConfig):
-    name = 'webapp'
+class WebAppConfig(AppConfig):
+    name = 'web_app'
     verbose_name = 'داده‌ها'

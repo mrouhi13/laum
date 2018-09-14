@@ -1,5 +1,5 @@
-from webapp.generics import CreateAPIView
-from webapp.utils.email import NewPageEmail, ReportEmail
+from web_app.generics import CreateAPIView
+from web_app.utils.email import NewPageEmail, ReportEmail
 from .serializers import DataSerializer, ReportSerializer
 
 

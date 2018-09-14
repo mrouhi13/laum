@@ -11,7 +11,7 @@ let myStack = {
 };
 let csrftoken = Cookies.get('csrftoken');
 let domain = window.location.origin + '/';
-const apiBaseUrl = 'webapp/v1/';
+const apiBaseUrl = 'web_app/v1/';
 const newPageUrl = domain + apiBaseUrl + 'data/create/';
 const reportUrl = domain + apiBaseUrl + 'report/create/';
 
