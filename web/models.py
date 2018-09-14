@@ -2,11 +2,9 @@ import random
 import string
 
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
-from .templatetags.webapp_extras import tojalali, topersian
+from .templatetags.webapp_extras import to_jalali, to_persian
 
 
 def generate_new_pid(n=12):
@@ -64,6 +62,7 @@ class Data(models.Model):
                                      help_text='مکان و موقعیت گرفتن عکس به همراه معرفی افراد حاضر در عکس.')
     reference = models.CharField(_('منبع'), max_length=128, blank=True, default='',
                                  help_text='نام کتاب، روزنامه، مجله یا آدرس سایت، بلاگ و... به همراه نام نویسنده')
+    website = models.EmailField(_('وب‌سایت'), max_length=254, blank=True, default='')
     author = models.EmailField(_('ایمیل نویسنده'), max_length=254, blank=True, default='')
     is_active = models.BooleanField(_('فعال'), default=False,
                                     help_text='مشخص می‌کند که این صفحه در لیست نتایج قابل دیدن باشد یا نه.')
@@ -81,15 +80,15 @@ class Data(models.Model):
         return self.title
 
     def jalali_updated_on(self):
-        jalali_date = tojalali(self.updated_on.strftime('%Y-%m-%d'))
-        return topersian(jalali_date)
+        jalali_date = to_jalali(self.updated_on.strftime('%Y-%m-%d'))
+        return to_persian(jalali_date)
 
     jalali_updated_on.admin_order_field = 'updated_on'
     jalali_updated_on.short_description = 'آخرین به‌روزرسانی'
 
     def jalali_created_on(self):
-        jalali_date = tojalali(self.created_on.strftime('%Y-%m-%d'))
-        return topersian(jalali_date)
+        jalali_date = to_jalali(self.created_on.strftime('%Y-%m-%d'))
+        return to_persian(jalali_date)
 
     jalali_created_on.admin_order_field = 'created_on'
     jalali_created_on.short_description = 'تاریخ ایجاد'
@@ -120,22 +119,22 @@ class Report(models.Model):
         return self.data.title
 
     def jalali_updated_on(self):
-        jalali_date = tojalali(self.updated_on.strftime('%Y-%m-%d'))
-        return topersian(jalali_date)
+        jalali_date = to_jalali(self.updated_on.strftime('%Y-%m-%d'))
+        return to_persian(jalali_date)
 
     jalali_updated_on.admin_order_field = 'updated_on'
     jalali_updated_on.short_description = 'آخرین به‌روزرسانی'
 
     def jalali_created_on(self):
-        jalali_date = tojalali(self.created_on.strftime('%Y-%m-%d'))
-        return topersian(jalali_date)
+        jalali_date = to_jalali(self.created_on.strftime('%Y-%m-%d'))
+        return to_persian(jalali_date)
 
     jalali_created_on.admin_order_field = 'created_on'
     jalali_created_on.short_description = 'تاریخ ایجاد'
 
 
 class Tag(models.Model):
-    name = models.CharField(_('نام'), max_length=128, unique=True, blank=True, null=True)
+    name = models.CharField(_('نام'), max_length=128, unique=True)
     keyword = models.CharField(_('کلیدواژه'), max_length=128)
     is_active = models.BooleanField(_('فعال'), default=True,
                                     help_text='مشخص می‌کند که این برچسب قابل استفاده باشد یا نه.')
@@ -150,20 +149,16 @@ class Tag(models.Model):
         return self.name
 
     def jalali_updated_on(self):
-        jalali_date = tojalali(self.updated_on.strftime('%Y-%m-%d'))
-        return topersian(jalali_date)
+        jalali_date = to_jalali(self.updated_on.strftime('%Y-%m-%d'))
+        return to_persian(jalali_date)
 
     jalali_updated_on.admin_order_field = 'updated_on'
     jalali_updated_on.short_description = 'آخرین به‌روزرسانی'
 
     def jalali_created_on(self):
-        jalali_date = tojalali(self.created_on.strftime('%Y-%m-%d'))
-        return topersian(jalali_date)
+        jalali_date = to_jalali(self.created_on.strftime('%Y-%m-%d'))
+        return to_persian(jalali_date)
 
     jalali_created_on.admin_order_field = 'created_on'
     jalali_created_on.short_description = 'تاریخ ایجاد'
 
-
-@receiver(pre_save, sender=Tag)
-def generate_keyword(sender, instance, **kwargs):
-    instance.keyword = instance.name.replace(' ', '_').lower()
