@@ -1,0 +1,20 @@
+{% load widget_tweaks %}
+{% load webapp_extras %}
+<section class="jumbotron text-center pt-4 pb-3">
+    <form id="searchForm" class="form-inline my-2 my-lg-0" action="{% url 'web:list' %}" method="get"
+          autocomplete="off" novalidate>
+        <div class="container position-relative">
+            {% render_field form.q id="q" class="form-control input-search input-search-inline" dir="auto" aria-label="جست‌وجو" %}
+            <button class="btn btn-primary btn-search btn-search-inline" type="submit">
+                <span class="position-relative fas-reglage">
+                    <i class="fas fa-search"></i>
+                </span>
+            </button>
+        </div>
+    </form>
+    {% if data_list %}
+        <div class="container position-relative result-count">
+            <small>{{ count|topersian }} نتیجه پیدا شد.</small>
+        </div>
+    {% endif %}
+</section>

@@ -1,0 +1,77 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% load webapp_extras %}
+{% block content %}
+    {% include 'web/includes/search_inline.html' %}
+    <div class="row justify-content-center content">
+        {% if data %}
+            <div class="col-lg-7 col-md-10 col-sm-12 text-right">
+                <div class="page-header">
+                    <div class="page-title-section">
+                        <div class="header-vertical-divider"></div>
+                        <h3 class="page-title">{{ data.title }}</h3>
+                        <h5 class="page-subtitle">{{ data.subtitle }}</h5>
+                    </div>
+                    <div class="page-date">
+                        <p>{{ data.event }}</p>
+                    </div>
+                </div>
+                <div class="mobile-mode">
+                    <div class="mb-4 image-frame p-3">
+                        <div class="page-thumbnail">
+                            {% if data.image == '' %}
+                                <div class="page-thumbnail" style="height: 250px">
+                                    <i class="far fa-image fa-3x"></i>
+                                </div>
+                            {% else %}
+                                <div class="page-thumbnail">
+                                    <img class="page-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="page-image-caption">
+                        &nbsp;{{ data.image_caption }}
+                    </div>
+                    <div class="harder-horizontal-divider"></div>
+                </div>
+                <div class="page-content">
+                    <p>{{ data.content }}</p>
+                    {% for tag in data.tag.values %}
+                        <a class="ml-1" href="{% url 'web:list' %}?q={{ tag.name }}">
+                            <span class="page-tag">
+                                <small>#{{ tag.name }}</small>
+                            </span>
+                        </a>
+                    {% endfor %}
+                </div>
+                <div class="page-footer">
+                    <a class="page-report-link" data-toggle="modal" data-target="#reportModal">
+                        <i class="fas fa-edit"></i>
+                        &nbsp;گزارش خطا
+                    </a>
+                    <span class="font-italic">
+                        <small>(آخرین به‌روزرسانی {{ data.jalali_updated_on }})</small>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-5 desktop-mode">
+                <div class="mb-4 image-frame p-3">
+                    {% if data.image == '' %}
+                        <div class="page-thumbnail" style="height: 250px">
+                            <i class="far fa-image fa-3x"></i>
+                        </div>
+                    {% else %}
+                        <div class="page-thumbnail">
+                            <img class="page-image" alt="{{ data.image.filename }}" src="/{{ data.image }}">
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="page-image-caption">
+                    &nbsp;{{ data.image_caption }}
+                    <div class="harder-horizontal-divider"></div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

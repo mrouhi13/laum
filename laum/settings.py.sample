@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
 
     # Local
-    'web_app',
+    'web',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +63,7 @@ ROOT_URLCONF = 'laum.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'admin/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -144,10 +145,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Rest framework settings
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'web_app.exception.exception_handler',
+    'EXCEPTION_HANDLER': 'api.exception.exception_handler',
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
-    'DEFAULT_VERSION': 'default',
-    'ALLOWED_VERSIONS': [],
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ['v1'],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ]
