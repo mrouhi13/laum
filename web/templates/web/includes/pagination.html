@@ -22,13 +22,13 @@
                 {% if page_obj.number == i %}
                     <li class="page-item active">
                         <a class="page-link" tabindex="-1">
-                            {{ i|topersian }}
+                            {{ i|to_persian }}
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
                 {% else %}
                     <li class="page-item">
-                        <a class="page-link" href="?{{ parameters }}&page={{ i }}">{{ i|topersian }}</a>
+                        <a class="page-link" href="?{{ parameters }}&page={{ i }}">{{ i|to_persian }}</a>
                     </li>
                 {% endif %}
             {% endfor %}

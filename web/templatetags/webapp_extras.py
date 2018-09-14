@@ -10,7 +10,7 @@ register = template.Library()
 
 @register.filter
 @stringfilter
-def topersian(value):
+def to_persian(value):
     persian_nums = ('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
     original_text = str(value)
     converted_text = ''
@@ -25,20 +25,20 @@ def topersian(value):
 
 
 @register.filter
-def tojalali(date):
+def to_jalali(date):
     if date is None or date == '':
         return None
     else:
         try:
             jalali_string = jalali.Gregorian(date).persian_tuple()
-            month_name = getjalalimonthname(jalali_string[1])
+            month_name = get_jalali_month_name(jalali_string[1])
         except ValueError:
             return None
 
         return '{0} {1}، {2}'.format(jalali_string[2], month_name, jalali_string[0])
 
 
-def getjalalimonthname(month_number):
+def get_jalali_month_name(month_number):
     persian_names = (
         'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند')
 

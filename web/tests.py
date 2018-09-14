@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from .forms import SearchForm
 from .models import Data, Tag, generate_new_pid
-from .templatetags.webapp_extras import topersian, tojalali
+from .templatetags.webapp_extras import to_persian, to_jalali
 
 
 def create_test_data(n):
@@ -280,14 +280,14 @@ class TagModelTests(TestCase):
         self.assertEqual(new_tag.keyword, 'new_test_tag')
 
 
-class ToPersianFilterTests(TestCase):
+class to_persianFilterTests(TestCase):
     def test_with_english_text_and_no_digits(self):
         """
         No change.
         """
         original_text = 'Text with no digits.'
         converted_text = 'Text with no digits.'
-        result = topersian(original_text)
+        result = to_persian(original_text)
 
         self.assertEqual(result, converted_text)
 
@@ -297,7 +297,7 @@ class ToPersianFilterTests(TestCase):
         """
         original_text = 'Text with digit: 1234567890'
         converted_text = 'Text with digit: ۱۲۳۴۵۶۷۸۹۰'
-        result = topersian(original_text)
+        result = to_persian(original_text)
 
         self.assertEqual(result, converted_text)
 
@@ -307,7 +307,7 @@ class ToPersianFilterTests(TestCase):
         """
         original_text = 'Text with digit: ۱۲۳۴۵۶۷۸۹۰'
         converted_text = 'Text with digit: ۱۲۳۴۵۶۷۸۹۰'
-        result = topersian(original_text)
+        result = to_persian(original_text)
 
         self.assertEqual(result, converted_text)
 
@@ -317,7 +317,7 @@ class ToPersianFilterTests(TestCase):
         """
         original_text = 'متن آزمایشی بدون عدد.'
         converted_text = 'متن آزمایشی بدون عدد.'
-        result = topersian(original_text)
+        result = to_persian(original_text)
 
         self.assertEqual(result, converted_text)
 
@@ -327,7 +327,7 @@ class ToPersianFilterTests(TestCase):
         """
         original_text = 'متن آزمایشی با عدد: ۱۲۳۴۵۶۷۸۹۰'
         converted_text = 'متن آزمایشی با عدد: ۱۲۳۴۵۶۷۸۹۰'
-        result = topersian(original_text)
+        result = to_persian(original_text)
 
         self.assertEqual(result, converted_text)
 
@@ -337,18 +337,18 @@ class ToPersianFilterTests(TestCase):
         """
         original_text = 'متن آزمایشی با عدد: 1234567890'
         converted_text = 'متن آزمایشی با عدد: ۱۲۳۴۵۶۷۸۹۰'
-        result = topersian(original_text)
+        result = to_persian(original_text)
 
         self.assertEqual(result, converted_text)
 
 
-class ToJalaliFilterTests(TestCase):
+class to_jalaliFilterTests(TestCase):
     def test_with_empty_date(self):
         """
         Return none.
         """
         date = ''
-        jalali_date = tojalali(date)
+        jalali_date = to_jalali(date)
         self.assertEqual(jalali_date, None)
 
     def test_with_none_date(self):
@@ -356,7 +356,7 @@ class ToJalaliFilterTests(TestCase):
         Return none.
         """
         date = None
-        jalali_date = tojalali(date)
+        jalali_date = to_jalali(date)
         self.assertEqual(jalali_date, None)
 
     def test_with_incorrect_date_format(self):
@@ -364,7 +364,7 @@ class ToJalaliFilterTests(TestCase):
         Return none.
         """
         date = '201822'
-        jalali_date = tojalali(date)
+        jalali_date = to_jalali(date)
         self.assertEqual(jalali_date, None)
 
     def test_with_correct_date_format(self):
@@ -372,5 +372,5 @@ class ToJalaliFilterTests(TestCase):
         Return date in Jalali format.
         """
         date = datetime.date(2019, 2, 2)
-        jalali_date = tojalali(date)
+        jalali_date = to_jalali(date)
         self.assertEqual(jalali_date, '13 بهمن، 1397')
