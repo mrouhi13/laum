@@ -39,7 +39,7 @@
                     {% for tag in data.tag.values %}
                         <a class="ml-1" href="{% url 'web:list' %}?q={{ tag.name }}">
                             <span class="page-tag">
-                                <small>#{{ tag.name }}</small>
+                                <small>#{{ tag.keyword }}</small>
                             </span>
                         </a>
                     {% endfor %}
