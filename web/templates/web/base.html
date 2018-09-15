@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="fa-ir">
-
 <head>
     <title>لام | این‌جا چراغی روشن است!</title>
 
@@ -27,7 +26,7 @@
     <meta name="apple-mobile-web-app-title" content="Laum">
     <meta name="application-name" content="Laum">
     <meta name="msapplication-TileColor" content="#022f53">
-    <meta name="msapplication-config" content="{% static 'web//images/icons/browserconfig.xml' %}">
+    <meta name="msapplication-config" content="{% static 'web/images/icons/browserconfig.xml' %}">
     <meta name="theme-color" content="#ffffff">
 </head>
 
@@ -35,7 +34,7 @@
 {% include 'web/includes/header.html' %}
 <main role="main">
     <div class="container">
-        {% block content %} {% endblock %}
+        {% block content %} {% endblock content %}
         {% include 'web/includes/new-page.html' %}
         {% include 'web/includes/report.html' %}
     </div>
@@ -48,5 +47,4 @@
 <script type="text/javascript" src="{% static 'web/vendor/pnotify/pnotify.custom.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'web/js/main.js' %}"></script>
 </body>
-
 </html>

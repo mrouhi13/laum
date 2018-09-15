@@ -1,7 +1,6 @@
 {% block subject %}
     گزارش مشکل در صفحه‌ی {{ page_title }}
 {% endblock subject %}
-
 {% block text_body %}
     دوست عزیز، این ایمیل به منزله‌‌ی تایید دریافت گزارش ارسالی شما برای صفحه‌ی
     {{ page_title }}
@@ -10,7 +9,6 @@
 
     باتشکر از مشارکت شما در گسترش اطلاعات آزاد، {{ site_title }}.
 {% endblock text_body %}
-
 {% block html_body %}
     <style>
         @font-face {
@@ -27,7 +25,6 @@ color: #6C737A; line-height: 1.375; direction: rtl; text-align: right">
         <tbody align="right" style="direction: rtl">
         <tr>
             <td style="padding: 30px 50px 15px; background-color: #FFF; direction: rtl; text-align: right">
-
                 <a href="{{ site_link }}" rel="noopener noreferrer" style="direction: rtl; text-align: right"><img
                         style="direction: rtl; text-align: right" alt="{{ site_title }}" height="36"
                         src="{{ protocol }}://{{ domain }}/static/webapp/images/laum.logo.yellow.png" width="36"></a>
@@ -81,5 +78,4 @@ color: #6C737A; line-height: 1.375; direction: rtl; text-align: right">
         </tbody>
     </table>
     </body>
-
 {% endblock html_body %}

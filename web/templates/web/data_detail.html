@@ -1,6 +1,5 @@
 {% extends 'web/base.html' %}
-{% load static %}
-{% load webapp_extras %}
+{% load static web_extras %}
 {% block content %}
     {% include 'web/includes/search_inline.html' %}
     <div class="row justify-content-center content">
@@ -74,4 +73,4 @@
             </div>
         {% endif %}
     </div>
-{% endblock %}
+{% endblock content %}
