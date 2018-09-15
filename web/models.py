@@ -4,7 +4,7 @@ import string
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from .templatetags.webapp_extras import to_jalali, to_persian
+from .templatetags.web_extras import to_jalali, to_persian
 
 
 def generate_new_pid(n=12):

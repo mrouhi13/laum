@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from .forms import SearchForm
 from .models import Data, Tag, generate_new_pid
-from .templatetags.webapp_extras import to_persian, to_jalali
+from .templatetags.web_extras import to_persian, to_jalali
 
 
 def create_test_data(n):
