@@ -1,5 +1,5 @@
 {% extends 'web/base.html' %}
-{% load static %}
+{% load static thumbnail %}
 {% block content %}
     {% include 'web/includes/search_inline.html' %}
     {% if data_list %}
@@ -9,12 +9,12 @@
                     <a href="/{{ data.pid }}/">
                         <div class="card mb-4 box-shadow">
                             <div class="position-relative thumbnail">
-                                {% if data.image == '' %}
+                                {% thumbnail data.image '290x290' crop='center' as im %}
+                                    <img class="card-img-top portrait" alt="{{ data.title }}" src="{{ im.url }}"
+                                         width="auto" height="{{ im.height }}">
+                                {% empty %}
                                     <i class="far fa-image fa-3x"></i>
-                                {% else %}
-                                    <img class="card-img-top portrait" alt="{{ data.image.filename }}" src="
-                                    /{{ data.image }}">
-                                {% endif %}
+                                {% endthumbnail %}
                                 <div class="content-title">{{ data.title }}</div>
                             </div>
                             <div class="card-body text-justify">
@@ -42,7 +42,8 @@
             <div class="col-lg-7 col-md-10 col-sm-12 mb-5 text-center">
                 <small style="line-height: 30px; color: #6c757d87">
                     شاید کلیدواژه‌ی نادرستی را جست‌وجو کرده‌اید؛ برای رسیدن به نتیجه‌ی مطلوب کلیدواژه‌های
-                    عمومی‌تر را امتحان کنید یا اگر فکر می‌کنید صفحه‌ی مورد نظر شما در فهرست ما وجود ندارد، شما آن چراغ را
+                    عمومی‌تر را امتحان کنید یا اگر فکر می‌کنید صفحه‌ی مورد نظر شما در فهرست ما وجود ندارد، شما آن چراغ
+                    را
                     <a style="cursor: pointer;color: #353a40" data-toggle="modal" data-target="#newPageModal">روشن
                         کنید</a>.
                     <br>

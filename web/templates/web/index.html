@@ -1,5 +1,5 @@
 {% extends 'web/base.html' %}
-{% load static %}
+{% load static thumbnail %}
 {% block content %}
     {% include 'web/includes/search.html' %}
     <div class="random-page mb-4">
@@ -10,11 +10,12 @@
                         <a href="/{{ data.pid }}/">
                             <div class="mb-4 box-shadow image-frame">
                                 <div class="thumbnail">
-                                    {% if data.image == '' %}
+                                    {% thumbnail data.image '268x268' crop='center' as im %}
+                                        <img alt="{{ data.title }}" src="{{ im.url }}" width="auto"
+                                             height="{{ im.height }}">
+                                    {% empty %}
                                         <i class="far fa-image fa-3x"></i>
-                                    {% else %}
-                                        <img alt="{{ data.title }}" src="/{{ data.image }}">
-                                    {% endif %}
+                                    {% endthumbnail %}
                                 </div>
                             </div>
                         </a>
