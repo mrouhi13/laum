@@ -4,8 +4,8 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .forms import SearchForm
-from .models import Data, Tag, generate_new_pid
-from .templatetags.web_extras import to_persian, to_jalali
+from .models import Data, generate_new_pid
+from .templatetags.web_extras import convert_date_to_jalali as to_jalali, convert_digits_to_persian as to_persian
 
 
 def create_test_data(n):
@@ -248,39 +248,7 @@ class DataModelTests(TestCase):
         self.assertEqual(len(new_pid), 13)
 
 
-class TagModelTests(TestCase):
-    def test_single_word_tag_name(self):
-        """
-        The single-word names keyword are one.
-        """
-        new_tag = Tag.objects.create(name='test')
-
-        new_tag.save()
-
-        self.assertEqual(new_tag.keyword, 'test')
-
-    def test_with_two_word_tag_name_with_space(self):
-        """
-        The space of two word names convert to underscore (_).
-        """
-        new_tag = Tag.objects.create(name='test tag')
-
-        new_tag.save()
-
-        self.assertEqual(new_tag.keyword, 'test_tag')
-
-    def test_with_two_word_tag_name_with_underscore(self):
-        """
-        The more than two word names with underscore is same.
-        """
-        new_tag = Tag.objects.create(name='new test_tag')
-
-        new_tag.save()
-
-        self.assertEqual(new_tag.keyword, 'new_test_tag')
-
-
-class to_persianFilterTests(TestCase):
+class ToPersianFilterTests(TestCase):
     def test_with_english_text_and_no_digits(self):
         """
         No change.
@@ -342,7 +310,7 @@ class to_persianFilterTests(TestCase):
         self.assertEqual(result, converted_text)
 
 
-class to_jalaliFilterTests(TestCase):
+class ToJalaliFilterTests(TestCase):
     def test_with_empty_date(self):
         """
         Return none.

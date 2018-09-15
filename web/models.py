@@ -4,7 +4,7 @@ import string
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from .templatetags.web_extras import to_jalali, to_persian
+from .templatetags.web_extras import convert_date_to_jalali as to_jalali, convert_digits_to_persian as to_persian
 
 
 def generate_new_pid(n=12):
@@ -161,4 +161,3 @@ class Tag(models.Model):
 
     jalali_created_on.admin_order_field = 'created_on'
     jalali_created_on.short_description = 'تاریخ ایجاد'
-
