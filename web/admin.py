@@ -20,7 +20,8 @@ class DataAdmin(admin.ModelAdmin):
     ]
     list_display = ('title', 'author', 'is_active', 'jalali_updated_on', 'jalali_created_on')
     list_filter = ['author', 'is_active', 'updated_on', 'created_on']
-    search_fields = ['title', 'content', 'event', 'image_caption', 'tag', 'website', 'author', 'reference']
+    search_fields = ['title', 'content', 'event', 'image_caption', 'tag__name', 'tag__keyword', 'website', 'author',
+                     'reference']
 
 
 @admin.register(Report)
