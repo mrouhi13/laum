@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from web.models import Data
+from web.models import Data, Report
 
 
 def create_test_data(n):
@@ -13,6 +13,16 @@ def create_test_data(n):
 
     for title in titles_list[:n]:
         Data.objects.create(title=title, content='')
+
+
+def create_test_active_data(n):
+    """
+    Create test data with the given `title` and active.
+    """
+    titles_list = ['Mari', 'Pycharm', 'Mezzo', 'Majid']
+
+    for title in titles_list[:n]:
+        Data.objects.create(title=title, content='', is_active=True)
 
 
 class DataCreateApiTest(APITestCase):
@@ -96,7 +106,7 @@ class ReportApiTest(APITestCase):
         data = {}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Data.objects.count(), 0)
+        self.assertEqual(Report.objects.count(), 0)
 
     def test_with_one_empty_required_field(self):
         """
@@ -106,7 +116,7 @@ class ReportApiTest(APITestCase):
         data = {'body': ''}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Data.objects.count(), 0)
+        self.assertEqual(Report.objects.count(), 0)
 
     def test_with_one_filled_required_field(self):
         """
@@ -116,7 +126,7 @@ class ReportApiTest(APITestCase):
         data = {'body': 'test'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Data.objects.count(), 0)
+        self.assertEqual(Report.objects.count(), 0)
 
     def test_with_empty_required_field(self):
         """
@@ -126,11 +136,25 @@ class ReportApiTest(APITestCase):
         data = {'body': '', 'reporter': ''}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Data.objects.count(), 0)
+        self.assertEqual(Report.objects.count(), 0)
 
     def test_with_required_field_and_email(self):
         """
         Validate email and send a mail to author.
+        """
+        create_test_active_data(1)
+
+        data = Data.objects.get(id=1)
+
+        url = reverse('v1:create-report')
+        data = {'data': data.pid, 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Report.objects.count(), 1)
+
+    def test_with_required_field_and_email_and_inactive_status(self):
+        """
+        Return 404 status when status is not active.
         """
         create_test_data(1)
 
@@ -139,8 +163,8 @@ class ReportApiTest(APITestCase):
         url = reverse('v1:create-report')
         data = {'data': data.pid, 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Data.objects.count(), 1)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Report.objects.count(), 0)
 
     def test_with_required_field_and_incorrect_email(self):
         """
@@ -150,7 +174,7 @@ class ReportApiTest(APITestCase):
         data = {'body': 'test', 'reporter': 'go.mezzo'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Data.objects.count(), 0)
+        self.assertEqual(Report.objects.count(), 0)
 
     def test_with_required_field_and_incorrect_pid(self):
         """
@@ -160,4 +184,4 @@ class ReportApiTest(APITestCase):
         data = {'data': '123', 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Data.objects.count(), 0)
+        self.assertEqual(Report.objects.count(), 0)

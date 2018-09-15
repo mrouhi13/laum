@@ -13,3 +13,8 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = ('data', 'body', 'reporter')
+
+    def validate(self, attrs):
+        if not attrs['data'].is_active:
+            raise serializers.ValidationError()
+        return attrs
