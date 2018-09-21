@@ -28,12 +28,12 @@ class DataAdmin(admin.ModelAdmin):
 class ReportAdmin(admin.ModelAdmin):
     readonly_fields = ('data', 'jalali_updated_on', 'jalali_created_on')
     fieldsets = [
-        ('اطلاعات اصلی', {'fields': ['body', 'reporter', 'status']}),
+        ('اطلاعات اصلی', {'fields': ['body', 'reporter', 'status', 'description']}),
         ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']}),
     ]
     list_display = ('data', 'reporter', 'status', 'jalali_updated_on', 'jalali_created_on')
     list_filter = ['reporter', 'status', 'updated_on', 'created_on']
-    search_fields = ['data', 'body', 'reporter']
+    search_fields = ['data', 'body', 'reporter', 'description']
 
 
 @admin.register(Tag)
