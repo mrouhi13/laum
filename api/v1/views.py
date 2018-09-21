@@ -15,13 +15,7 @@ class PageCreateView(CreateAPIView):
         to = page.author
 
         if to is not None:
-            page_title = page.title
-            page_pid = page.pid
-
-            context = {
-                'page_title': page_title,
-                'page_pid': page_pid,
-            }
+            context = {'page': page}
 
             NewPageEmail(self.request, context).send([to])
 
@@ -38,12 +32,6 @@ class ReportCreateView(CreateAPIView):
         to = serializer.validated_data['reporter']
 
         if to is not None:
-            page_title = serializer.validated_data['page'].title
-            page_pid = serializer.validated_data['page'].pid
-
-            context = {
-                'page_title': page_title,
-                'page_pid': page_pid,
-            }
+            context = {'page': serializer.validated_data['page']}
 
             ReportEmail(self.request, context).send([to])

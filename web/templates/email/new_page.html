@@ -1,10 +1,10 @@
 {% load static %}
 {% block subject %}
-    تاییدیه‌ی ثبت صفحه‌ی {{ page_title }}
+    تاییدیه‌ی ثبت صفحه‌ی {{ page.title }}
 {% endblock subject %}
 {% block text_body %}
     دوست عزیز، این ایمیل به منزله‌‌ی تایید دریافت اطلاعات ارسالی شما برای صفحه‌ی
-    {{ page_title }}
+    {{ page.title }}
     می‌باشد. بعد از بازبینی و تایید توسط تیم تولید محتوا این صفحه قابل نمایش خواهد شد.
 
     باتشکر از مشارکت شما در گسترش اطلاعات آزاد، {{ site_title }}.
@@ -14,7 +14,7 @@
         @font-face {
             font-family: 'Shabnam';
             src: url('{% static 'web/fonts/shabnam/Shabnam.eot' %}');
-            src: url('{% static 'web/fonts/shabnam/Shabnam.eot?#iefix' %}') format('embedded-opentype'), url('{{ protocol }}://{{ domain }}/static/webapp/fonts/shabnam/Shabnam .woff2 ') format(' woff2 '), url(' {{ protocol }} :// {{ domain }} /static/webapp/fonts/shabnam/Shabnam.woff ') format('woff'), url('{{ protocol }}://{{ domain }}/static/webapp/fonts/shabnam/Shabnam.ttf') format('truetype')
+            src: url('{% static 'web/fonts/shabnam/Shabnam.eot?#iefix' %}') format('embedded-opentype'), url('{% static 'web/fonts/shabnam/Shabnam.woff2' %}') format('woff2'), url('{% static 'web/fonts/shabnam/Shabnam.woff' %}') format('woff'), url('{% static 'web/fonts/shabnam/Shabnam.ttf' %}') format('truetype')
         }
     </style>
     <body style="margin: 0; padding: 0; background-color: #FAFAFA; font-family: 'Shabnam', sans-serif;
@@ -35,14 +35,14 @@ color: #6C737A; line-height: 1.375; direction: rtl; text-align: right">
             <td style="padding: 0 50px 25px; background-color: #FFF;">
                 <div style="color: #353a40">
                     <p>تاییدیه‌ی ثبت صفحه‌ی <a style="text-decoration: none; color: #07C"
-                                               href="{% url 'web:detail' page_pid %}"
-                                               rel="noopener noreferrer">{{ page_title }}</a></p>
+                                               href="{% url 'web:detail' page.pid %}"
+                                               rel="noopener noreferrer">{{ page.title }}</a></p>
                 </div>
                 <div>
                     <div style="width: 100%; background-color: #fafafb">
                         <div style="border-bottom: solid 1px #e4e6e8; padding: 3em; line-height: 2em; text-align: justify">
                             دوست عزیز،<br>این ایمیل به منزله‌‌ی تایید دریافت اطلاعات ارسالی شما برای صفحه‌ی
-                            <strong>{{ page_title }}</strong>
+                            <strong>{{ page.title }}</strong>
                             می‌باشد. بعد از ویرایش و تایید توسط تیم تولید محتوا این صفحه قابل نمایش خواهد شد.
                         </div>
                         <div style="color: #848d95; font-size: 12px; font-style: italic; padding: 1.5em; margin-bottom:1em">
@@ -53,8 +53,8 @@ color: #6C737A; line-height: 1.375; direction: rtl; text-align: right">
                 <div>
                     <a style="margin: 1em 0; color:#FFF; display: block; width: 100%; text-align:center;
                     padding:0.6em 0; background-color: #0095ff; border-radius: 2px; text-decoration: none; border: 1px solid #07C"
-                       href="{% url 'web:detail' page_pid %}"
-                       rel="noopener noreferrer">{{ page_title }}</a>
+                       href="{% url 'web:detail' page.pid %}"
+                       rel="noopener noreferrer">{{ page.title }}</a>
                 </div>
             </td>
         </tr>
