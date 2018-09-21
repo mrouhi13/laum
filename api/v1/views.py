@@ -1,22 +1,22 @@
 from api.generics import CreateAPIView
 from web.utils.email import NewPageEmail, ReportEmail
-from .serializers import DataSerializer, ReportSerializer
+from .serializers import PageSerializer, ReportSerializer
 
 
-class DataCreateView(CreateAPIView):
+class PageCreateView(CreateAPIView):
     """
     API endpoint that allows all users to add new page.
     """
-    serializer_class = DataSerializer
+    serializer_class = PageSerializer
 
     def perform_create(self, serializer):
-        data = serializer.save()
+        page = serializer.save()
 
-        to = data.author
+        to = page.author
 
         if to is not None:
-            page_title = data.title
-            page_pid = data.pid
+            page_title = page.title
+            page_pid = page.pid
 
             context = {
                 'page_title': page_title,
@@ -38,8 +38,8 @@ class ReportCreateView(CreateAPIView):
         to = serializer.validated_data['reporter']
 
         if to is not None:
-            page_title = serializer.validated_data['data'].title
-            page_pid = serializer.validated_data['data'].pid
+            page_title = serializer.validated_data['page'].title
+            page_pid = serializer.validated_data['page'].pid
 
             context = {
                 'page_title': page_title,

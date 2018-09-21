@@ -4,28 +4,28 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .forms import SearchForm
-from .models import Data, generate_new_pid
+from .models import Page, generate_new_pid
 from .templatetags.web_extras import convert_date_to_jalali as to_jalali, convert_digits_to_persian as to_persian
 
 
-def create_test_data(n):
+def create_test_page(n):
     """
-    Create data with the given `title`.
+    Create page with the given `title`.
     """
-    titles_list = ['Linux', 'Python', 'Django', 'Peon']
+    titles_list = ['Linux', 'Python', 'Django', 'Mezzo']
 
     for title in titles_list[:n]:
-        Data.objects.create(title=title, content='')
+        Page.objects.create(title=title, content='')
 
 
-def create_test_active_data(n):
+def create_test_active_page(n):
     """
-    Create test data with the given `title` and active.
+    Create test page with the given `title` and active.
     """
-    titles_list = ['Mari', 'Pycharm', 'Mezzo', 'Majid']
+    titles_list = ['Mari', 'Pycharm', 'Peon', 'Majid']
 
     for title in titles_list[:n]:
-        Data.objects.create(title=title, content='', is_active=True)
+        Page.objects.create(title=title, content='', is_active=True)
 
 
 class IndexViewTests(TestCase):
@@ -37,7 +37,7 @@ class IndexViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class DataListViewTests(TestCase):
+class PageListViewTests(TestCase):
     def test_search_without_query_string(self):
         """
         Nothing to display.
@@ -46,107 +46,106 @@ class DataListViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 0)
-        self.assertQuerysetEqual(response.context['data_list'], [])
+        self.assertQuerysetEqual(response.context['page_list'], [])
 
     def test_search_with_empty_query_string(self):
         """
-        An appropriate message is displayed.
+        Nothing to display.
         """
-        create_test_data(4)
-        create_test_active_data(4)
+        create_test_page(4)
+        create_test_active_page(4)
 
         response = self.client.get(reverse('web:list'), data={'q': ''})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 0)
-        self.assertQuerysetEqual(response.context['data_list'], [])
+        self.assertQuerysetEqual(response.context['page_list'], [])
 
     def test_search_with_no_result(self):
         """
         If result found, show the result else an appropriate message is displayed.
         """
-        create_test_data(4)
-        create_test_active_data(4)
+        create_test_page(4)
+        create_test_active_page(4)
 
         response = self.client.get(reverse('web:list'), data={'q': 'ubuntu'})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 0)
-        self.assertQuerysetEqual(response.context['data_list'], [])
+        self.assertQuerysetEqual(response.context['page_list'], [])
 
     def test_search_with_result_with_exact_query_string(self):
         """
         If result found, show the result else an appropriate message is displayed.
         """
-        create_test_data(4)
-        create_test_active_data(4)
+        create_test_page(4)
+        create_test_active_page(4)
 
         response = self.client.get(reverse('web:list'), data={'q': 'Majid'})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 1)
-        self.assertQuerysetEqual(response.context['data_list'], ['<Data: Majid>'])
+        self.assertQuerysetEqual(response.context['page_list'], ['<Page: Majid>'])
 
     def test_search_with_result_with_partial_query_string(self):
         """
         If result found, show the result else an appropriate message is displayed.
         """
-        create_test_data(4)
-        create_test_active_data(4)
+        create_test_page(4)
+        create_test_active_page(4)
 
         response = self.client.get(reverse('web:list'), data={'q': 'py'})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['count'], 1)
-        self.assertQuerysetEqual(response.context['data_list'], ['<Data: Pycharm>'])
+        self.assertQuerysetEqual(response.context['page_list'], ['<Page: Pycharm>'])
 
     def test_search_with_not_active_pages_include(self):
         """
         If result found, show the result else an appropriate message is displayed.
         """
-        create_test_data(4)
-        create_test_active_data(4)
+        create_test_page(4)
+        create_test_active_page(4)
 
-        response = self.client.get(reverse('web:list'), data={'q': 'ma'})
+        response = self.client.get(reverse('web:list'), data={'q': 'm'})
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['count'], 2)
-        self.assertQuerysetEqual(response.context['data_list'], ['<Data: Mari>', '<Data: Majid>'])
+        self.assertEqual(response.context['count'], 3)
+        self.assertQuerysetEqual(response.context['page_list'], ['<Page: Mari>', '<Page: Pycharm>', '<Page: Majid>'])
 
 
-class DataDetailViewTests(TestCase):
-    def test_data_with_id_exist(self):
+class PageDetailViewTests(TestCase):
+    def test_page_with_id_exist(self):
         """
-        If data found, show the content.
+        If page found, show the content.
         """
-        create_test_data(4)
-        create_test_active_data(4)
+        create_test_page(4)
+        create_test_active_page(4)
 
-        data = self.client.get(reverse('web:list'), data={'q': 'pycharm'})
-        response = self.client.get(reverse('web:detail', args=(data.context['data_list'][0].pid,)))
+        page = self.client.get(reverse('web:list'), data={'q': 'pycharm'}).context['page_list']
+        response = self.client.get(reverse('web:detail', args=(page[0].pid,)))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Pycharm')
 
-    def test_data_with_id_exist_but_not_active(self):
+    def test_page_with_id_exist_but_not_active(self):
         """
-        If data found, show only active the content.
+        If page found, only show the active content.
         """
-        create_test_data(4)
-        create_test_active_data(4)
+        create_test_page(4)
+        create_test_active_page(4)
 
-        data = self.client.get(reverse('web:list'), data={'q': 'python'}).context['data_list']
+        page = self.client.get(reverse('web:list'), data={'q': 'python'}).context['page_list']
+        pid = 'null'
 
-        pid = '0'
-
-        if data:
-            pid = data[0].pid
+        if page:
+            pid = page[0].pid
 
         response = self.client.get(reverse('web:detail', args=(pid,)))
 
         self.assertEqual(response.status_code, 404)
 
-    def test_data_without_id_exist(self):
+    def test_page_without_id_exist(self):
         """
         Return a 404 not found.
         """
@@ -183,61 +182,61 @@ class SearchFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
 
-class DataModelTests(TestCase):
-    def test_random_pages_with_no_data(self):
+class PageModelTests(TestCase):
+    def test_random_pages_with_no_page(self):
         """
         Return empty queryset.
         """
-        random_data = Data.objects.get_random_data()
+        random_page = Page.objects.get_random_page()
 
-        self.assertIs(len(random_data), 0)
+        self.assertIs(len(random_page), 0)
 
-    def test_random_pages_with_less_than_three_data(self):
+    def test_random_pages_with_less_than_three_page(self):
         """
         Return a queryset with 2 objects.
         """
-        create_test_data(4)
-        create_test_active_data(2)
+        create_test_page(4)
+        create_test_active_page(2)
 
-        random_data = Data.objects.get_random_data()
+        random_page = Page.objects.get_random_page()
 
-        self.assertIs(len(random_data), 2)
+        self.assertIs(len(random_page), 2)
 
-    def test_random_pages_with_exact_three_three_data(self):
+    def test_random_pages_with_exact_three_three_page(self):
         """
         Return a queryset with 3 objects.
         """
-        create_test_data(4)
-        create_test_active_data(3)
+        create_test_page(4)
+        create_test_active_page(3)
 
-        random_data = Data.objects.get_random_data()
+        random_page = Page.objects.get_random_page()
 
-        self.assertIs(len(random_data), 3)
+        self.assertIs(len(random_page), 3)
 
-    def test_random_pages_with_more_than_three_data(self):
+    def test_random_pages_with_more_than_three_page(self):
         """
         Return a queryset with 3 objects.
         """
-        create_test_data(4)
-        create_test_active_data(4)
+        create_test_page(4)
+        create_test_active_page(4)
 
-        random_data = Data.objects.get_random_data()
+        random_page = Page.objects.get_random_page()
 
-        self.assertIs(len(random_data), 3)
+        self.assertIs(len(random_page), 3)
 
     def test_random_pages_uniqueness(self):
         """
         Return a queryset with 3 unique objects.
         """
-        create_test_data(4)
-        create_test_active_data(4)
+        create_test_page(4)
+        create_test_active_page(4)
 
-        random_data = Data.objects.get_random_data()
+        random_page = Page.objects.get_random_page()
 
-        self.assertNotEqual(random_data[0].id, random_data[1].id)
-        self.assertNotEqual(random_data[1].id, random_data[2].id)
-        self.assertNotEqual(random_data[0].id, random_data[2].id)
-        self.assertIs(len(random_data), 3)
+        self.assertNotEqual(random_page[0].id, random_page[1].id)
+        self.assertNotEqual(random_page[1].id, random_page[2].id)
+        self.assertNotEqual(random_page[0].id, random_page[2].id)
+        self.assertIs(len(random_page), 3)
 
     def test_a_new_pid(self):
         """

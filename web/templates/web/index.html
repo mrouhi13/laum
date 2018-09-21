@@ -3,15 +3,15 @@
 {% block content %}
     {% include 'web/includes/search.html' %}
     <div class="random-page mb-4">
-        {% if random_data %}
+        {% if random_page %}
             <div class="row justify-content-center">
-                {% for data in random_data %}
+                {% for page in random_page %}
                     <div class="col-md-4 col-lg-4 col-xl-3">
-                        <a href="/{{ data.pid }}/">
+                        <a href="{% url 'web:detail' page.pid %}">
                             <div class="mb-4 box-shadow image-frame">
                                 <div class="thumbnail">
-                                    {% thumbnail data.image '268x268' crop='center' as im %}
-                                        <img alt="{{ data.title }}" src="{{ im.url }}" width="auto"
+                                    {% thumbnail page.image '268x268' crop='center' as im %}
+                                        <img alt="{{ page.title }}" src="{{ im.url }}" width="auto"
                                              height="{{ im.height }}">
                                     {% empty %}
                                         <i class="far fa-image fa-3x"></i>

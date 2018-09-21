@@ -15,40 +15,40 @@ def generate_new_pid(n=12):
         postfix_string = ''.join(random.choices(string.ascii_letters + string.digits, k=n))
         new_pid = '%s%s' % (prefix_string, postfix_string)
 
-        if Data.objects.is_pid_exists(new_pid):
+        if Page.objects.is_pid_exists(new_pid):
             new_pid = ''
 
     return new_pid
 
 
-class DataManager(models.Manager):
-    def get_random_data(self):
-        data_count = self.count()
-        random_data = list()
+class PageManager(models.Manager):
+    def get_random_page(self):
+        page_count = self.count()
+        random_page = list()
 
         if self.filter(is_active=True).count() <= 3:
-            random_data = self.filter(is_active=True)
-            random_data = list(random_data)
+            random_page = self.filter(is_active=True)
+            random_page = list(random_page)
         else:
-            while len(random_data) < 3:
-                remaining_count = 3 - len(random_data)
-                random_ids = random.sample(range(1, data_count + 1), remaining_count)
+            while len(random_page) < 3:
+                remaining_count = 3 - len(random_page)
+                random_ids = random.sample(range(1, page_count + 1), remaining_count)
 
                 for i in random_ids:
-                    random_data += self.filter(id=i, is_active=True)
+                    random_page += self.filter(id=i, is_active=True)
 
-                    data_set = set(random_data)
-                    random_data = list(data_set)
+                    page_set = set(random_page)
+                    random_page = list(page_set)
 
-        random.shuffle(random_data)
+        random.shuffle(random_page)
 
-        return random_data
+        return random_page
 
     def is_pid_exists(self, pid):
         return self.filter(pid=pid).exists()
 
 
-class Data(models.Model):
+class Page(models.Model):
     tag = models.ManyToManyField('Tag', verbose_name='برچسب‌ها', related_name='tags', related_query_name='tag',
                                  blank=True)
     pid = models.CharField(_('شناسه‌ی عمومی'), max_length=13, unique=True, default=generate_new_pid)
@@ -69,11 +69,11 @@ class Data(models.Model):
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
     created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
 
-    objects = DataManager()
+    objects = PageManager()
 
     class Meta:
         verbose_name = 'صفحه'
-        verbose_name_plural = 'صفحه‌ها'
+        verbose_name_plural = 'صفحه'
         ordering = ['created_on']
 
     def __str__(self):
@@ -104,7 +104,7 @@ class Report(models.Model):
         (STATUS_IS_DENIED, _('رد شده')),
     )
 
-    data = models.ForeignKey('Data', to_field='pid', verbose_name='صفحه', on_delete=models.CASCADE)
+    page = models.ForeignKey('Page', to_field='pid', verbose_name='صفحه', on_delete=models.CASCADE)
     body = models.TextField(_('متن گزارش'), max_length=1024)
     reporter = models.EmailField(_('ایمیل گزارش‌دهنده'), max_length=254)
     status = models.CharField(_('وضعیت رسیدگی'), max_length=32, choices=STATUS_CHOICES, default=STATUS_IS_PENDING)
@@ -114,10 +114,10 @@ class Report(models.Model):
 
     class Meta:
         verbose_name = 'گزارش'
-        verbose_name_plural = 'گزارش‌ها'
+        verbose_name_plural = 'گزارش'
 
     def __str__(self):
-        return self.data.title
+        return self.page.title
 
     def jalali_updated_on(self):
         jalali_date = to_jalali(self.updated_on.strftime('%Y-%m-%d'))
@@ -144,7 +144,7 @@ class Tag(models.Model):
 
     class Meta:
         verbose_name = 'برچسب'
-        verbose_name_plural = 'برچسب‌ها'
+        verbose_name_plural = 'برچسب'
 
     def __str__(self):
         return self.name

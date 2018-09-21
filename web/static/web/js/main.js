@@ -12,7 +12,7 @@ let myStack = {
 let csrftoken = Cookies.get('csrftoken');
 let domain = window.location.origin + '/';
 const apiBaseUrl = 'api/v1/';
-const newPageUrl = domain + apiBaseUrl + 'data/create/';
+const newPageUrl = domain + apiBaseUrl + 'page/create/';
 const reportUrl = domain + apiBaseUrl + 'report/create/';
 
 function csrfSafeMethod(method) {
@@ -150,7 +150,7 @@ function csrfSafeMethod(method) {
 
         data.append('body', $('#body').val());
         data.append('reporter', $('#reporter').val());
-        data.append('data', $('#id').val());
+        data.append('page', $('#id').val());
 
         $.ajax({
             type: 'POST',
