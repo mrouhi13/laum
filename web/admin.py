@@ -3,9 +3,9 @@ from django.contrib.auth.models import Group
 
 from .models import Page, Tag, Report
 
-admin.site.site_header = 'مدیریت لام'
-admin.site.site_title = 'مدیریت لام'
-admin.site.index_title = 'مدیریت لام'
+admin.site.site_header = 'پنل مدیریت لام'
+admin.site.site_title = 'پنل مدیریت لام'
+admin.site.index_title = 'داشبورد'
 
 admin.site.unregister(Group)
 
