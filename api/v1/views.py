@@ -1,5 +1,5 @@
 from api.generics import CreateAPIView
-from web.utils.email import NewPageEmail, ReportEmail
+from web.utils.email import SendNewPageEmail, SendReportEmail
 from .serializers import PageSerializer, ReportSerializer
 
 
@@ -17,7 +17,7 @@ class PageCreateView(CreateAPIView):
         if to is not None:
             context = {'page': page}
 
-            NewPageEmail(self.request, context).send([to])
+            SendNewPageEmail(self.request, context).send([to])
 
 
 class ReportCreateView(CreateAPIView):
@@ -34,4 +34,4 @@ class ReportCreateView(CreateAPIView):
         if to is not None:
             context = {'page': serializer.validated_data['page']}
 
-            ReportEmail(self.request, context).send([to])
+            SendReportEmail(self.request, context).send([to])
