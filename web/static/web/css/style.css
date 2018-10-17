@@ -306,6 +306,11 @@ footer li:first-child {
     color: #353a40;
 }
 
+.content-tag {
+    display: block !important;
+    text-align: initial;
+}
+
 .card {
     border: none;
 }
@@ -552,7 +557,7 @@ footer li:first-child {
     .jumbotron-heading {
         font-size: 1.8rem;
     }
-    
+
     .slogan-text {
         display: none;
     }

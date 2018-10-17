@@ -20,9 +20,9 @@
                             <div class="card-body text-justify">
                                 <p class="card-text content-body">
                                     {{ page.content|truncatechars:40 }}</p>
-                                <div class="d-flex">
+                                <div class="d-flex content-tag">
                                     {% for tag in page.tag.values %}
-                                        <small class="text-muted ml-2">#{{ tag.name }}</small>
+                                        <small class="text-muted ml-2">#{{ tag.keyword }}</small>
                                     {% endfor %}
                                 </div>
                             </div>
