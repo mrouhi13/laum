@@ -107,8 +107,10 @@ class Report(models.Model):
     page = models.ForeignKey('Page', to_field='pid', verbose_name='صفحه', on_delete=models.CASCADE)
     body = models.TextField(_('متن گزارش'), max_length=1024)
     reporter = models.EmailField(_('ایمیل گزارش‌دهنده'), max_length=254)
-    status = models.CharField(_('وضعیت رسیدگی'), max_length=32, choices=STATUS_CHOICES, default=STATUS_IS_PENDING)
-    description = models.TextField(_('توضیحات'), max_length=1024, blank=True)
+    description = models.TextField(_('توضیحات'), max_length=1024, blank=True, help_text=_(
+        'درصورتی که نیاز به یادآوری توضیحاتی در آینده وجود دارد در این قسمت وارد کنید. برای مثال علت رد گزارش یا...'))
+    status = models.CharField(_('وضعیت رسیدگی'), max_length=32, choices=STATUS_CHOICES, default=STATUS_IS_PENDING,
+                              help_text=_('در تعیین وضیعت رسیدگی دقت کنید. این قسمت تنها یک بار قابل تفییر است.'))
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
     created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
 
