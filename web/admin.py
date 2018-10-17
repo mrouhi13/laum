@@ -1,5 +1,7 @@
+from django import urls
 from django.contrib import admin
 from django.contrib.auth.models import Group
+from django.utils.safestring import mark_safe
 
 from .models import Page, Tag, Report
 
@@ -16,8 +18,7 @@ class PageAdmin(admin.ModelAdmin):
     fieldsets = [
         ('اطلاعات اصلی', {'fields': ['pid', 'title', 'subtitle', 'content', 'event', 'image', 'image_caption']}),
         ('اطلاعات تکمیلی', {'fields': ['tag', 'reference', 'website', 'author', 'is_active']}),
-        ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']}),
-    ]
+        ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ('title', 'author', 'is_active', 'jalali_updated_on', 'jalali_created_on')
     list_filter = ['author', 'is_active', 'updated_on', 'created_on']
     search_fields = ['title', 'content', 'event', 'image_caption', 'tag__name', 'tag__keyword', 'website', 'author',
@@ -26,14 +27,18 @@ class PageAdmin(admin.ModelAdmin):
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
-    readonly_fields = ('page', 'jalali_updated_on', 'jalali_created_on')
-    fieldsets = [
-        ('اطلاعات اصلی', {'fields': ['body', 'reporter', 'status', 'description']}),
-        ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']}),
-    ]
-    list_display = ('page', 'reporter', 'status', 'jalali_updated_on', 'jalali_created_on')
+    readonly_fields = ['link_to_page', 'jalali_updated_on', 'jalali_created_on']
+    fieldsets = [('اطلاعات اصلی', {'fields': ['link_to_page', 'body', 'reporter', 'status', 'description']}),
+                 ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
+    list_display = ['page', 'reporter', 'status', 'jalali_updated_on', 'jalali_created_on']
     list_filter = ['reporter', 'status', 'updated_on', 'created_on']
     search_fields = ['page', 'body', 'reporter', 'description']
+
+    def link_to_page(self, obj):
+        link = urls.reverse('admin:web_page_change', args=[obj.page.id])
+        return mark_safe('<a href="{}" target="_blank">{}</a>'.format(link, obj.page.title))
+
+    link_to_page.short_description = 'صفحه'
 
 
 @admin.register(Tag)
