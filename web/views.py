@@ -21,7 +21,7 @@ class PageListView(generic.ListView, FormView):
     paginate_by = 8
 
     def get_initial(self):
-        if self.request.GET.get('q'):
+        if self.request.GET.get('q', None):
             initial = {'q': self.request.GET.get('q')}
         else:
             initial = {}
@@ -31,7 +31,7 @@ class PageListView(generic.ListView, FormView):
     def get_queryset(self):
         page_list = []
 
-        if self.request.GET.get('q'):
+        if self.request.GET.get('q', None):
             page_list = Page.objects.filter(title__icontains=self.request.GET['q'], is_active=True)
 
         return page_list
@@ -53,7 +53,7 @@ class PageDetailView(generic.DetailView, FormView):
     template_name = 'web/page_detail.html'
 
     def get_queryset(self):
-        pid = self.kwargs.get(self.slug_url_kwarg)
+        pid = self.kwargs.get(self.slug_url_kwarg, None)
         page_detail = Page.objects.filter(pid=pid, is_active=True)
 
         return page_detail
