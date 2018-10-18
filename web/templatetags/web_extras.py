@@ -4,6 +4,7 @@ from django import template
 from django.template.defaultfilters import stringfilter
 
 from web import jalali
+from web.helpers import get_jalali_month_name
 
 register = template.Library()
 
@@ -36,10 +37,3 @@ def convert_date_to_jalali(date):
             return None
 
         return '{0} {1}، {2}'.format(d, month_name, y)
-
-
-def get_jalali_month_name(month_number):
-    persian_names = (
-        'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند')
-
-    return persian_names[month_number - 1]
