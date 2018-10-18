@@ -10,13 +10,13 @@ def index(request):
     search_form = SearchForm()
     random_page = Page.objects.get_random_page()
 
-    return render(request, 'web/index.html', {'form': search_form, 'random_page': random_page})
+    return render(request, 'web/pages/index.html', {'form': search_form, 'random_page': random_page})
 
 
 class PageListView(generic.ListView, FormView):
     model = Page
     form_class = SearchForm
-    template_name = 'web/page_list.html'
+    template_name = 'web/pages/page_list.html'
     context_object_name = 'page_list'
     paginate_by = 8
 
@@ -50,7 +50,7 @@ class PageDetailView(generic.DetailView, FormView):
     model = Page
     slug_field = 'pid'
     form_class = SearchForm
-    template_name = 'web/page_detail.html'
+    template_name = 'web/pages/page_detail.html'
 
     def get_queryset(self):
         pid = self.kwargs.get(self.slug_url_kwarg, None)

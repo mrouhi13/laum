@@ -1,0 +1,6 @@
+{% extends 'web/base.html' %}
+{% block content %}
+    {% include 'web/components/page_list/search.html' %}
+    {% include 'web/components/page_list/list.html' %}
+    {{ block.super }}
+{% endblock content %}

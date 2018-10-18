@@ -1,0 +1,51 @@
+{% load thumbnail %}
+{% if page_list %}
+    <div class="row justify-content-center">
+        {% for page in page_list %}
+            <div class="col-md-5 col-lg-4 col-xl-3">
+                <a href="{% url 'web:detail' page.pid %}">
+                    <div class="card mb-4 box-shadow">
+                        <div class="position-relative thumbnail">
+                            {% thumbnail page.image '290x290' crop='center' as im %}
+                                <img class="card-img-top portrait" alt="{{ page.title }}" src="{{ im.url }}"
+                                     width="auto" height="{{ im.height }}">
+                            {% empty %}
+                                <i class="far fa-image fa-3x"></i>
+                            {% endthumbnail %}
+                            <div class="content-title">{{ page.title }}</div>
+                        </div>
+                        <div class="card-body text-justify">
+                            <p class="card-text content-body">
+                                {{ page.content|truncatechars:40 }}</p>
+                            <div class="d-flex content-tag">
+                                {% for tag in page.tag.values %}
+                                    <small class="text-muted ml-2">#{{ tag.keyword }}</small>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    {% include 'web/includes/pagination.html' %}
+{% else %}
+    <div class="row no-result-message align-items-center">
+        <div class="col text-center mb-4">
+            ): اوه متاسفم! هیچ نتیجه‌ای پیدا نشد.
+        </div>
+    </div>
+    <div class="row no-result-message justify-content-center">
+        <div class="col-lg-7 col-md-10 col-sm-12 mb-5 text-center">
+            <small style="line-height: 30px; color: #6c757d87">
+                شاید کلیدواژه‌ی نادرستی را جست‌وجو کرده‌اید؛ برای رسیدن به نتیجه‌ی مطلوب کلیدواژه‌های
+                عمومی‌تر را امتحان کنید یا اگر فکر می‌کنید صفحه‌ی مورد نظر شما در فهرست ما وجود ندارد، شما آن چراغ
+                را
+                <a style="cursor: pointer;color: #353a40" data-toggle="modal" data-target="#newPageModal">روشن
+                    کنید</a>.
+                <br>
+                از این‌که با کامل‌تر کردن این فهرست به ما کمک می‌کنید از شما ممنونیم.
+            </small>
+        </div>
+    </div>
+{% endif %}

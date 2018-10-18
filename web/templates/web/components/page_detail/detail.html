@@ -1,0 +1,74 @@
+{% load thumbnail %}
+<div class="row justify-content-center content">
+    {% if page %}
+        <div class="col-lg-7 col-md-10 col-sm-12 text-right">
+            <div class="page-header">
+                <div class="page-title-section">
+                    <div class="header-vertical-divider"></div>
+                    <h3 class="page-title">{{ page.title }}</h3>
+                    <h5 class="page-subtitle">{{ page.subtitle }}</h5>
+                </div>
+                <div class="page-date">
+                    <p>{{ page.event }}</p>
+                </div>
+            </div>
+            <div class="mobile-mode">
+                <div class="mb-4 image-frame p-3">
+                    <div class="page-thumbnail">
+                        {% thumbnail page.image '290x290' crop='center' as im %}
+                            <div class="page-thumbnail">
+                                <img class="page-image" alt="{{ page.title }}" src="{{ im.url }}"
+                                     width="auto" height="{{ im.height }}">
+                            </div>
+                        {% empty %}
+                            <div class="page-thumbnail" style="height: 250px">
+                                <i class="far fa-image fa-3x"></i>
+                            </div>
+                        {% endthumbnail %}
+                    </div>
+                </div>
+                <div class="page-image-caption">
+                    &nbsp;{{ page.image_caption }}
+                </div>
+                <div class="harder-horizontal-divider"></div>
+            </div>
+            <div class="page-content">
+                <p>{{ page.content }}</p>
+                {% for tag in page.tag.values %}
+                    <a class="ml-1" href="{% url 'web:list' %}?q={{ tag.keyword }}">
+                            <span class="page-tag">
+                                <small>#{{ tag.keyword }}</small>
+                            </span>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="page-footer">
+                <a class="page-report-link" data-toggle="modal" data-target="#reportModal">
+                    <i class="fas fa-edit"></i>
+                    &nbsp;گزارش خطا
+                </a>
+                <span class="font-italic">
+                        <small>(آخرین به‌روزرسانی {{ page.jalali_updated_on }})</small>
+                    </span>
+            </div>
+        </div>
+        <div class="col-lg-5 desktop-mode">
+            <div class="mb-4 image-frame p-3">
+                {% thumbnail page.image '410x410' crop='center' as im %}
+                    <div class="page-thumbnail">
+                        <img class="page-image" alt="{{ page.title }}" src="{{ im.url }}"
+                             width="auto" height="{{ im.height }}">
+                    </div>
+                {% empty %}
+                    <div class="page-thumbnail" style="height: 250px">
+                        <i class="far fa-image fa-3x"></i>
+                    </div>
+                {% endthumbnail %}
+            </div>
+            <div class="page-image-caption">
+                &nbsp;{{ page.image_caption }}
+                <div class="harder-horizontal-divider"></div>
+            </div>
+        </div>
+    {% endif %}
+</div>

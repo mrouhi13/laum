@@ -1,0 +1,6 @@
+{% extends 'web/base.html' %}
+{% block content %}
+    {% include 'web/components/index/search.html' %}
+    {% include 'web/components/index/random_pages.html' %}
+    {{ block.super }}
+{% endblock content %}

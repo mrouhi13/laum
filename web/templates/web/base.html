@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="fa-ir">
 <head>
-    <title>لام | این‌جا چراغی روشن است!</title>
+    <title>{% block title %}لام | این‌جا چراغی روشن است!{% endblock title %}</title>
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -10,13 +10,13 @@
     <meta name="keywords" content="کیست, چیست, کی"/>
     <meta name="author" content="مجید روحی"/>
     <meta name="description" content="تاریکی‌های خود را، این‌جا روشن کنید."/>
-
-    <link rel="stylesheet" type="text/css" href="{% static 'web/vendor/bootstrap/css/bootstrap.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'web/vendor/pnotify/pnotify.custom.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'web/vendor/fontawesome/css/all.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'web/css/style.css' %}">
-
-    {# Favicon #}
+    {% block stylesheet %}
+        <link rel="stylesheet" type="text/css" href="{% static 'web/vendor/bootstrap/css/bootstrap.min.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'web/vendor/pnotify/pnotify.custom.min.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'web/vendor/fontawesome/css/all.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'web/css/style.css' %}">
+    {% endblock stylesheet %}
+    <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'web/images/icons/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'web/images/icons/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'web/images/icons/favicon-16x16.png' %}">
@@ -28,23 +28,28 @@
     <meta name="msapplication-TileColor" content="#022f53">
     <meta name="msapplication-config" content="{% static 'web/images/icons/browserconfig.xml' %}">
     <meta name="theme-color" content="#ffffff">
+    {% block head_script %}{% endblock head_script %}
 </head>
-
 <body>
-{% include 'web/includes/header.html' %}
+{% block header %}
+    {% include 'web/includes/header.html' %}
+{% endblock header %}
 <main role="main">
     <div class="container">
-        {% block content %} {% endblock content %}
-        {% include 'web/includes/new-page.html' %}
-        {% include 'web/includes/report.html' %}
+        {% block content %}
+            {% include 'web/includes/new_page.html' %}
+        {% endblock content %}
     </div>
 </main>
-{% include 'web/includes/footer.html' %}
-
-<script type="text/javascript" src="{% static 'web/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'web/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'web/vendor/jscookie/js.cookie.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'web/vendor/pnotify/pnotify.custom.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'web/js/main.js' %}"></script>
+{% block footer %}
+    {% include 'web/includes/footer.html' %}
+{% endblock footer %}
+{% block bottom_script %}
+    <script type="text/javascript" src="{% static 'web/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'web/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'web/vendor/jscookie/js.cookie.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'web/vendor/pnotify/pnotify.custom.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'web/js/main.js' %}"></script>
+{% endblock bottom_script %}
 </body>
 </html>
