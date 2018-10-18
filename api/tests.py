@@ -32,7 +32,7 @@ class PageCreateApiTest(APITestCase):
         """
         url = reverse('v1:create-page')
         data = {}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Page.objects.count(), 0)
 
@@ -42,7 +42,7 @@ class PageCreateApiTest(APITestCase):
         """
         url = reverse('v1:create-page')
         data = {'title': ''}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Page.objects.count(), 0)
 
@@ -52,7 +52,7 @@ class PageCreateApiTest(APITestCase):
         """
         url = reverse('v1:create-page')
         data = {'title': 'test'}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Page.objects.count(), 0)
 
@@ -62,7 +62,7 @@ class PageCreateApiTest(APITestCase):
         """
         url = reverse('v1:create-page')
         data = {'title': '', 'content': ''}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Page.objects.count(), 0)
 
@@ -72,7 +72,7 @@ class PageCreateApiTest(APITestCase):
         """
         url = reverse('v1:create-page')
         data = {'title': 'test', 'content': 'test content'}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Page.objects.count(), 1)
 
@@ -82,7 +82,7 @@ class PageCreateApiTest(APITestCase):
         """
         url = reverse('v1:create-page')
         data = {'title': 'test', 'content': 'test content', 'email': 'go.mezzo@icloud.com'}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Page.objects.count(), 1)
 
@@ -92,7 +92,7 @@ class PageCreateApiTest(APITestCase):
         """
         url = reverse('v1:create-page')
         data = {'title': 'test', 'content': 'test content', 'author': 'go.mezzo'}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Page.objects.count(), 0)
 
@@ -104,7 +104,7 @@ class ReportApiTest(APITestCase):
         """
         url = reverse('v1:create-report')
         data = {}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Report.objects.count(), 0)
 
@@ -114,7 +114,7 @@ class ReportApiTest(APITestCase):
         """
         url = reverse('v1:create-report')
         data = {'body': ''}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Report.objects.count(), 0)
 
@@ -124,7 +124,7 @@ class ReportApiTest(APITestCase):
         """
         url = reverse('v1:create-report')
         data = {'body': 'test'}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Report.objects.count(), 0)
 
@@ -134,7 +134,7 @@ class ReportApiTest(APITestCase):
         """
         url = reverse('v1:create-report')
         data = {'body': '', 'reporter': ''}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Report.objects.count(), 0)
 
@@ -148,7 +148,7 @@ class ReportApiTest(APITestCase):
 
         url = reverse('v1:create-report')
         data = {'page': page.pid, 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Report.objects.count(), 1)
 
@@ -162,7 +162,7 @@ class ReportApiTest(APITestCase):
 
         url = reverse('v1:create-report')
         data = {'page': page.pid, 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Report.objects.count(), 0)
 
@@ -172,7 +172,7 @@ class ReportApiTest(APITestCase):
         """
         url = reverse('v1:create-report')
         data = {'body': 'test', 'reporter': 'go.mezzo'}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Report.objects.count(), 0)
 
@@ -182,6 +182,6 @@ class ReportApiTest(APITestCase):
         """
         url = reverse('v1:create-report')
         data = {'page': '123', 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Report.objects.count(), 0)
