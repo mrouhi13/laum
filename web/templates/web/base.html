@@ -28,7 +28,21 @@
     <meta name="msapplication-TileColor" content="#022f53">
     <meta name="msapplication-config" content="{% static 'web/images/icons/browserconfig.xml' %}">
     <meta name="theme-color" content="#ffffff">
-    {% block head_script %}{% endblock head_script %}
+    {% block head_script %}
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-126660701-2"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+
+            gtag('js', new Date());
+
+            gtag('config', 'UA-126660701-2');
+        </script>
+    {% endblock head_script %}
 </head>
 <body>
 {% block header %}
