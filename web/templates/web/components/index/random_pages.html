@@ -1,10 +1,10 @@
 {% load thumbnail %}
 <div class="random-page mb-4">
-    {% if random_page %}
+    {% if random_pages %}
         <div class="row justify-content-center">
-            {% for page in random_page %}
+            {% for page in random_pages %}
                 <div class="col-md-4 col-lg-4 col-xl-3">
-                    <a href="{% url 'web:detail' page.pid %}">
+                    <a href="{% url 'web:page-detail' page.pid %}">
                         <div class="mb-4 box-shadow image-frame">
                             <div class="thumbnail">
                                 {% thumbnail page.image '268x268' crop='center' as im %}

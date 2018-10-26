@@ -8,21 +8,21 @@ from .templatetags.web_extras import convert_date_to_jalali as to_jalali, conver
 
 
 def generate_new_pid(n=12):
-    new_pid = ''
+    new_pid = None
     prefix_string = 'a'
 
-    while new_pid == '':
+    while not new_pid:
         postfix_string = ''.join(random.choices(string.ascii_letters + string.digits, k=n))
         new_pid = '%s%s' % (prefix_string, postfix_string)
 
         if Page.objects.is_pid_exists(new_pid):
-            new_pid = ''
+            new_pid = None
 
     return new_pid
 
 
 class PageManager(models.Manager):
-    def get_random_page(self):
+    def get_random_pages(self):
         page_count = self.count()
         random_page = list()
 

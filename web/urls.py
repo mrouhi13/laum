@@ -6,9 +6,11 @@ from . import views
 
 app_name = 'web'
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('search/', views.PageListView.as_view(), name='list'),
-    path('<str:slug>/', views.PageDetailView.as_view(), name='detail'),
+    path('', views.IndexView.as_view(), name='index'),
+    path('search/', views.PageListView.as_view(), name='page-list'),
+    path('<str:slug>/', views.PageDetailView.as_view(), name='page-detail'),
+    path('page/create/', views.PageCreateView.as_view(), name='page-create'),
+    path('report/create/', views.ReportCreateView.as_view(), name='report-create'),
 ]
 
 # This is only needed when using runserver.

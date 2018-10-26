@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 
-from web.utils.email import SendReportEmail
+from web.utils.email import SendEmail
 from .models import Page, Tag, Report
 
 admin.site.site_header = 'پنل مدیریت لام'
@@ -67,8 +67,9 @@ class ReportAdmin(admin.ModelAdmin):
 
             if to is not None:
                 context = {'report': obj}
+                email_template = 'email/report.html'
 
-                SendReportEmail(request, context).send([to])
+                SendEmail(request, context, email_template).send([to])
 
 
 @admin.register(Tag)

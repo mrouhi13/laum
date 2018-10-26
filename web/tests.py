@@ -40,13 +40,11 @@ class IndexViewTests(TestCase):
 class PageListViewTests(TestCase):
     def test_search_without_query_string(self):
         """
-        Nothing to display.
+        Redirect to index.
         """
-        response = self.client.get(reverse('web:list'))
+        response = self.client.get(reverse('web:page-list'))
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['count'], 0)
-        self.assertQuerysetEqual(response.context['page_list'], [])
+        self.assertEqual(response.status_code, 302)
 
     def test_search_with_empty_query_string(self):
         """
@@ -55,24 +53,20 @@ class PageListViewTests(TestCase):
         create_test_page(4)
         create_test_active_page(4)
 
-        response = self.client.get(reverse('web:list'), data={'q': ''})
+        response = self.client.get(reverse('web:page-list'), data={'q': ''})
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['count'], 0)
-        self.assertQuerysetEqual(response.context['page_list'], [])
+        self.assertEqual(response.status_code, 302)
 
     def test_search_with_no_result(self):
         """
-        If result found, show the result else an appropriate message is displayed.
+        If result found, show the result else an 404 message is displayed.
         """
         create_test_page(4)
         create_test_active_page(4)
 
-        response = self.client.get(reverse('web:list'), data={'q': 'ubuntu'})
+        response = self.client.get(reverse('web:page-list'), data={'q': 'ubuntu'})
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['count'], 0)
-        self.assertQuerysetEqual(response.context['page_list'], [])
+        self.assertEqual(response.status_code, 404)
 
     def test_search_with_result_with_exact_query_string(self):
         """
@@ -81,10 +75,10 @@ class PageListViewTests(TestCase):
         create_test_page(4)
         create_test_active_page(4)
 
-        response = self.client.get(reverse('web:list'), data={'q': 'Majid'})
+        response = self.client.get(reverse('web:page-list'), data={'q': 'Majid'})
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['count'], 1)
+        self.assertEqual(response.context['page_obj'].paginator.count, 1)
         self.assertQuerysetEqual(response.context['page_list'], ['<Page: Majid>'])
 
     def test_search_with_result_with_partial_query_string(self):
@@ -94,10 +88,10 @@ class PageListViewTests(TestCase):
         create_test_page(4)
         create_test_active_page(4)
 
-        response = self.client.get(reverse('web:list'), data={'q': 'py'})
+        response = self.client.get(reverse('web:page-list'), data={'q': 'py'})
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['count'], 1)
+        self.assertEqual(response.context['page_obj'].paginator.count, 1)
         self.assertQuerysetEqual(response.context['page_list'], ['<Page: Pycharm>'])
 
     def test_search_with_not_active_pages_include(self):
@@ -107,10 +101,10 @@ class PageListViewTests(TestCase):
         create_test_page(4)
         create_test_active_page(4)
 
-        response = self.client.get(reverse('web:list'), data={'q': 'm'})
+        response = self.client.get(reverse('web:page-list'), data={'q': 'm'})
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['count'], 3)
+        self.assertEqual(response.context['page_obj'].paginator.count, 3)
         self.assertQuerysetEqual(response.context['page_list'], ['<Page: Mari>', '<Page: Pycharm>', '<Page: Majid>'])
 
 
@@ -122,26 +116,23 @@ class PageDetailViewTests(TestCase):
         create_test_page(4)
         create_test_active_page(4)
 
-        page = self.client.get(reverse('web:list'), data={'q': 'pycharm'}).context['page_list']
-        response = self.client.get(reverse('web:detail', args=(page[0].pid,)))
+        page = self.client.get(reverse('web:page-list'), data={'q': 'pycharm'}).context['page_list']
+        response = self.client.get(reverse('web:page-detail', args=(page[0].pid,)))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Pycharm')
 
     def test_page_with_id_exist_but_not_active(self):
         """
-        If page found, only show the active content.
+        Only show the active page.
         """
         create_test_page(4)
         create_test_active_page(4)
 
-        page = self.client.get(reverse('web:list'), data={'q': 'python'}).context['page_list']
-        pid = 'null'
+        page = Page.objects.get(title='Python')
+        pid = page.pid
 
-        if page:
-            pid = page[0].pid
-
-        response = self.client.get(reverse('web:detail', args=(pid,)))
+        response = self.client.get(reverse('web:page-detail', args=(pid,)))
 
         self.assertEqual(response.status_code, 404)
 
@@ -149,7 +140,7 @@ class PageDetailViewTests(TestCase):
         """
         Return a 404 not found.
         """
-        response = self.client.get(reverse('web:detail', args=(1,)))
+        response = self.client.get(reverse('web:page-detail', args=(1,)))
         self.assertEqual(response.status_code, 404)
 
 
@@ -187,7 +178,7 @@ class PageModelTests(TestCase):
         """
         Return empty queryset.
         """
-        random_page = Page.objects.get_random_page()
+        random_page = Page.objects.get_random_pages()
 
         self.assertIs(len(random_page), 0)
 
@@ -198,7 +189,7 @@ class PageModelTests(TestCase):
         create_test_page(4)
         create_test_active_page(2)
 
-        random_page = Page.objects.get_random_page()
+        random_page = Page.objects.get_random_pages()
 
         self.assertIs(len(random_page), 2)
 
@@ -209,7 +200,7 @@ class PageModelTests(TestCase):
         create_test_page(4)
         create_test_active_page(3)
 
-        random_page = Page.objects.get_random_page()
+        random_page = Page.objects.get_random_pages()
 
         self.assertIs(len(random_page), 3)
 
@@ -220,7 +211,7 @@ class PageModelTests(TestCase):
         create_test_page(4)
         create_test_active_page(4)
 
-        random_page = Page.objects.get_random_page()
+        random_page = Page.objects.get_random_pages()
 
         self.assertIs(len(random_page), 3)
 
@@ -231,7 +222,7 @@ class PageModelTests(TestCase):
         create_test_page(4)
         create_test_active_page(4)
 
-        random_page = Page.objects.get_random_page()
+        random_page = Page.objects.get_random_pages()
 
         self.assertNotEqual(random_page[0].id, random_page[1].id)
         self.assertNotEqual(random_page[1].id, random_page[2].id)
@@ -341,3 +332,164 @@ class ToJalaliFilterTests(TestCase):
         date = datetime.date(2019, 2, 2)
         jalali_date = to_jalali(date)
         self.assertEqual(jalali_date, '13 بهمن، 1397')
+
+# class PageCreateApiTest(APITestCase):
+#     def test_with_no_required_field(self):
+#         """
+#         Check required fields.
+#         """
+#         url = reverse('v1:create-page')
+#         data = {}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Page.objects.count(), 0)
+#
+#     def test_with_one_empty_required_field(self):
+#         """
+#         Check required fields and return error if one or more is empty.
+#         """
+#         url = reverse('v1:create-page')
+#         data = {'title': ''}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Page.objects.count(), 0)
+#
+#     def test_with_one_filled_required_field(self):
+#         """
+#         Check required fields and return error if one or more is empty.
+#         """
+#         url = reverse('v1:create-page')
+#         data = {'title': 'test'}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Page.objects.count(), 0)
+#
+#     def test_with_empty_required_field(self):
+#         """
+#         Check required fields and return error if one or more is empty.
+#         """
+#         url = reverse('v1:create-page')
+#         data = {'title': '', 'content': ''}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Page.objects.count(), 0)
+#
+#     def test_with_required_field(self):
+#         """
+#         Create a page if required field is filled.
+#         """
+#         url = reverse('v1:create-page')
+#         data = {'title': 'test', 'content': 'test content'}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+#         self.assertEqual(Page.objects.count(), 1)
+#
+#     def test_with_required_field_and_email(self):
+#         """
+#         Validate email and send a mail to author.
+#         """
+#         url = reverse('v1:create-page')
+#         data = {'title': 'test', 'content': 'test content', 'email': 'go.mezzo@icloud.com'}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+#         self.assertEqual(Page.objects.count(), 1)
+#
+#     def test_with_required_field_and_incorrect_email(self):
+#         """
+#         Validate email and return 400 Bad Request status if not valid.
+#         """
+#         url = reverse('v1:create-page')
+#         data = {'title': 'test', 'content': 'test content', 'author': 'go.mezzo'}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Page.objects.count(), 0)
+#
+#
+# class ReportApiTest(APITestCase):
+#     def test_with_no_required_field(self):
+#         """
+#         Check required fields.
+#         """
+#         url = reverse('v1:create-report')
+#         data = {}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Report.objects.count(), 0)
+#
+#     def test_with_one_empty_required_field(self):
+#         """
+#         Check required fields and return error if one or more is empty.
+#         """
+#         url = reverse('v1:create-report')
+#         data = {'body': ''}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Report.objects.count(), 0)
+#
+#     def test_with_one_filled_required_field(self):
+#         """
+#         Check required fields and return error if one or more is empty.
+#         """
+#         url = reverse('v1:create-report')
+#         data = {'body': 'test'}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Report.objects.count(), 0)
+#
+#     def test_with_empty_required_field(self):
+#         """
+#         Check required fields and return error if one or more is empty.
+#         """
+#         url = reverse('v1:create-report')
+#         data = {'body': '', 'reporter': ''}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Report.objects.count(), 0)
+#
+#     def test_with_required_field_and_email(self):
+#         """
+#         Validate email and send a mail to author.
+#         """
+#         create_test_active_page(1)
+#
+#         page = Page.objects.get(id=1)
+#
+#         url = reverse('v1:create-report')
+#         data = {'page': page.pid, 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+#         self.assertEqual(Report.objects.count(), 1)
+#
+#     def test_with_required_field_and_email_and_inactive_status(self):
+#         """
+#         Return 404 status when status is not active.
+#         """
+#         create_test_page(1)
+#
+#         page = Page.objects.get(id=1)
+#
+#         url = reverse('v1:create-report')
+#         data = {'page': page.pid, 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Report.objects.count(), 0)
+#
+#     def test_with_required_field_and_incorrect_email(self):
+#         """
+#         Create a page record if required field is filled.
+#         """
+#         url = reverse('v1:create-report')
+#         data = {'body': 'test', 'reporter': 'go.mezzo'}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Report.objects.count(), 0)
+#
+#     def test_with_required_field_and_incorrect_pid(self):
+#         """
+#         Validate email and send a mail to author.
+#         """
+#         url = reverse('v1:create-report')
+#         data = {'page': '123', 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
+#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(Report.objects.count(), 0)

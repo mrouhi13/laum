@@ -12,73 +12,63 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <div class="form-group position-relative">
-                                <label for="title">عنوان *</label>
-                                <input type="text" class="form-control" id="title" placeholder="جلال‌الدین محمد بلخی"
-                                       pattern=".{3,64}" required>
-                                <div class="invalid-tooltip">این فیلد اجباری است و باید بیش‌تر از ۳ حرف باشد</div>
+                                {{ page_form.title.label_tag }}
+                                {{ page_form.title }}
+                                <div class="invalid-tooltip">این فیلد لازم است و باید بیش‌تر از ۳ حرف باشد</div>
                             </div>
                             <div class="form-group position-relative">
-                                <label for="subtitle">زیرعنوان</label>
-                                <input type="text" class="form-control" id="subtitle"
-                                       placeholder="معروف به مولانا" pattern=".{0}|.{3,32}">
+                                {{ page_form.subtitle.label_tag }}
+                                {{ page_form.subtitle }}
                                 <div class="invalid-tooltip">باید خالی یا بیش‌تر از ۳ حرف باشد</div>
                             </div>
                             <div class="form-group position-relative text-right">
-                                <label for="event">رویداد مهم</label>
-                                <input type="text" class="form-control" id="event"
-                                       placeholder="۵۸۶ - ۶۵۲ خورشیدی زاده‌ی بلخ" aria-describedby="eventHelpLine"
-                                       pattern=".{0}|.{3,32}">
+                                {{ page_form.event.label_tag }}
+                                {{ page_form.event }}
                                 <small id="eventHelpLine" class="text-muted">
-                                    تاریخ یک رویداد مهم به همراه محل وقوع.
+                                    {{ page_form.event.help_text }}
                                 </small>
                                 <div class="invalid-tooltip">باید خالی یا بیش‌تر از ۳ حرف باشد</div>
                             </div>
                             <div class="form-group">
-                                <label for="inputCity">آپلود عکس</label>
+                                <label for="id_image">آپلود تصویر:</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="image">
-                                    <label class="custom-file-label text-truncate direction-left" for="image"></label>
+                                    <label class="custom-file-label text-truncate direction-left"
+                                           for="id_image"></label>
+                                    {{ page_form.image }}
                                 </div>
                             </div>
                             <div class="form-group position-relative text-right">
-                                <label for="imageCaption">توضیح عکس</label>
-                                <input type="text" class="form-control" id="imageCaption"
-                                       placeholder="نگاره‌ای پندارین از مولانا"
-                                       aria-describedby="imageCaptionHelpLine" pattern=".{0}|.{3,64}">
+                                {{ page_form.image_caption.label_tag }}
+                                {{ page_form.image_caption }}
                                 <small id="imageCaptionHelpLine" class="text-muted">
-                                    مکان و موقعیت گرفتن عکس به همراه معرفی افراد حاضر در عکس.
+                                    {{ page_form.image_caption.help_text }}
                                 </small>
                                 <div class="invalid-tooltip">باید خالی یا بیش‌تر از ۳ حرف باشد</div>
                             </div>
                         </div>
                         <div class=" col-md-6">
                             <div class="form-group position-relative">
-                                <label for="content">محتوا *</label>
-                                <textarea class="form-control" id="content"
-                                          placeholder="مولوی زاده‌ی بلخ خوارزمشاهیان (خراسان در ایران بزرگ، افغانستان کنونی) یا وخش بود و..."
-                                          rows="17" minlength="100" maxlength="1024" required></textarea>
-                                <div class="invalid-tooltip">این فیلد اجباری است و باید بیش‌تر از ۱۰۰ حرف باشد</div>
+                                {{ page_form.content.label_tag }}
+                                {{ page_form.content }}
+                                <div class="invalid-tooltip">این فیلد لازم است و باید بیش‌تر از ۱۰۰ حرف باشد</div>
                             </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-6">
                             <div class="form-group position-relative text-right">
-                                <label for="reference">منبع</label>
-                                <input type="text" class="form-control" id="reference"
-                                       placeholder="شرح زندگانی مولوی، به قلم بدیع‌الزمان فروزانفر"
-                                       aria-describedby="referenceHelpLine" pattern=".{0}|.{3,64}">
+                                {{ page_form.reference.label_tag }}
+                                {{ page_form.reference }}
                                 <small id="referenceHelpLine" class="text-muted">
-                                    نام کتاب، روزنامه، مجله یا آدرس سایت، بلاگ و... به همراه نام نویسنده
+                                    {{ page_form.reference.help_text }}
                                 </small>
                                 <div class="invalid-tooltip">باید خالی یا بیش‌تر از ۳ حرف باشد</div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group position-relative">
-                                <label for="author">ایمیل شما</label>
-                                <input type="email" class="form-control text-left direction-left" id="author"
-                                       placeholder="youremail@example.com">
+                                {{ page_form.author.label_tag }}
+                                {{ page_form.author }}
                                 <div class="invalid-tooltip">ایمیل معتبر وارد کنید</div>
                             </div>
                         </div>

@@ -10,10 +10,9 @@ let myStack = {
     }
 };
 let csrftoken = Cookies.get('csrftoken');
-let domain = window.location.origin + '/';
-const apiBaseUrl = 'api/v1/';
-const newPageUrl = domain + apiBaseUrl + 'page/create/';
-const reportUrl = domain + apiBaseUrl + 'report/create/';
+let domain = window.location.origin;
+const createPageUrl = domain + '/page/create/';
+const createReportUrl = domain + '/report/create/';
 
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -47,7 +46,7 @@ function csrfSafeMethod(method) {
     $('.modal').on('hidden.bs.modal', function () {
         $(this).find('form')[0].reset();
         $('form').removeClass('needs-validation was-validated');
-        $('#image').next('.custom-file-label').html('');
+        $('#id_image').next('.custom-file-label').html('');
 
         let submit_page = $('#submitPage');
         submit_page.prop('disabled', false);
@@ -59,12 +58,12 @@ function csrfSafeMethod(method) {
     });
 
     $('#searchForm').submit(function () {
-        if ($.trim($('#q').val()) === '') {
+        if ($.trim($('#id_q').val()) === '') {
             return false;
         }
     });
 
-    $('#image').on('change', function () {
+    $('#id_image').on('change', function () {
         let fileName = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
         $(this).next('.custom-file-label').html(fileName);
     });
@@ -80,23 +79,23 @@ function csrfSafeMethod(method) {
             ' fa-spin"></i></span>');
 
         let data = new FormData();
-        let image = $('#image')[0].files;
+        let image = $('#id_image')[0].files;
 
         if (image.length > 0) {
             data.append('image', image[0]);
         }
 
-        data.append('title', $('#title').val());
-        data.append('subtitle', $('#subtitle').val());
-        data.append('event', $('#event').val());
-        data.append('content', $('#content').val());
-        data.append('image_caption', $('#imageCaption').val());
-        data.append('reference', $('#reference').val());
-        data.append('author', $('#author').val());
-
+        data.append('title', $('#id_title').val());
+        data.append('subtitle', $('#id_subtitle').val());
+        data.append('event', $('#id_event').val());
+        data.append('content', $('#id_content').val());
+        data.append('image_caption', $('#id_image_caption').val());
+        data.append('reference', $('#id_reference').val());
+        data.append('author', $('#id_author').val());
+        console.log('data: ', data);
         $.ajax({
             type: 'POST',
-            url: newPageUrl,
+            url: createPageUrl,
             data: data,
             cache: false,
             contentType: false,
@@ -107,7 +106,7 @@ function csrfSafeMethod(method) {
                 }
             },
             success: function () {
-                myStack.text = 'اطلاعات با موفقیت ارسال شد';
+                myStack.text = 'اطلاعات با موفقیت ارسال شد.';
                 myStack.type = 'success';
 
                 PNotify.removeAll();
@@ -118,10 +117,15 @@ function csrfSafeMethod(method) {
             },
             error: function (error) {
                 if (error.status === 500) {
-                    myStack.text = 'خطای سمت سرور';
+                    myStack.text = 'درخواست شما با خطا مواجه شد.';
                     myStack.type = 'error';
-                } else {
-                    myStack.text = error.responseJSON.message;
+                } else if (error.status === 400) {
+                    $.each(error.responseJSON, function (key) {
+                        console.log('#' + key + '_tooltip_id');
+                        $('#' + key + '_tooltip_id').show()
+                    });
+
+                    myStack.text = 'ثبت اطلاعات با خطا مواجه شد.';
                     myStack.type = 'error';
                 }
 
@@ -148,13 +152,13 @@ function csrfSafeMethod(method) {
 
         let data = new FormData();
 
-        data.append('body', $('#body').val());
-        data.append('reporter', $('#reporter').val());
-        data.append('page', $('#id').val());
+        data.append('body', $('#id_body').val());
+        data.append('reporter', $('#id_reporter').val());
+        data.append('page', $('#id_page').val());
 
         $.ajax({
             type: 'POST',
-            url: reportUrl,
+            url: createReportUrl,
             data: data,
             cache: false,
             contentType: false,
@@ -165,7 +169,7 @@ function csrfSafeMethod(method) {
                 }
             },
             success: function () {
-                myStack.text = 'گزارش با موفقیت ارسال شد';
+                myStack.text = 'گزارش با موفقیت ارسال شد.';
                 myStack.type = 'success';
 
                 PNotify.removeAll();
@@ -176,10 +180,18 @@ function csrfSafeMethod(method) {
             },
             error: function (error) {
                 if (error.status === 500) {
-                    myStack.text = 'خطای سمت سرور';
+                    myStack.text = 'درخواست شما با خطا مواجه شد.';
                     myStack.type = 'error';
-                } else {
-                    myStack.text = error.responseJSON.message;
+                } else if (error.status === 404) {
+                    myStack.text = 'صفحه‌ی مورد نظر پیدا نشد.';
+                    myStack.type = 'error';
+                } else if (error.status === 400) {
+                    $.each(error.responseJSON, function (key) {
+                        console.log('#' + key + '_tooltip_id');
+                        $('#' + key + '_tooltip_id').show()
+                    });
+
+                    myStack.text = 'ثبت گزارش با خطا مواجه شد.';
                     myStack.type = 'error';
                 }
 

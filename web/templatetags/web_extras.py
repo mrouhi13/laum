@@ -1,4 +1,5 @@
 import re
+from urllib.parse import urlencode
 
 from django import template
 from django.template.defaultfilters import stringfilter
@@ -37,3 +38,10 @@ def convert_date_to_jalali(date):
             return None
 
         return '{0} {1}، {2}'.format(d, month_name, y)
+
+
+@register.simple_tag(takes_context=True)
+def url_replace(context, **kwargs):
+    query = context['request'].GET.dict()
+    query.update(kwargs)
+    return urlencode(query)
