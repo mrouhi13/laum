@@ -41,12 +41,10 @@ INSTALLED_APPS = [
 
     # Third Party
     'rest_framework',
-    'widget_tweaks',
     'sorl.thumbnail',
 
     # Local
     'web',
-    'api',
 ]
 
 MIDDLEWARE = [
