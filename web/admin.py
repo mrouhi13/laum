@@ -21,7 +21,7 @@ class PageAdmin(admin.ModelAdmin):
         ('اطلاعات تکمیلی', {'fields': ['tag', 'reference', 'website', 'author', 'is_active']}),
         ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['title', 'author', 'is_active', 'jalali_updated_on', 'jalali_created_on']
-    list_filter = ['author', 'is_active', 'updated_on', 'created_on']
+    list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['title', 'content', 'event', 'image_caption', 'tag__name', 'tag__keyword', 'website', 'author',
                      'reference']
 
@@ -32,7 +32,7 @@ class ReportAdmin(admin.ModelAdmin):
     fieldsets = [('اطلاعات اصلی', {'fields': ['link_to_page', 'body', 'link_to_mail', 'description', 'status']}),
                  ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['page', 'link_to_mail', 'status', 'jalali_updated_on', 'jalali_created_on']
-    list_filter = ['reporter', 'status', 'updated_on', 'created_on']
+    list_filter = ['status', 'updated_on', 'created_on']
     search_fields = ['page', 'body', 'reporter', 'description']
 
     def link_to_page(self, obj):
