@@ -14,7 +14,7 @@
         <div class="mobile-mode">
             <div class="mb-4 image-frame p-3">
                 <div class="page-thumbnail">
-                    {% thumbnail page.image '290x290' crop='center' as im %}
+                    {% thumbnail page.image '536x290' crop='center' as im %}
                         <div class="page-thumbnail">
                             <img class="page-image" alt="{{ page.title }}" src="{{ im.url }}" width="auto"
                                  height="{{ im.height }}">
@@ -44,7 +44,7 @@
         <div class="page-footer">
             <a class="page-report-link" data-toggle="modal" data-target="#reportModal">
                 <i class="fas fa-edit"></i>
-                &nbsp;گزارش خطا
+                گزارش خطا
             </a>
             <span class="font-italic">
                 <small>(آخرین به‌روزرسانی {{ page.jalali_updated_on }})</small>
