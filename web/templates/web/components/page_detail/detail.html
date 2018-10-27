@@ -16,8 +16,8 @@
                 <div class="page-thumbnail">
                     {% thumbnail page.image '290x290' crop='center' as im %}
                         <div class="page-thumbnail">
-                            <img class="page-image" alt="{{ page.title }}" src="{{ im.url }}"
-                                 width="auto" height="{{ im.height }}">
+                            <img class="page-image" alt="{{ page.title }}" src="{{ im.url }}" width="auto"
+                                 height="{{ im.height }}">
                         </div>
                     {% empty %}
                         <div class="page-thumbnail" style="height: 250px">
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="page-image-caption">
-                &nbsp;{{ page.image_caption }}
+                {{ page.image_caption }}
             </div>
             <div class="harder-horizontal-divider"></div>
         </div>
@@ -35,9 +35,9 @@
             <p>{{ page.content }}</p>
             {% for tag in page.tag.values %}
                 <a class="ml-1" href="{% url 'web:page-list' %}?q={{ tag.keyword }}">
-                            <span class="page-tag">
-                                <small>#{{ tag.keyword }}</small>
-                            </span>
+                    <span class="page-tag">
+                        <small>#{{ tag.keyword }}</small>
+                    </span>
                 </a>
             {% endfor %}
         </div>
@@ -47,8 +47,8 @@
                 &nbsp;گزارش خطا
             </a>
             <span class="font-italic">
-                        <small>(آخرین به‌روزرسانی {{ page.jalali_updated_on }})</small>
-                    </span>
+                <small>(آخرین به‌روزرسانی {{ page.jalali_updated_on }})</small>
+            </span>
         </div>
     </div>
     <div class="col-lg-5 desktop-mode">
@@ -65,7 +65,7 @@
             {% endthumbnail %}
         </div>
         <div class="page-image-caption">
-            &nbsp;{{ page.image_caption }}
+            {{ page.image_caption }}
             <div class="harder-horizontal-divider"></div>
         </div>
     </div>
