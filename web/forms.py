@@ -8,6 +8,12 @@ class SearchForm(forms.Form):
     q = forms.CharField(label='جست‌وجو', min_length=1, max_length=100)
     q.widget.attrs.update({'class': 'form-control input-search', 'dir': 'auto', 'aria-label': 'جست‌وجو'})
 
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+        initial = getattr(self, 'initial', None)
+        if initial:
+            self.fields['q'].widget.attrs.update({'class': 'form-control input-search input-search-inline'})
+
 
 class PageForm(forms.ModelForm):
     class Meta:
