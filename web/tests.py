@@ -66,7 +66,9 @@ class PageListViewTests(TestCase):
 
         response = self.client.get(reverse('web:page-list'), data={'q': 'ubuntu'})
 
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['page_obj'].paginator.count, 0)
+        self.assertQuerysetEqual(response.context['object_list'], [])
 
     def test_search_with_result_with_exact_query_string(self):
         """
@@ -79,7 +81,7 @@ class PageListViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['page_obj'].paginator.count, 1)
-        self.assertQuerysetEqual(response.context['page_list'], ['<Page: Majid>'])
+        self.assertQuerysetEqual(response.context['object_list'], ['<Page: Majid>'])
 
     def test_search_with_result_with_partial_query_string(self):
         """
@@ -92,9 +94,9 @@ class PageListViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['page_obj'].paginator.count, 1)
-        self.assertQuerysetEqual(response.context['page_list'], ['<Page: Pycharm>'])
+        self.assertQuerysetEqual(response.context['object_list'], ['<Page: Pycharm>'])
 
-    def test_search_with_not_active_pages_include(self):
+    def test_search_with_no_include_inactive_pages(self):
         """
         If result found, show the result else an appropriate message is displayed.
         """
@@ -105,7 +107,7 @@ class PageListViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['page_obj'].paginator.count, 3)
-        self.assertQuerysetEqual(response.context['page_list'], ['<Page: Mari>', '<Page: Pycharm>', '<Page: Majid>'])
+        self.assertQuerysetEqual(response.context['object_list'], ['<Page: Majid>', '<Page: Pycharm>', '<Page: Mari>'])
 
 
 class PageDetailViewTests(TestCase):
@@ -116,7 +118,7 @@ class PageDetailViewTests(TestCase):
         create_test_page(4)
         create_test_active_page(4)
 
-        page = self.client.get(reverse('web:page-list'), data={'q': 'pycharm'}).context['page_list']
+        page = self.client.get(reverse('web:page-list'), data={'q': 'pycharm'}).context['object_list']
         response = self.client.get(reverse('web:page-detail', args=(page[0].pid,)))
 
         self.assertEqual(response.status_code, 200)
