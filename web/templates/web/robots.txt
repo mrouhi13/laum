@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /page/create/
+Disallow: /report/create/
+Disallow: /sitemap.xml
