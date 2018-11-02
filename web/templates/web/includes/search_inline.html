@@ -1,0 +1,18 @@
+{% load web_extras %}
+<section class="jumbotron text-center pt-4 pb-3">
+    <form id=searchForm class="form-inline my-2 my-lg-0" action="{% url 'web:page-list' %}" autocomplete=off novalidate>
+        <div class="container position-relative">
+            {{ search_form.q }}
+            <button class="btn btn-primary btn-search btn-search-inline" type=submit>
+                <span class="position-relative fas-reglage">
+                    <i class="fas fa-search"></i>
+                </span>
+            </button>
+        </div>
+    </form>
+    {% if object_list %}
+        <div class="container position-relative result-count">
+            <small>{{ page_obj.paginator.count|to_persian }} نتیجه پیدا شد.</small>
+        </div>
+    {% endif %}
+</section>

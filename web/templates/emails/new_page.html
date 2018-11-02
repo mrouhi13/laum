@@ -1,0 +1,80 @@
+{% block subject %}
+    ثبت اطلاعات برای صفحه‌ی «{{ page.title }}»
+{% endblock subject %}
+{% block text_body %}
+    دوست عزیز، این ایمیل به دلیل ثبت اطلاعات برای صفحه‌ی
+    «{{ page.title }}»
+    ارسال شده است. بعد از بازبینی و تایید توسط تیم تولید محتوا این صفحه قابل نمایش خواهد شد.
+
+    باتشکر از مشارکت شما در گسترش اطلاعات آزاد، {{ site_title }}.
+{% endblock text_body %}
+{% block html_body %}
+    <style>
+        @font-face {
+            font-family: 'Shabnam';
+            src: url('{{ protocol }}://{{ domain }}/static/web/fonts/shabnam/Shabnam.eot');
+            src: url('{{ protocol }}://{{ domain }}/static/web/fonts/shabnam/Shabnam.eot?#iefix') format('embedded-opentype'), url('{{ protocol }}://{{ domain }}/static/web/fonts/shabnam/Shabnam.woff2') format('woff2'), url('{{ protocol }}://{{ domain }}/static/web/fonts/shabnam/Shabnam.woff') format('woff'), url('{{ protocol }}://{{ domain }}/static/web/fonts/shabnam/Shabnam.ttf') format('truetype')
+        }
+    </style>
+    <body style="margin: 0; padding: 0; background-color: #FAFAFA; font-family: 'Shabnam', sans-serif;
+    font-size: 16px;
+color: #6C737A; line-height: 1.375; direction: rtl; text-align: right">
+    <table border="0" cellpadding="0" cellspacing="0" style="margin: 2em auto; width: 600px; border-collapse:
+    collapse;">
+        <tbody align="right" style="direction: rtl">
+        <tr>
+            <td style="padding: 30px 50px 15px; background-color: #FFF; direction: rtl; text-align: right">
+                <a href="{{ protocol }}://{{ domain }}/"
+                   style="direction: rtl; text-align: right"><img
+                        style="direction: rtl; text-align: right"
+                        src="{{ protocol }}://{{ domain }}/static/web/images/laum.logo.yellow.png" width=36 height=36
+                        alt={{ site_title }}></a>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 0 50px 25px; background-color: #FFF;">
+                <div style="color: #353a40">
+                    <p>ثبت اطلاعات برای صفحه‌ی «<a style="text-decoration: none; color: #07C"
+                                                   href="{{ protocol }}://{{ domain }}/{{ page.pid }}/"
+                                                   rel="noopener noreferrer">{{ page.title }}</a>»</p>
+                </div>
+                <div>
+                    <div style="width: 100%; background-color: #fafafb">
+                        <div style="border-bottom: solid 1px #e4e6e8; padding: 3em; line-height: 2em; text-align: justify">
+                            دوست عزیز،<br>این ایمیل به دلیل ثبت اطلاعات برای صفحه‌ی
+                            «<strong>{{ page.title }}</strong>»
+                            ارسال شده است. بعد از ویرایش و تایید توسط تیم تولید محتوا این صفحه قابل نمایش خواهد شد.
+                        </div>
+                        <div style="color: #848d95; font-size: 12px; font-style: italic; padding: 1.5em; margin-bottom:1em">
+                            باتشکر از مشارکت شما در گسترش اطلاعات آزاد، <strong>{{ site_title }}</strong>.
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <a style="margin: 1em 0; color:#FFF; display: block; width: 100%; text-align:center;
+                    padding:0.6em 0; background-color: #0095ff; border-radius: 2px; text-decoration: none; border: 1px solid #07C"
+                       href="{{ protocol }}://{{ domain }}/{{ page.pid }}/"
+                       rel="noopener noreferrer">رفتن به صفحه‌ی «{{ page.title }}»</a>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 25px 10px; font-size: 11px; line-height: 1.36; color: #9EA3A9;">
+                <div style="margin-bottom: 1em;">
+                    <img src="{{ protocol }}://{{ domain }}/static/web/images/laum.logo.yellow.png" width=24 height=24
+                         alt={{ site_title }}>
+                    <p style="margin-top:4px;"><strong>{{ site_title }}</strong>، تهران، ایران</p>
+                </div>
+                <p>دلیل دریافت این ایمیل ارسال اطلاعات به {{ site_title }} می‌باشد.</p>
+                <p>از آدرس ایمیل شما برای تبلیغات توسط سرویس ما استفاده نخواهد شد.</p>
+                <div><a style="color:#999; text-decoration:underline" href="{{ protocol }}://{{ domain }}/"
+                        rel="noopener noreferrer">قوانین ما</a> &nbsp;•&nbsp; <a style="color:#999;
+                        text-decoration:underline" href="mailto: {{ contact_email }}" rel="noopener noreferrer">تماس
+                    با ما </a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </body>
+{% endblock html_body %}

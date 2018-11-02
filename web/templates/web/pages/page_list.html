@@ -1,0 +1,11 @@
+{% extends 'web/base.html' %}
+{% block title %}{{ request.GET.q }} | جست‌وجوی {{ site_title }}{% endblock title %}
+{% block content %}
+    {% include 'web/components/page_list/search.html' %}
+    {% if object_list %}
+        {% include 'web/components/page_list/list.html' %}
+    {% else %}
+        {% include 'web/components/page_list/no_result.html' %}
+    {% endif %}
+    {{ block.super }}
+{% endblock content %}

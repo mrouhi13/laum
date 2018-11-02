@@ -16,7 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from web import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('webapp.urls', namespace='webapp')),
+    path('', include('web.urls', namespace='web')),
 ]
+
+handler400 = views.bad_request
+handler403 = views.permission_denied
+handler404 = views.page_not_found
+handler500 = views.server_error
