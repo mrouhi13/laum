@@ -15,6 +15,7 @@ admin.site.unregister(Group)
 
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
+    date_hierarchy = 'created_on'
     readonly_fields = ['pid', 'jalali_updated_on', 'jalali_created_on']
     fieldsets = [
         ('اطلاعات اصلی', {'fields': ['pid', 'title', 'subtitle', 'content', 'event', 'image', 'image_caption']}),
@@ -28,6 +29,7 @@ class PageAdmin(admin.ModelAdmin):
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
+    date_hierarchy = 'created_on'
     readonly_fields = ['link_to_page', 'body', 'link_to_mail', 'jalali_updated_on', 'jalali_created_on']
     fieldsets = [('اطلاعات اصلی', {'fields': ['link_to_page', 'body', 'link_to_mail', 'description', 'status']}),
                  ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
