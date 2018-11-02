@@ -1,12 +1,34 @@
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, get_list_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.views import defaults
 from django.views.generic import CreateView, DetailView, ListView, TemplateView
 from django.views.generic.edit import FormView, FormMixin
 
 from .forms import SearchForm, PageForm, ReportForm
 from .models import Page, Report
 from .utils.email import SendEmail
+
+ERROR_404_TEMPLATE_NAME = 'errors/error_404.html'
+ERROR_403_TEMPLATE_NAME = 'errors/error_403.html'
+ERROR_400_TEMPLATE_NAME = 'errors/error_400.html'
+ERROR_500_TEMPLATE_NAME = 'errors/error_500.html'
+
+
+def page_not_found(request, exception, template_name=ERROR_404_TEMPLATE_NAME):
+    return defaults.page_not_found(request, exception, template_name)
+
+
+def server_error(request, template_name=ERROR_500_TEMPLATE_NAME):
+    return defaults.server_error(request, template_name)
+
+
+def bad_request(request, exception, template_name=ERROR_400_TEMPLATE_NAME):
+    return defaults.bad_request(request, exception, template_name)
+
+
+def permission_denied(request, exception, template_name=ERROR_403_TEMPLATE_NAME):
+    return defaults.permission_denied(request, exception, template_name)
 
 
 class AjaxableResponseMixin(FormMixin):
@@ -25,17 +47,16 @@ class AjaxableResponseMixin(FormMixin):
     def form_valid(self, form):
         response = super().form_valid(form)
         if self.request.is_ajax():
-            print(self.object)
             page = self.object
             reporter = form.cleaned_data.get('reporter')
             author = form.cleaned_data.get('author')
             email_template = None
             to = None
             if reporter:
-                email_template = 'email/report.html'
+                email_template = 'emails/report.html'
                 to = reporter
             elif author:
-                email_template = 'email/new_page.html'
+                email_template = 'emails/new_page.html'
                 to = author
 
             if email_template:
@@ -64,7 +85,6 @@ class IndexView(TemplateView):
 class PageListView(ListView):
     model = Page
     template_name = 'web/pages/page_list.html'
-    context_object_name = 'page_list'
     paginate_by = 8
 
     def get(self, request, *args, **kwargs):
@@ -75,8 +95,7 @@ class PageListView(ListView):
 
     def get_queryset(self):
         q = self.request.GET.get('q')
-        page_list = get_list_or_404(self.model, title__icontains=q, is_active=True)
-        return page_list
+        return Page.objects.filter(title__icontains=q, is_active=True)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PageListView, self).get_context_data(**kwargs)
@@ -106,8 +125,7 @@ class PageDetailView(DetailView, FormView):
 
     def get_object(self, queryset=None):
         pid = self.kwargs.get(self.slug_url_kwarg)
-        page_detail = get_object_or_404(self.model, pid=pid, is_active=True)
-        return page_detail
+        return get_object_or_404(self.model, pid=pid, is_active=True)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PageDetailView, self).get_context_data(**kwargs)
