@@ -67,7 +67,7 @@ class ReportAdmin(admin.ModelAdmin):
 
             if to is not None:
                 context = {'report': obj}
-                email_template = 'email/report.html'
+                email_template = 'emails/report.html'
 
                 SendEmail(request, context, email_template).send([to])
 
