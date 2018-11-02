@@ -117,7 +117,7 @@ function csrfSafeMethod(method) {
             },
             error: function (error) {
                 if (error.status === 500) {
-                    myStack.text = 'درخواست شما با خطا مواجه شد.';
+                    myStack.text = 'خطایی در سرور رخ داده است.';
                     myStack.type = 'error';
                 } else if (error.status === 400) {
                     $.each(error.responseJSON, function (key) {
@@ -180,7 +180,7 @@ function csrfSafeMethod(method) {
             },
             error: function (error) {
                 if (error.status === 500) {
-                    myStack.text = 'درخواست شما با خطا مواجه شد.';
+                    myStack.text = 'خطایی در سرور رخ داده است.';
                     myStack.type = 'error';
                 } else if (error.status === 404) {
                     myStack.text = 'صفحه‌ی مورد نظر پیدا نشد.';
