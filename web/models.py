@@ -74,6 +74,7 @@ class Page(models.Model):
     class Meta:
         verbose_name = 'صفحه'
         verbose_name_plural = 'صفحه'
+        ordering = ['-created_on']
 
     def __str__(self):
         return self.title
