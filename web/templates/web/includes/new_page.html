@@ -2,6 +2,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <form id="newPageForm" class="needs-validation" novalidate>
+                {% csrf_token %}
                 <div class="modal-header">
                     <h5 class="modal-title">
                         <i class="far fa-file-alt fa-sm"></i>

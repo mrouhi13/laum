@@ -12,20 +12,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group position-relative">
-                        {{ form.body.label_tag }}
-                        {{ form.body }}
+                        {{ report_form.body.label_tag }}
+                        {{ report_form.body }}
                         <div class="invalid-tooltip" id="body_tooltip_id">این فیلد لازم است و باید بیش‌تر از ۳ حرف
                             باشد
                         </div>
                     </div>
                     <div class="form-group position-relative">
-                        {{ form.reporter.label_tag }}
-                        {{ form.reporter }}
+                        {{ report_form.reporter.label_tag }}
+                        {{ report_form.reporter }}
                         <div class="invalid-tooltip" id="reporter_tooltip_id">ایمیل معتبر وارد کنید</div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    {{ form.page }}
+                    {{ report_form.page }}
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
                     <button type="submit" class="btn btn-primary" id="submitReport">ارسال</button>
                 </div>
