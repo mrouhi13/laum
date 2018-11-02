@@ -1,13 +1,12 @@
 <section class="jumbotron text-center">
-    <div class="container">
+    <div class=container>
         <h1 class="jumbotron-heading mb-5">{{ site_slogan }}</h1>
-        <form id="searchForm" class="my-2 my-lg-0" action="{% url 'web:page-list' %}" method="get" autocomplete="off"
-              novalidate>
-            <div class="form-group">
+        <form id=searchForm class="my-2 my-lg-0" action="{% url 'web:page-list' %}" autocomplete=off novalidate>
+            <div class=form-group>
                 {{ search_form.q }}
             </div>
-            <div class="form-group">
-                <button class="btn btn-primary btn-search my-3" type="submit">جست‌وجو</button>
+            <div class=form-group>
+                <button class="btn btn-primary btn-search my-3" type=submit>جست‌وجو</button>
             </div>
         </form>
     </div>

@@ -7,15 +7,14 @@
         <div class="row justify-content-center">
             <div class="mb-5 text-center">
                 <a href="/">
-                    <img class="mb-3" src="{% static 'web/images/laum.logo.yellow.png' %}" alt="laum.logo.yellow"
-                         width="40"
-                         height="40">
+                    <img class=mb-3 src="{% static 'web/images/laum.logo.yellow.png' %}" width=40 height=40
+                         alt={{ site_url }}>
                 </a>
                 <p>خطای <b>۴۰۴</b></p>
                 <p>
                     <small style="line-height: 30px; color: #6c757d87">آدرس درخواست شده پیدا نشد.</small>
                 </p>
-                <p class="text-left" style="color: #353a40">
+                <p class=text-left style="color:#353a40">
                     <small>{{ request.path }}</small>
                 </p>
             </div>
