@@ -9,7 +9,9 @@
     <meta name=viewport content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name=keywords content="کیست, چیست, کی"/>
     <meta name=author content="مجید روحی"/>
-    <meta name=description content="تاریکی‌های خود را، این‌جا روشن کنید."/>
+    <meta name=description
+          content="تاریکی‌های خود را، این‌جا روشن کنید. در لام می‌توانید از هر چیزی بخوانید و روشن شوید؛ می‌توانید دانسته‌های خود را در لام به اشتراک بگذارید و دیگران را روشن کنید."/>
+    <link rel=canonical href="https://www.laum.ir/"/>
     {% block stylesheet %}
         <link rel=stylesheet type="text/css" href="{% static 'web/vendor/bootstrap/css/bootstrap.min.css' %}"/>
         <link rel=stylesheet type="text/css" href="{% static 'web/vendor/pnotify/pnotify.custom.min.css' %}"/>
@@ -26,11 +28,12 @@
     <meta name=apple-mobile-web-app-title content=Laum>
     <meta name=application-name content=Laum>
     <meta name=msapplication-TileColor content="#022f53">
+    <meta name=msapplication-TileImage content="{% static 'web/images/icons/mstile-144x144.png' %}">
     <meta name=msapplication-config content="{% static 'web/images/icons/browserconfig.xml' %}">
-    <meta name=theme-color content="#ffffff">
+    <meta name=theme-color content="#022f53">
     {% block head_script %}
         <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128172798-1"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_id }}"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
 
@@ -40,7 +43,7 @@
 
             gtag('js', new Date());
 
-            gtag('config', 'UA-128172798-1');
+            gtag('config', '{{ google_analytics_id }}');
         </script>
     {% endblock head_script %}
 </head>
