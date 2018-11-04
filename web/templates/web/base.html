@@ -8,15 +8,11 @@
     <meta http-equiv=X-UA-Compatible content="IE=edge"/>
     <meta name=viewport content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name=keywords content="کیست, چیست, کی"/>
-    <meta name=author content="مجید روحی"/>
     <meta name=description
           content="تاریکی‌های خود را، این‌جا روشن کنید. در لام می‌توانید از هر چیزی بخوانید و روشن شوید؛ می‌توانید دانسته‌های خود را در لام به اشتراک بگذارید و دیگران را روشن کنید."/>
     <link rel=canonical href="https://www.laum.ir/"/>
     {% block stylesheet %}
-        <link rel=stylesheet type="text/css" href="{% static 'web/vendor/bootstrap/css/bootstrap.min.css' %}"/>
-        <link rel=stylesheet type="text/css" href="{% static 'web/vendor/pnotify/pnotify.custom.min.css' %}"/>
-        <link rel=stylesheet type="text/css" href="{% static 'web/vendor/fontawesome/css/all.css' %}"/>
-        <link rel=stylesheet type="text/css" href="{% static 'web/css/style.min.css' %}">
+        <link rel=stylesheet type="text/css" href="{% static 'web/css/default.min.css' %}">
     {% endblock stylesheet %}
     <!-- Favicon -->
     <link rel=apple-touch-icon sizes=180x180 href="{% static 'web/images/icons/apple-touch-icon.png' %}">
@@ -35,15 +31,8 @@
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_id }}"></script>
         <script>
-            window.dataLayer = window.dataLayer || [];
-
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-
-            gtag('js', new Date());
-
-            gtag('config', '{{ google_analytics_id }}');
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+            gtag('js',new Date());gtag('config','{{ google_analytics_id }}')
         </script>
     {% endblock head_script %}
 </head>
@@ -62,11 +51,7 @@
     {% include 'web/includes/footer.html' %}
 {% endblock footer %}
 {% block bottom_script %}
-    <script type="text/javascript" src="{% static 'web/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'web/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'web/vendor/jscookie/js.cookie.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'web/vendor/pnotify/pnotify.custom.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'web/js/main.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'web/js/default.min.js' %}"></script>
 {% endblock bottom_script %}
 </body>
 </html>
