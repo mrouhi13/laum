@@ -9,7 +9,7 @@
                             <div class=thumbnail>
                                 {% thumbnail page.image '268x268' crop='center' as im %}
                                     <img src="{{ im.url }}" width=auto height={{ im.height }} title="{{ page.title }}"
-                                         alt={{ page.title }}>
+                                         alt="{{ page.title }}">
                                 {% empty %}
                                     <i class="far fa-image fa-3x"></i>
                                 {% endthumbnail %}
