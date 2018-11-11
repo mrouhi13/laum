@@ -19,9 +19,16 @@
 
 @font-face {
     font-family: 'Lalehzar';
-    src: url('../fonts/lalehzar/Lalehzar-Regular.ttf');
-url('../fonts/lalehzar/Lalehzar-Regular.ttf') format('truetype')
+    src: url('../fonts/lalehzar/Lalehzar-Regular.svg');
+    src: url('../fonts/lalehzar/Lalehzar-Regular.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/lalehzar/Lalehzar-Regular.woff2') format('woff2'),
+        url('../fonts/lalehzar/Lalehzar-Regular.woff') format('woff'),
+        url('../fonts/lalehzar/Lalehzar-Regular.ttf') format('truetype'),
+        url('../fonts/lalehzar/Lalehzar-Regular.svg#Lalehzar-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
+
 
 /* Restyle Tags */
 html, body {
