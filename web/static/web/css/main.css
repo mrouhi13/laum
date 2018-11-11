@@ -21,14 +21,13 @@
     font-family: 'Lalehzar';
     src: url('../fonts/lalehzar/Lalehzar-Regular.svg');
     src: url('../fonts/lalehzar/Lalehzar-Regular.eot?#iefix') format('embedded-opentype'),
-        url('../fonts/lalehzar/Lalehzar-Regular.woff2') format('woff2'),
-        url('../fonts/lalehzar/Lalehzar-Regular.woff') format('woff'),
-        url('../fonts/lalehzar/Lalehzar-Regular.ttf') format('truetype'),
-        url('../fonts/lalehzar/Lalehzar-Regular.svg#Lalehzar-Regular') format('svg');
+    url('../fonts/lalehzar/Lalehzar-Regular.woff2') format('woff2'),
+    url('../fonts/lalehzar/Lalehzar-Regular.woff') format('woff'),
+    url('../fonts/lalehzar/Lalehzar-Regular.ttf') format('truetype'),
+    url('../fonts/lalehzar/Lalehzar-Regular.svg#Lalehzar-Regular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
-
 
 /* Restyle Tags */
 html, body {
@@ -103,8 +102,9 @@ label {
     background-color: transparent;
 }
 
-.jumbotron h1 {
+.jumbotron h2 {
     font-family: Lalehzar, sans-serif;
+    font-size: 2.5rem;
 }
 
 .jumbotron-heading {
@@ -225,6 +225,11 @@ footer li:first-child {
 .navbar {
     font-family: Lalehzar, sans-serif;
     box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.5);
+}
+
+.navbar-title {
+    font-size: 1.5rem;
+    margin-bottom: 0;
 }
 
 /* Search Input */
