@@ -95,13 +95,13 @@ class Page(models.Model):
 
 
 class Report(models.Model):
-    STATUS_IS_PENDING = 'pending'
-    STATUS_IS_PROCESSED = 'processed'
-    STATUS_IS_DENIED = 'denied'
+    IS_PENDING = 'pending'
+    IS_PROCESSED = 'processed'
+    IS_DENIED = 'denied'
     STATUS_CHOICES = (
-        (STATUS_IS_PENDING, _('در انتظار')),
-        (STATUS_IS_PROCESSED, _('رسیدگی شده')),
-        (STATUS_IS_DENIED, _('رد شده')),
+        (IS_PENDING, _('در انتظار')),
+        (IS_PROCESSED, _('رسیدگی شده')),
+        (IS_DENIED, _('رد شده')),
     )
 
     page = models.ForeignKey('Page', to_field='pid', verbose_name='صفحه', on_delete=models.CASCADE)
@@ -109,7 +109,7 @@ class Report(models.Model):
     reporter = models.EmailField(_('ایمیل گزارش‌دهنده'), max_length=254)
     description = models.TextField(_('توضیحات'), max_length=1024, blank=True, help_text=_(
         'درصورتی که نیاز به یادآوری توضیحاتی در آینده وجود دارد در این قسمت وارد کنید. برای مثال علت رد گزارش یا...'))
-    status = models.CharField(_('وضعیت رسیدگی'), max_length=32, choices=STATUS_CHOICES, default=STATUS_IS_PENDING,
+    status = models.CharField(_('وضعیت رسیدگی'), max_length=32, choices=STATUS_CHOICES, default=IS_PENDING,
                               help_text=_('در تعیین وضیعت رسیدگی دقت کنید. این قسمت تنها یک بار قابل تفییر است.'))
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
     created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
@@ -164,3 +164,32 @@ class Tag(models.Model):
 
     jalali_created_on.admin_order_field = 'created_on'
     jalali_created_on.short_description = 'تاریخ ایجاد'
+
+
+class Setting(models.Model):
+    SITE_TITLE = 'site_title'
+    SITE_SLOGAN_1 = 'site_slogan_1'
+    SITE_SLOGAN_2 = 'site_slogan_2'
+    DEFAULT_KEYWORDS = 'default_keywords'
+    DEFAULT_DESCRIPTION = 'default_description'
+    CONTACT_EMAIL = 'contact_email'
+    GOOGLE_ANALYTICS_ID = 'google_analytics_id'
+    TYPE_CHOICES = (
+        (SITE_TITLE, _('عنوان سایت')),
+        (SITE_SLOGAN_1, _('شعار ۱')),
+        (SITE_SLOGAN_2, _('شعار ۲')),
+        (DEFAULT_KEYWORDS, _('کلید واژه‌های پیش‌فرض')),
+        (DEFAULT_DESCRIPTION, _('توضیح پیش‌فرض')),
+        (CONTACT_EMAIL, _('ایمیل ارتباطی')),
+        (GOOGLE_ANALYTICS_ID, _('شناسه‌ی Google Analytics'))
+    )
+    type = models.CharField(_('نوع'), max_length=32, choices=TYPE_CHOICES, unique=True,
+                            help_text=_('از هر نوع فقط یک نمونه می‌توانید ایجاد کنید.'))
+    content = models.CharField(_('محتوا'), max_length=1024, help_text=_('محتوایی که در سایت نمایش داده می‌شود.'))
+
+    class Meta:
+        verbose_name = 'تنظیم'
+        verbose_name_plural = 'تنظیمات'
+
+    def __str__(self):
+        return self.type

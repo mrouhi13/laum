@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 
 from web.utils.email import SendEmail
-from .models import Page, Tag, Report
+from .models import Page, Tag, Report, Setting
 
 admin.site.site_header = 'پنل مدیریت لام'
 admin.site.site_title = 'پنل مدیریت لام'
@@ -77,11 +77,17 @@ class ReportAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     readonly_fields = ['jalali_updated_on', 'jalali_created_on']
-    fieldsets = [
-        ('اطلاعات اصلی', {'fields': ['name', 'keyword', 'is_active']}),
-        ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']}),
-    ]
+    fieldsets = [('اطلاعات اصلی', {'fields': ['name', 'keyword', 'is_active']}),
+                 ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['name', 'keyword', 'is_active', 'jalali_updated_on', 'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['name', 'keyword']
     prepopulated_fields = {'keyword': ['name']}
+
+
+@admin.register(Setting)
+class SettingAdmin(admin.ModelAdmin):
+    fieldsets = [('اطلاعات اصلی', {'fields': ['type', 'content']})]
+    list_display = ['type', 'content']
+    list_filter = ['type']
+    search_fields = ['type', 'content']
