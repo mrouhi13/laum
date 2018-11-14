@@ -1,16 +1,14 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang={{ language_code }}>
+{% load i18n static %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:'en-us' }}" {% if LANGUAGE_BIDI %}dir=rtl{% endif %}>
 <head>
     <title>{% block title %}{% endblock title %}</title>
-
     <meta charset=UTF-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge"/>
     <meta name=viewport content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name=keywords content="کیست, چیست, کی"/>
-    <meta name=description
-          content="در لام می‌توانید از هر چیزی بخوانید و روشن شوید؛ می‌توانید دانسته‌های خود را در لام به اشتراک بگذارید و دیگران را روشن کنید."/>
-    <link rel=canonical href="https://www.laum.ir/"/>
+    <meta name=keywords content="{% block meta_keywords %}{{ default_keywords }}{% endblock meta_keywords %}"/>
+    <meta name=description content="{% block meta_description %}{{ default_description }}{% endblock meta_description %}"/>
+    <link rel=canonical href="{% block link_canonical %}{% endblock link_canonical %}"/>
     {% block stylesheet %}
         <link rel=stylesheet type="text/css" href="{% static 'web/css/default.min.css' %}">
     {% endblock stylesheet %}
@@ -21,20 +19,20 @@
     <link rel=manifest href="{% static 'web/images/icons/site.webmanifest' %}">
     <link rel=mask-icon href="{% static 'web/images/icons/safari-pinned-tab.svg' %}" color="#022f53">
     <link rel="shortcut icon" href="{% static 'web/images/icons/favicon.ico' %}">
-    <meta name=apple-mobile-web-app-title content=Laum>
-    <meta name=application-name content=Laum>
+    <meta name=apple-mobile-web-app-title content={{ site_title }}>
+    <meta name=application-name content={{ site_title }}>
     <meta name=msapplication-TileColor content="#022f53">
     <meta name=msapplication-TileImage content="{% static 'web/images/icons/mstile-144x144.png' %}">
     <meta name=msapplication-config content="{% static 'web/images/icons/browserconfig.xml' %}">
     <meta name=theme-color content="#022f53">
-    {% block head_script %}
+    {% block extrahead %}
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_id }}"></script>
         <script>
             window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
             gtag('js',new Date());gtag('config','{{ google_analytics_id }}')
         </script>
-    {% endblock head_script %}
+    {% endblock extrahead %}
 </head>
 <body>
 {% block header %}
@@ -50,8 +48,8 @@
 {% block footer %}
     {% include 'web/includes/footer.html' %}
 {% endblock footer %}
-{% block bottom_script %}
+{% block extrafoot %}
     <script type="text/javascript" src="{% static 'web/js/default.min.js' %}"></script>
-{% endblock bottom_script %}
+{% endblock extrafoot %}
 </body>
 </html>
