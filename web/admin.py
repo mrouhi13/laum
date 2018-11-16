@@ -30,11 +30,12 @@ class PageAdmin(admin.ModelAdmin):
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
-    fieldsets = [('اطلاعات اصلی', {'fields': ['link_to_page', 'body', 'link_to_mail', 'description', 'status']}),
-                 ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
-    list_display = ['page', 'link_to_mail', 'status', 'jalali_updated_on', 'jalali_created_on']
+    fieldsets = [
+        ('اطلاعات اصلی', {'fields': ['link_to_page', 'refid', 'body', 'link_to_mail', 'description', 'status']}),
+        ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
+    list_display = ['page', 'link_to_mail', 'status', 'jalali_updated_on', 'jalali_created_on', 'refid']
     list_filter = ['status', 'updated_on', 'created_on']
-    search_fields = ['page', 'body', 'reporter', 'description']
+    search_fields = ['page', 'body', 'reporter', 'description', 'refid']
 
     def link_to_page(self, obj):
         link = urls.reverse('admin:web_page_change', args=[obj.page.id])
@@ -48,7 +49,8 @@ class ReportAdmin(admin.ModelAdmin):
     link_to_mail.short_description = 'گزارش‌دهنده'
 
     def get_readonly_fields(self, request, obj=None):
-        self.readonly_fields = ['link_to_page', 'body', 'link_to_mail', 'jalali_updated_on', 'jalali_created_on']
+        self.readonly_fields = ['link_to_page', 'body', 'refid', 'link_to_mail', 'jalali_updated_on',
+                                'jalali_created_on']
 
         if not obj.status == Report.IS_PENDING:
             self.readonly_fields.extend(['description', 'status'])
@@ -67,12 +69,9 @@ class ReportAdmin(admin.ModelAdmin):
 
         if is_first_change:
             to = obj.reporter
-
-            if to is not None:
-                context = {'report': obj}
-                email_template = 'emails/report_result.html'
-
-                SendEmail(request, context, email_template).send([to])
+            context = {'report': obj}
+            email_template = 'emails/report_result.html'
+            SendEmail(request, context, email_template).send([to])
 
 
 @admin.register(Tag)

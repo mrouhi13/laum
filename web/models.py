@@ -136,6 +136,11 @@ class Report(models.Model):
     jalali_created_on.admin_order_field = 'created_on'
     jalali_created_on.short_description = 'تاریخ ایجاد'
 
+    def refid(self):
+        return '{0}_{1}'.format(self.page.pid, str(self.pk))
+
+    refid.short_description = 'شناسه ارجاع'
+
 
 class Tag(models.Model):
     name = models.CharField(_('نام'), max_length=128, unique=True)
