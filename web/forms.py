@@ -58,7 +58,7 @@ class ReportForm(forms.ModelForm):
         super(ReportForm, self).__init__(*args, **kwargs)
         self.fields['body'].widget.attrs = {'class': 'form-control',
                                             'placeholder': 'مثال: قسمت توضیحات عکس غلط نگارشی دارد.',
-                                            'aria-label': 'جست‌وجو', 'rows': 5, 'minlength': 3, 'maxlength': 102}
+                                            'aria-label': 'جست‌وجو', 'rows': 5, 'minlength': 20, 'maxlength': 1024}
         self.fields['reporter'].widget.attrs = {'class': 'form-control text-left direction-left',
                                                 'placeholder': 'youremail@example.com'}
         self.fields['reporter'].label = 'ایمیل'
