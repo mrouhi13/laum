@@ -30,7 +30,6 @@ class PageAdmin(admin.ModelAdmin):
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
-    readonly_fields = ['link_to_page', 'body', 'link_to_mail', 'jalali_updated_on', 'jalali_created_on']
     fieldsets = [('اطلاعات اصلی', {'fields': ['link_to_page', 'body', 'link_to_mail', 'description', 'status']}),
                  ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['page', 'link_to_mail', 'status', 'jalali_updated_on', 'jalali_created_on']
@@ -49,6 +48,8 @@ class ReportAdmin(admin.ModelAdmin):
     link_to_mail.short_description = 'گزارش‌دهنده'
 
     def get_readonly_fields(self, request, obj=None):
+        self.readonly_fields = ['link_to_page', 'body', 'link_to_mail', 'jalali_updated_on', 'jalali_created_on']
+
         if not obj.status == Report.IS_PENDING:
             self.readonly_fields.extend(['description', 'status'])
         return self.readonly_fields
