@@ -41,10 +41,12 @@ def convert_date_to_jalali(date):
 
 
 @register.filter(name='to_list')
-def convert_queryset_to_list(queryset, field):
+def convert_queryset_values_to_list(queryset, field):
     new_list = []
-    for item in queryset:
-        new_list.append(item[field])
+    if queryset:
+        for item in queryset:
+            if field in item:
+                new_list.append(item[field])
     return new_list
 
 
