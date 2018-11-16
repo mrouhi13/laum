@@ -3,9 +3,9 @@
 {% endblock subject %}
 {% block text_body %}
     دوست عزیز، این ایمیل به دلیل اعلام نتیجه گزارش ثبت شده در صفحه «{{ report.page.title }}» ارسال شده است.
-    {% if report.status == report_status.processed %}
+    {% if report.status == 'accepted' %}
         گزارش ارسالی شما رسیدگی شد.
-    {% elif report.status == report_status.denied %}
+    {% elif report.status == 'denied' %}
         گزارش ارسالی شما رد شد.
     {% endif %}
 {% endblock text_body %}
@@ -41,7 +41,7 @@
                             «<strong>{{ report.page.title }}</strong>» ارسال شده است.
                         </p>
                         <p>
-                            {% if report.status == 'processed' %}
+                            {% if report.status == 'accepted' %}
                                 گزارش ارسالی شما <strong>رسیدگی شد</strong>. شما می‌توانید تغییرات اعمال شده را از
                                 طریق لینک زیر ببینید.
                             {% elif report.status == 'denied' %}
