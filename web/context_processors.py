@@ -1,15 +1,15 @@
-from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
+
+from .models import Setting
 
 
-def site_info(request):
-    info = {
-        'site_title': settings.SITE_TITLE,
-        'site_slogan_1': settings.SITE_SLOGAN_1,
-        'site_slogan_2': settings.SITE_SLOGAN_2,
-        'site_url': settings.SITE_URL,
-        'contact_email': settings.CONTACT_EMAIL,
-        'language_code': settings.LANGUAGE_CODE,
-        'google_analytics_id': settings.GOOGLE_ANALYTICS_ID
-    }
+def site_settings(request):
+    settings = Setting.objects.all()
+    site = get_current_site(request)
+    protocol = 'https' if request.is_secure() else 'http'
+    base_url = protocol + '://' + site.domain
+    data = {'site_name': site.name, 'base_url': base_url}
+    for item in settings:
+        data.update({item.type: item.content})
 
-    return info
+    return data

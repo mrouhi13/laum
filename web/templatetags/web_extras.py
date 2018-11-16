@@ -40,6 +40,14 @@ def convert_date_to_jalali(date):
         return '{0} {1}، {2}'.format(d, month_name, y)
 
 
+@register.filter(name='to_list')
+def convert_queryset_to_list(queryset, field):
+    new_list = []
+    for item in queryset:
+        new_list.append(item[field])
+    return new_list
+
+
 @register.simple_tag(takes_context=True)
 def url_replace(context, **kwargs):
     query = context['request'].GET.dict()
