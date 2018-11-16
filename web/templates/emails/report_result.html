@@ -4,7 +4,7 @@
 {% block text_body %}
     دوست عزیز، این ایمیل به دلیل اعلام نتیجه گزارش ثبت شده در صفحه «{{ report.page.title }}» ارسال شده است.
     {% if report.status == 'accepted' %}
-        گزارش ارسالی شما رسیدگی شد.
+        گزارش ارسالی شما تایید شد.
     {% elif report.status == 'denied' %}
         گزارش ارسالی شما رد شد.
     {% endif %}
@@ -42,7 +42,7 @@
                         </p>
                         <p>
                             {% if report.status == 'accepted' %}
-                                گزارش ارسالی شما <strong>رسیدگی شد</strong>. شما می‌توانید تغییرات اعمال شده را از
+                                گزارش ارسالی شما <strong>تایید شد</strong>. شما می‌توانید تغییرات اعمال شده را از
                                 طریق لینک زیر ببینید.
                             {% elif report.status == 'denied' %}
                                 گزارش ارسالی شما <strong>رد شد</strong>.
@@ -59,7 +59,7 @@
                 </div>
                 <div>
                     <a style="margin:1em 0;color:#FFF;display:block;width:100%;text-align:center;padding:0.6em 0;background-color:#0095FF;border-radius:2px;text-decoration:none;border:1px solid #07C"
-                       href="{{ base_url }}/{{ page.pid }}">رفتن به صفحه «{{ page.title }}»</a>
+                       href="{{ base_url }}/{{ report.page.pid }}">رفتن به صفحه «{{ report.page.title }}»</a>
                 </div>
             </td>
         </tr>
