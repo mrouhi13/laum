@@ -1,9 +1,9 @@
 {% block subject %}
-    ثبت صفحه «{{ page.title }}»
+    گزارش خطا برای صفحه «{{ report.page.title }}»
 {% endblock subject %}
 {% block text_body %}
-    دوست عزیز، این ایمیل به دلیل ثبت اطلاعات برای صفحه «{{ page.title }}» ارسال شده است. بعد از بازبینی و تایید توسط تیم
-    تولید محتوا این صفحه قابل نمایش خواهد شد.
+    دوست عزیز، این ایمیل به دلیل ثبت گزارش در صفحه «{{ report.page.title }}» ارسال شده است. تیم تولید محتوا در اسرع وقت
+    به این گزارش رسیدگی خواهد کرد و پس از تایید، تغییرات قابل مشاهده خواهد شد.
 {% endblock text_body %}
 {% block html_body %}
     <style>
@@ -27,24 +27,27 @@
         <tr>
             <td style="padding:0 50px 25px;background-color:#FFF">
                 <div style="color:#353A40">
-                    <p>ثبت صفحه «<a style="text-decoration:none;color:#07C"
-                                    href="{{ base_url }}/{{ page.pid }}">{{ page.title }}</a>»</p>
+                    <p>گزارش خطا برای صفحه «<a style="text-decoration:none;color:#07C"
+                                               href="{{ base_url }}/{{ report.page.pid }}">{{ report.page.title }}</a>»
+                    </p>
                 </div>
-                <div>
-                    <div style="width:100%;background-color:#FAFAFB">
-                        <div style="border-bottom:solid 1px #E4E6E8;padding:3em;line-height:2em;text-align:justify">
-                            <p>دوست عزیز،<br>این ایمیل به دلیل ثبت اطلاعات برای صفحه
-                                «<strong>{{ page.title }}</strong>» ارسال شده است.</p>
-                            <p>بعد از بازبینی و تایید توسط تیم تولید محتوا این صفحه قابل نمایش خواهد شد.</p>
-                        </div>
-                        <div style="color:#848d95;font-size:12px;font-style:italic;padding:1.5em;margin-bottom:1em">
-                            باتشکر از مشارکت شما در گسترش اطلاعات آزاد.
-                        </div>
+                <div style="width:100%;background-color:#FAFAFB">
+                    <div style="border-bottom:solid 1px #E4E6E8;padding:3em;line-height:2em;text-align:justify">
+                        <p>دوست عزیز،<br>این ایمیل به دلیل ثبت گزارش در صفحه «<strong>{{ report.page.title }}</strong>»
+                            ارسال
+                            شده است.</p>
+                        <p>تیم تولید محتوا در اسرع وقت به این گزارش رسیدگی خواهد کرد و پس از تایید، تغییرات قابل مشاهده
+                            خواهد شد.</p>
+                        <p>کد ارجاع: {{ report.refid|default:'-' }}</p>
+                    </div>
+                    <div style="color:#848d95;font-size:12px;font-style:italic;padding:1.5em;margin-bottom:1em">باتشکر
+                        از مشارکت شما در گسترش اطلاعات آزاد.
                     </div>
                 </div>
                 <div>
                     <a style="margin:1em 0;color:#FFF;display:block;width:100%;text-align:center;padding:0.6em 0;background-color:#0095FF;border-radius:2px;text-decoration:none;border:1px solid #07C"
-                       href="{{ base_url }}/{{ page.pid }}">رفتن به صفحه «{{ page.title }}»</a>
+                       href="{{ base_url }}/{{ report.page.pid }}">رفتن به صفحه
+                        «{{ report.page.title }}»</a>
                 </div>
             </td>
         </tr>
@@ -52,7 +55,7 @@
             <td style="padding:25px 16px;font-size:11px;line-height:1.36;color:#9EA3A9">
                 <img src="{{ static_url }}/web/images/laum.logo.yellow.png" width=24 height=24>
                 <p><strong>{{ site_name }}</strong>، تهران، ایران</p>
-                <p>دلیل دریافت این ایمیل ارسال اطلاعات به {{ site_name }} می‌باشد.</p>
+                <p>دلیل دریافت این ایمیل ارسال گزارش به {{ site_name }} می‌باشد.</p>
                 <p>از آدرس ایمیل شما برای تبلیغات توسط سایت ما استفاده نخواهد شد.</p>
                 <p>
                     <a style="color:#999;text-decoration:underline" href="{{ base_url }}">قوانین ما</a>

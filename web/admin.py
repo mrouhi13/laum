@@ -49,14 +49,14 @@ class ReportAdmin(admin.ModelAdmin):
     link_to_mail.short_description = 'گزارش‌دهنده'
 
     def get_readonly_fields(self, request, obj=None):
-        if not obj.status == Report.STATUS_IS_PENDING:
+        if not obj.status == Report.IS_PENDING:
             self.readonly_fields.extend(['description', 'status'])
         return self.readonly_fields
 
     def save_model(self, request, obj, form, change):
         is_first_change = False
 
-        if 'status' not in self.readonly_fields and not obj.status == Report.STATUS_IS_PENDING:
+        if 'status' not in self.readonly_fields and not obj.status == Report.IS_PENDING:
             is_first_change = True
 
         if is_first_change and not form.cleaned_data['description']:
@@ -69,7 +69,7 @@ class ReportAdmin(admin.ModelAdmin):
 
             if to is not None:
                 context = {'report': obj}
-                email_template = 'emails/report.html'
+                email_template = 'emails/report_result.html'
 
                 SendEmail(request, context, email_template).send([to])
 
