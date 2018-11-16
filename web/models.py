@@ -96,11 +96,11 @@ class Page(models.Model):
 
 class Report(models.Model):
     IS_PENDING = 'pending'
-    IS_PROCESSED = 'processed'
+    IS_ACCEPTED = 'accepted'
     IS_DENIED = 'denied'
     STATUS_CHOICES = (
         (IS_PENDING, _('در انتظار')),
-        (IS_PROCESSED, _('رسیدگی شده')),
+        (IS_ACCEPTED, _('نایید شده')),
         (IS_DENIED, _('رد شده')),
     )
 
@@ -108,7 +108,8 @@ class Report(models.Model):
     body = models.TextField(_('متن گزارش'), max_length=1024)
     reporter = models.EmailField(_('ایمیل گزارش‌دهنده'), max_length=254)
     description = models.TextField(_('توضیحات'), max_length=1024, blank=True, help_text=_(
-        'درصورتی که نیاز به یادآوری توضیحاتی در آینده وجود دارد در این قسمت وارد کنید. برای مثال علت رد گزارش یا...'))
+        'درصورتی که نیاز به یادآوری توضیحاتی در آینده وجود دارد در این قسمت وارد کنید.\
+        هم‌چنین در صورت رد گزارش محتوای این فیلد برای کاربر ارسال می‌شود.'))
     status = models.CharField(_('وضعیت رسیدگی'), max_length=32, choices=STATUS_CHOICES, default=IS_PENDING,
                               help_text=_('در تعیین وضیعت رسیدگی دقت کنید. این قسمت تنها یک بار قابل تفییر است.'))
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
@@ -167,7 +168,6 @@ class Tag(models.Model):
 
 
 class Setting(models.Model):
-    SITE_TITLE = 'site_title'
     SITE_SLOGAN_1 = 'site_slogan_1'
     SITE_SLOGAN_2 = 'site_slogan_2'
     DEFAULT_KEYWORDS = 'default_keywords'
@@ -175,7 +175,6 @@ class Setting(models.Model):
     CONTACT_EMAIL = 'contact_email'
     GOOGLE_ANALYTICS_ID = 'google_analytics_id'
     TYPE_CHOICES = (
-        (SITE_TITLE, _('عنوان سایت')),
         (SITE_SLOGAN_1, _('شعار ۱')),
         (SITE_SLOGAN_2, _('شعار ۲')),
         (DEFAULT_KEYWORDS, _('کلید واژه‌های پیش‌فرض')),
