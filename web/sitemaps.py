@@ -12,7 +12,8 @@ class PageSitemap(Sitemap):
     def items(self):
         return Page.objects.filter(is_active=True)
 
-    def lastmod(self, obj):
+    @staticmethod
+    def lastmod(obj):
         return obj.updated_on
 
     def location(self, obj):
