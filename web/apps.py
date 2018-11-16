@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class WebConfig(AppConfig):
     name = 'web'
-    verbose_name = 'لام'
+    verbose_name = 'پروژه لام'
