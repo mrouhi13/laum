@@ -1,5 +1,5 @@
 {% extends 'web/base.html' %}
-{% block title %}{{ request.GET.q }} | جست‌وجوی {{ site_title }}{% endblock title %}
+{% block title %}{{ request.GET.q }} | جست‌وجوی {{ site_name }}{% endblock title %}
 {% block link_canonical %}{% url 'web:page-list' %}?{{ request.GET.urlencode }}{% endblock link_canonical %}
 {% block content %}
     {% include 'web/components/page_list/search.html' %}
