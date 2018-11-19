@@ -38,13 +38,13 @@ class ReportAdmin(admin.ModelAdmin):
     search_fields = ['page', 'body', 'reporter', 'description', 'refid']
 
     def link_to_page(self, obj):
-        link = urls.reverse('admin:web_page_change', args=[obj.page.id])
+        link = urls.reverse('admin:web_page_change', args=[obj.page.pk])
         return mark_safe('<a href="{}" target="_blank">{}</a>'.format(link, obj.page.title))
 
     link_to_page.short_description = 'صفحه'
 
     def link_to_mail(self, obj):
-        return mark_safe('<a href="mailto:{}">{}</a>'.format(obj.reporter, obj.reporter))
+        return mark_safe('<a href="mailto:{0}">{0}</a>'.format(obj.reporter))
 
     link_to_mail.short_description = 'گزارش‌دهنده'
 

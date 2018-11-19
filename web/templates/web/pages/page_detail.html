@@ -1,6 +1,6 @@
 {% extends 'web/base.html' %}
 {% load web_extras %}
-{% block title %}{{ page.title }} | {{ site_title }}{% endblock title %}
+{% block title %}{{ page.title }} | {{ site_name }}{% endblock title %}
 {% block meta_description %}{{ page.content|truncatechars:250 }}{% endblock meta_description %}
 {% block meta_keywords %}{{ page.tag.values|to_list:'keyword'|join:',' }}{% endblock meta_keywords %}
 {% block link_canonical %}{% url 'web:page-detail' page.pid %}{% endblock link_canonical %}

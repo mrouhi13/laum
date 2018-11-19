@@ -4,8 +4,10 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .forms import SearchForm
-from .models import Page, generate_new_pid
-from .templatetags.web_extras import convert_date_to_jalali as to_jalali, convert_digits_to_persian as to_persian
+from .helpers import get_jalali_month_name
+from .models import Report, Page, generate_new_pid
+from .templatetags.web_extras import convert_date_to_jalali as to_jalali, convert_digits_to_persian as to_persian, \
+    convert_queryset_values_to_list as to_list
 
 
 def create_test_page(n):
@@ -138,7 +140,7 @@ class PageDetailViewTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-    def test_page_without_id_exist(self):
+    def test_page_with_id_not_exist(self):
         """
         Return a 404 not found.
         """
@@ -335,163 +337,257 @@ class ToJalaliFilterTests(TestCase):
         jalali_date = to_jalali(date)
         self.assertEqual(jalali_date, '13 بهمن، 1397')
 
-# class PageCreateApiTest(APITestCase):
-#     def test_with_no_required_field(self):
-#         """
-#         Check required fields.
-#         """
-#         url = reverse('v1:create-page')
-#         data = {}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Page.objects.count(), 0)
-#
-#     def test_with_one_empty_required_field(self):
-#         """
-#         Check required fields and return error if one or more is empty.
-#         """
-#         url = reverse('v1:create-page')
-#         data = {'title': ''}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Page.objects.count(), 0)
-#
-#     def test_with_one_filled_required_field(self):
-#         """
-#         Check required fields and return error if one or more is empty.
-#         """
-#         url = reverse('v1:create-page')
-#         data = {'title': 'test'}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Page.objects.count(), 0)
-#
-#     def test_with_empty_required_field(self):
-#         """
-#         Check required fields and return error if one or more is empty.
-#         """
-#         url = reverse('v1:create-page')
-#         data = {'title': '', 'content': ''}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Page.objects.count(), 0)
-#
-#     def test_with_required_field(self):
-#         """
-#         Create a page if required field is filled.
-#         """
-#         url = reverse('v1:create-page')
-#         data = {'title': 'test', 'content': 'test content'}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(Page.objects.count(), 1)
-#
-#     def test_with_required_field_and_email(self):
-#         """
-#         Validate email and send a mail to author.
-#         """
-#         url = reverse('v1:create-page')
-#         data = {'title': 'test', 'content': 'test content', 'email': 'go.mezzo@icloud.com'}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(Page.objects.count(), 1)
-#
-#     def test_with_required_field_and_incorrect_email(self):
-#         """
-#         Validate email and return 400 Bad Request status if not valid.
-#         """
-#         url = reverse('v1:create-page')
-#         data = {'title': 'test', 'content': 'test content', 'author': 'go.mezzo'}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Page.objects.count(), 0)
-#
-#
-# class ReportApiTest(APITestCase):
-#     def test_with_no_required_field(self):
-#         """
-#         Check required fields.
-#         """
-#         url = reverse('v1:create-report')
-#         data = {}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Report.objects.count(), 0)
-#
-#     def test_with_one_empty_required_field(self):
-#         """
-#         Check required fields and return error if one or more is empty.
-#         """
-#         url = reverse('v1:create-report')
-#         data = {'body': ''}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Report.objects.count(), 0)
-#
-#     def test_with_one_filled_required_field(self):
-#         """
-#         Check required fields and return error if one or more is empty.
-#         """
-#         url = reverse('v1:create-report')
-#         data = {'body': 'test'}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Report.objects.count(), 0)
-#
-#     def test_with_empty_required_field(self):
-#         """
-#         Check required fields and return error if one or more is empty.
-#         """
-#         url = reverse('v1:create-report')
-#         data = {'body': '', 'reporter': ''}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Report.objects.count(), 0)
-#
-#     def test_with_required_field_and_email(self):
-#         """
-#         Validate email and send a mail to author.
-#         """
-#         create_test_active_page(1)
-#
-#         page = Page.objects.get(id=1)
-#
-#         url = reverse('v1:create-report')
-#         data = {'page': page.pid, 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(Report.objects.count(), 1)
-#
-#     def test_with_required_field_and_email_and_inactive_status(self):
-#         """
-#         Return 404 status when status is not active.
-#         """
-#         create_test_page(1)
-#
-#         page = Page.objects.get(id=1)
-#
-#         url = reverse('v1:create-report')
-#         data = {'page': page.pid, 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Report.objects.count(), 0)
-#
-#     def test_with_required_field_and_incorrect_email(self):
-#         """
-#         Create a page record if required field is filled.
-#         """
-#         url = reverse('v1:create-report')
-#         data = {'body': 'test', 'reporter': 'go.mezzo'}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Report.objects.count(), 0)
-#
-#     def test_with_required_field_and_incorrect_pid(self):
-#         """
-#         Validate email and send a mail to author.
-#         """
-#         url = reverse('v1:create-report')
-#         data = {'page': '123', 'body': 'test', 'reporter': 'go.mezzo@icloud.com'}
-#         response = self.client.post(url, data, enforce_csrf_checks=True, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(Report.objects.count(), 0)
+
+class ToListFilterTests(TestCase):
+    def test_with_none_queryset(self):
+        data = to_list(None, 'id')
+
+        self.assertEqual(data, [])
+
+    def test_with_empty_queryset(self):
+        queryset = Page.objects.all()
+
+        data = to_list(queryset, 'id')
+
+        self.assertEqual(data, [])
+
+    def test_with_filled_queryset(self):
+        create_test_active_page(4)
+
+        queryset = Page.objects.all().values()
+
+        data = to_list(queryset, 'id')
+
+        self.assertEqual(data, [4, 3, 2, 1])
+
+    def test_with_none_field(self):
+        create_test_active_page(4)
+
+        queryset = Page.objects.all().values()
+
+        data = to_list(queryset, None)
+
+        self.assertEqual(data, [])
+
+    def test_with_empty_field(self):
+        create_test_active_page(4)
+
+        queryset = Page.objects.all().values()
+
+        data = to_list(queryset, '')
+
+        self.assertEqual(data, [])
+
+    def test_with_not_exist_field(self):
+        create_test_active_page(4)
+
+        queryset = Page.objects.all().values()
+
+        data = to_list(queryset, 'idd')
+
+        self.assertEqual(data, [])
+
+
+class GetJalaliMonthNameTests(TestCase):
+    def test_with_correct_month_number(self):
+        data = get_jalali_month_name(1)
+
+        self.assertEqual(data, 'فروردین')
+
+    def test_with_incorrect_month_number_1(self):
+        data = get_jalali_month_name(12)
+
+        self.assertEqual(data, 'اسفند')
+
+    def test_with_incorrect_month_number_2(self):
+        data = get_jalali_month_name(0)
+
+        self.assertEqual(data, 'فروردین')
+
+    def test_with_none_type(self):
+        data = get_jalali_month_name(None)
+
+        self.assertEqual(data, None)
+
+    def test_with_empty_string_type(self):
+        data = get_jalali_month_name('')
+
+        self.assertEqual(data, None)
+
+    def test_with_string_type_1(self):
+        data = get_jalali_month_name('11')
+
+        self.assertEqual(data, 'بهمن')
+
+    def test_with_string_type_2(self):
+        data = get_jalali_month_name('str')
+
+        self.assertEqual(data, None)
+
+
+class PageCreateApiTest(TestCase):
+    def test_with_no_required_field(self):
+        """
+        Check required fields.
+        """
+        url = reverse('web:page-create')
+        data = {}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Page.objects.count(), 0)
+
+    def test_with_one_empty_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('web:page-create')
+        data = {'title': ''}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Page.objects.count(), 0)
+
+    def test_with_one_filled_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('web:page-create')
+        data = {'title': 'test'}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Page.objects.count(), 0)
+
+    def test_with_empty_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('web:page-create')
+        data = {'title': '', 'content': ''}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Page.objects.count(), 0)
+
+    def test_with_required_field(self):
+        """
+        Create a page if required field is filled.
+        """
+        url = reverse('web:page-create')
+        data = {'title': 'test',
+                'content': 'cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed \
+                cras ornare arcu dui vivamus arcu felis bibendum ut'}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Page.objects.count(), 1)
+
+    def test_with_required_field_and_email(self):
+        """
+        Validate email and send a mail to author.
+        """
+        url = reverse('web:page-create')
+        data = {'title': 'test',
+                'content': 'cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed \
+                cras ornare arcu dui vivamus arcu felis bibendum ut', 'email': 'go.mezzo@icloud.com'}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Page.objects.count(), 1)
+
+    def test_with_required_field_and_incorrect_email(self):
+        """
+        Validate email and return 400 Bad Request status if not valid.
+        """
+        url = reverse('web:page-create')
+        data = {'title': 'test',
+                'content': 'cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed \
+                cras ornare arcu dui vivamus arcu felis bibendum ut', 'author': 'go.mezzo'}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Page.objects.count(), 0)
+
+
+class ReportApiTest(TestCase):
+    def test_with_no_required_field(self):
+        """
+        Check required fields.
+        """
+        url = reverse('web:report-create')
+        data = {}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Report.objects.count(), 0)
+
+    def test_with_one_empty_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('web:report-create')
+        data = {'body': ''}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Report.objects.count(), 0)
+
+    def test_with_one_filled_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('web:report-create')
+        data = {'body': 'cursus euismod quis viverra'}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Report.objects.count(), 0)
+
+    def test_with_empty_required_field(self):
+        """
+        Check required fields and return error if one or more is empty.
+        """
+        url = reverse('web:report-create')
+        data = {'body': '', 'reporter': ''}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Report.objects.count(), 0)
+
+    def test_with_required_field_and_email(self):
+        """
+        Validate email and send a mail to author.
+        """
+        create_test_active_page(1)
+
+        page = Page.objects.get(id=1)
+
+        url = reverse('web:report-create')
+        data = {'page': page.pid, 'body': 'cursus euismod quis viverra', 'reporter': 'go.mezzo@icloud.com'}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Report.objects.count(), 1)
+
+    def test_with_required_field_and_email_and_inactive_status(self):
+        """
+        Return 404 status when status is not active.
+        """
+        create_test_page(1)
+
+        page = Page.objects.get(id=1)
+
+        url = reverse('web:report-create')
+        data = {'page': page.pid, 'body': 'cursus euismod quis viverra', 'reporter': 'go.mezzo@icloud.com'}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(Report.objects.count(), 0)
+
+    def test_with_required_field_and_incorrect_email(self):
+        """
+        Create a page record if required field is filled.
+        """
+        url = reverse('web:report-create')
+        data = {'body': 'cursus euismod quis viverra', 'reporter': 'go.mezzo'}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Report.objects.count(), 0)
+
+    def test_with_required_field_and_incorrect_pid(self):
+        """
+        Validate email and send a mail to author.
+        """
+        url = reverse('web:report-create')
+        data = {'page': '123', 'body': 'cursus euismod quis viverra', 'reporter': 'go.mezzo@icloud.com'}
+        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Report.objects.count(), 0)

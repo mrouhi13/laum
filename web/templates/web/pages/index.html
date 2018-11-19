@@ -1,5 +1,5 @@
 {% extends 'web/base.html' %}
-{% block title %}{{ site_title }} | {{ site_slogan_1 }}{% endblock title %}
+{% block title %}{{ site_name }} | {{ site_slogan_1 }}{% endblock title %}
 {% block link_canonical %}{% url 'web:index' %}{% endblock link_canonical %}
 {% block content %}
     {% include 'web/components/index/search.html' %}

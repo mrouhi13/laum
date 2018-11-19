@@ -137,7 +137,7 @@ class Report(models.Model):
     jalali_created_on.short_description = 'تاریخ ایجاد'
 
     def refid(self):
-        return '{0}_{1}'.format(self.page.pid, str(self.pk))
+        return '{}_{}'.format(self.page.pid, str(self.pk))
 
     refid.short_description = 'شناسه ارجاع'
 
