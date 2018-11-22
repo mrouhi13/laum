@@ -5,7 +5,6 @@ This project defines everything about in a paragraph, with the help of all peopl
 
 # Technology
 * Python/Django for backend developing
-* Django rest framework for API developing
 * Postgres for database
 * Bootstrap, jQuery, Fontawesome and Pnotify for front-end developing
 
