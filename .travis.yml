@@ -9,7 +9,7 @@ install:
 # command to run tests
 script:
   - cp laum/settings.py.sample laum/settings.py
-  - sed -i -e "s/SECRET_KEY = '.*'/SECRET_KEY = '$(</dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-.:;<=>?@[\]^_`{|}~' | head -c 50)'/g" laum/settings.py
+  - sed -i -e "s/SECRET_KEY = '.*'/SECRET_KEY = 'a-z0-9!@#$%^&*(-_=+)' | head -c 50)'/g" laum/settings.py
   - ./manage.py migrate
   - ./manage.py collectstatic
   - ./manage.py test
