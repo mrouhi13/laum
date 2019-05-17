@@ -17,7 +17,7 @@ class PageSitemap(Sitemap):
         return obj.updated_on
 
     def location(self, obj):
-        return '/{}/'.format(obj.pid)
+        return f'/{obj.pid}/'
 
 
 class StaticViewSitemap(Sitemap):

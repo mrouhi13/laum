@@ -9,7 +9,7 @@ from .templatetags.web_extras import convert_date_to_jalali as to_jalali, conver
 
 def generate_new_pid(n=12):
     new_pid = None
-    prefix_string = 'a'
+    prefix_string = 'lmp_'
 
     while not new_pid:
         postfix_string = ''.join(random.choices(string.ascii_letters + string.digits, k=n))
@@ -25,10 +25,10 @@ class PageManager(models.Manager):
     def get_random_pages(self):
         page_count = self.count()
         random_page = list()
+        all_pages = self.filter(is_active=True)
 
-        if self.filter(is_active=True).count() <= 3:
-            random_page = self.filter(is_active=True)
-            random_page = list(random_page)
+        if all_pages.count() <= 3:
+            random_page = list(all_pages)
         else:
             while len(random_page) < 3:
                 remaining_count = 3 - len(random_page)
@@ -51,7 +51,7 @@ class PageManager(models.Manager):
 class Page(models.Model):
     tag = models.ManyToManyField('Tag', verbose_name='برچسب‌ها', related_name='tags', related_query_name='tag',
                                  blank=True)
-    pid = models.CharField(_('شناسه‌ی عمومی'), max_length=13, unique=True, default=generate_new_pid)
+    pid = models.CharField(_('شناسه‌ی عمومی'), max_length=16, unique=True, default=generate_new_pid)
     title = models.CharField(_('عنوان'), max_length=128)
     subtitle = models.CharField(_('زیرعنوان'), max_length=128, blank=True, default='')
     content = models.TextField(_('محتوا'), max_length=1024)
@@ -137,7 +137,7 @@ class Report(models.Model):
     jalali_created_on.short_description = 'تاریخ ایجاد'
 
     def refid(self):
-        return '{}_{}'.format(self.page.pid, str(self.pk))
+        return f'lmr_{self.page.pid}_{self.pk}'
 
     refid.short_description = 'شناسه ارجاع'
 

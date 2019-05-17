@@ -197,7 +197,7 @@ class PageModelTests(TestCase):
 
         self.assertIs(len(random_page), 2)
 
-    def test_random_pages_with_exact_three_three_page(self):
+    def test_random_pages_with_exact_three_page(self):
         """
         Return a queryset with 3 objects.
         """
@@ -239,7 +239,7 @@ class PageModelTests(TestCase):
         """
         new_pid = generate_new_pid()
 
-        self.assertEqual(len(new_pid), 13)
+        self.assertEqual(len(new_pid), 16)
 
 
 class ToPersianFilterTests(TestCase):
