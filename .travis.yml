@@ -2,7 +2,6 @@ dist: xenial
 language: python
 sudo: false
 python:
-  - '3.4'
   - '3.5'
   - '3.6'
   - '3.7'
@@ -14,15 +13,14 @@ env:
 
 # command to install dependencies
 install:
-  - travis_retry pip install -U tox-travis
   - make init
 
 before_script:
   - cp laum/settings.py.sample laum/settings.py
-  - sed -i -e "s/SECRET_KEY = '.*'/SECRET_KEY = '_'" laum/settings.py
+  - sed -i -e "s/SECRET_KEY = '.*'/SECRET_KEY = '_'/" laum/settings.py
   - make setup
 
 # command to run tests
-script: pipenv run tox
+script: make test
 
 after_success: pipenv run codecov
