@@ -14,6 +14,6 @@ def get_jalali_month_name(month_number):
 
             return persian_names[month_number - 1]
     except ValueError:
-        return None
+        pass
 
     return None

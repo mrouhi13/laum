@@ -48,18 +48,10 @@ class AjaxableResponseMixin(FormMixin):
         response = super().form_valid(form)
         if self.request.is_ajax():
             obj = self.object
-            reporter = form.cleaned_data.get('reporter')
-            author = form.cleaned_data.get('author')
-            email_template = None
-            to = None
-            if reporter:
-                context = {'report': obj}
-                email_template = 'emails/new_report.html'
-                to = reporter
-            elif author:
-                context = {'page': obj}
-                email_template = 'emails/new_page.html'
-                to = author
+            object_type = obj.__class__.__name__.lower()
+            context = {object_type: obj}
+            email_template = f'emails/new_{object_type}.html'
+            to = form.cleaned_data.get('reporter') or form.cleaned_data.get('author')
 
             if email_template:
                 SendEmail(self.request, context, template_name=email_template).send([to])

@@ -18,7 +18,7 @@ def convert_digits_to_persian(value):
     converted_text = ''
 
     for char in original_text:
-        if re.search('\d+', char):
+        if re.search(r'\d', char):
             converted_text += persian_nums[int(char)]
         else:
             converted_text += char
@@ -37,17 +37,17 @@ def convert_date_to_jalali(date):
         except ValueError:
             return None
 
-        return '{0} {1}، {2}'.format(d, month_name, y)
+        return f'{d} {month_name}، {y}'
 
 
 @register.filter(name='to_list')
 def convert_queryset_values_to_list(queryset, field):
-    new_list = []
+    item_list = []
     if queryset:
         for item in queryset:
             if field in item:
-                new_list.append(item[field])
-    return new_list
+                item_list.append(item[field])
+    return item_list
 
 
 @register.simple_tag(takes_context=True)
