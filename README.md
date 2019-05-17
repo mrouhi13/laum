@@ -1,9 +1,12 @@
 # Laum
+[![build](https://travis-ci.org/mrouhi13/laum.svg?branch=master)](https://travis-ci.org/mrouhi13/laum)
+[![codecov](https://codecov.io/gh/mrouhi13/laum/branch/master/graph/badge.svg)](https://codecov.io/gh/mrouhi13/laum)
+
 May 2018
 
 This project defines everything about in a paragraph, with the help of all people. [read more...][1]
 
-# Technology
+# Technologies
 * Python/Django for backend developing
 * Postgres for database
 * Bootstrap, jQuery, Fontawesome and Pnotify for front-end developing
