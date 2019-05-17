@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 coverage = "*"
+codecov = "*"
 
 [packages]
 django = "==2.2.1"
