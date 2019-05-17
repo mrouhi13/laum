@@ -1,0 +1,17 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+coverage = "*"
+
+[packages]
+django = "==2.2.1"
+django-templated-mail = "==1.1.1"
+pillow = "==6.0.0"
+pytz = "==2019.1"
+sorl-thumbnail = "==12.5.0"
+
+[requires]
+python_version = "3.6"
