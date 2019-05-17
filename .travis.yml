@@ -19,7 +19,7 @@ install:
 
 before_script:
   - cp laum/settings.py.sample laum/settings.py
-  - sed -i -e "s/SECRET_KEY = '.*'/SECRET_KEY = '_'" laum/settings.py
+  - sed -i -e "s/SECRET_KEY = '.*'/SECRET_KEY = '_'/" laum/settings.py
   - make setup
 
 # command to run tests
