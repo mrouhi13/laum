@@ -1,14 +1,28 @@
+dist: xenial
 language: python
+sudo: false
 python:
-  - "3.6"
+  - '3.4'
+  - '3.5'
+  - '3.6'
+  - '3.7'
+
+env:
+  global:
+    - PIPENV_VENV_IN_PROJECT=1
+    - PIPENV_IGNORE_VIRTUALENVS=1
+
 # command to install dependencies
 install:
-  - pip install pip --upgrade
-  - pip install -r requirements.txt
-# command to run tests
-script:
+  - travis_retry pip install -U tox-travis
+  - make init
+
+before_script:
   - cp laum/settings.py.sample laum/settings.py
-  - sed -i -e "s/SECRET_KEY = '.*'/SECRET_KEY = '$(</dev/urandom | tr -cd 'a-z0-9!@#$%^&*()' | head -c 50)'/g" laum/settings.py
-  - ./manage.py migrate
-  - ./manage.py collectstatic
-  - ./manage.py test
+  - sed -i -e "s/SECRET_KEY = '.*'/SECRET_KEY = '_'" laum/settings.py
+  - make setup
+
+# command to run tests
+script: pipenv run tox
+
+after_success: pipenv run codecov
