@@ -53,17 +53,17 @@ class Page(models.Model):
                                  blank=True)
     pid = models.CharField(_('شناسه‌ی عمومی'), max_length=16, unique=True, default=generate_new_pid)
     title = models.CharField(_('عنوان'), max_length=128)
-    subtitle = models.CharField(_('زیرعنوان'), max_length=128, blank=True, default='')
+    subtitle = models.CharField(_('زیرعنوان'), max_length=128, blank=True)
     content = models.TextField(_('محتوا'), max_length=1024)
-    event = models.CharField(_('رویداد مهم'), max_length=128, blank=True, default='',
+    event = models.CharField(_('رویداد مهم'), max_length=128, blank=True,
                              help_text='تاریخ یک رویداد مهم برای موضوع وارد شده به همراه محل وقوع.')
-    image = models.ImageField(_('تصویر'), upload_to='images', blank=True, default='')
-    image_caption = models.CharField(_('توضیح تصویر'), max_length=128, blank=True, default='',
+    image = models.ImageField(_('تصویر'), upload_to='images', blank=True)
+    image_caption = models.CharField(_('توضیح تصویر'), max_length=128, blank=True,
                                      help_text='مکان و موقعیت گرفتن عکس به همراه معرفی افراد حاضر در عکس.')
-    reference = models.CharField(_('منبع'), max_length=128, blank=True, default='',
+    reference = models.CharField(_('منبع'), max_length=128, blank=True,
                                  help_text='نام کتاب، روزنامه، مجله یا آدرس سایت، بلاگ و... به همراه نام نویسنده')
-    website = models.EmailField(_('وب‌سایت'), max_length=254, blank=True, default='')
-    author = models.EmailField(_('ایمیل نویسنده'), max_length=254, blank=True, default='')
+    website = models.URLField(_('وب‌سایت'), blank=True)
+    author = models.EmailField(_('ایمیل نویسنده'), blank=True)
     is_active = models.BooleanField(_('فعال'), default=False,
                                     help_text='مشخص می‌کند که این صفحه در لیست نتایج قابل دیدن باشد یا نه.')
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
@@ -106,7 +106,7 @@ class Report(models.Model):
 
     page = models.ForeignKey('Page', to_field='pid', verbose_name='صفحه', on_delete=models.CASCADE)
     body = models.TextField(_('متن گزارش'), max_length=1024)
-    reporter = models.EmailField(_('ایمیل گزارش‌دهنده'), max_length=254)
+    reporter = models.EmailField(_('ایمیل گزارش‌دهنده'))
     description = models.TextField(_('توضیحات'), max_length=1024, blank=True, help_text=_(
         'درصورتی که نیاز به یادآوری توضیحاتی در آینده وجود دارد در این قسمت وارد کنید.\
         هم‌چنین در صورت رد گزارش محتوای این فیلد برای کاربر ارسال می‌شود.'))
@@ -143,8 +143,8 @@ class Report(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(_('نام'), max_length=128, unique=True)
-    keyword = models.CharField(_('کلیدواژه'), max_length=128)
+    name = models.CharField(_('نام'), max_length=50, unique=True)
+    keyword = models.SlugField(_('کلیدواژه'), allow_unicode=True)
     is_active = models.BooleanField(_('فعال'), default=True,
                                     help_text='مشخص می‌کند که این برچسب قابل استفاده باشد یا نه.')
     updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
