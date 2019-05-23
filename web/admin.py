@@ -14,10 +14,10 @@ admin.site.index_title = 'داشبورد'
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
-    readonly_fields = ['link_to_page', 'jalali_updated_on', 'jalali_created_on']
+    readonly_fields = ['link_to_page', 'link_to_reports','jalali_updated_on', 'jalali_created_on']
     fieldsets = [
         ('اطلاعات اصلی', {'fields': ['link_to_page', 'title', 'subtitle', 'content', 'event', 'image', 'image_caption']}),
-        ('اطلاعات تکمیلی', {'fields': ['tag', 'reference', 'website', 'author', 'is_active']}),
+        ('اطلاعات تکمیلی', {'fields': ['tag', 'reference', 'website', 'author', 'is_active', 'link_to_reports']}),
         ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['title', 'author', 'is_active', 'jalali_updated_on', 'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
@@ -30,6 +30,17 @@ class PageAdmin(admin.ModelAdmin):
 
     link_to_page.short_description = 'شناسه‌ی عمومی'
 
+    def link_to_reports(self, obj):
+        report_set = obj.report_set.all()
+        reports_link = []
+
+        for report in report_set:
+            link = urls.reverse('admin:web_report_change', args=[report.pk])
+            reports_link.append(f'<a href="{link}" target="_blank">{report.body[:15]}...</a>')
+        return mark_safe('، '.join(reports_link))
+
+    link_to_reports.short_description = 'گزارش‌ها'
+
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
@@ -39,7 +50,7 @@ class ReportAdmin(admin.ModelAdmin):
         ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['page', 'link_to_mail', 'status', 'jalali_updated_on', 'jalali_created_on', 'refid']
     list_filter = ['status', 'updated_on', 'created_on']
-    search_fields = ['page', 'body', 'reporter', 'description', 'refid']
+    search_fields = ['page__pid', 'body', 'reporter', 'description']
 
     def link_to_page(self, obj):
         link = urls.reverse('admin:web_page_change', args=[obj.page.pk])

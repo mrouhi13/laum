@@ -139,7 +139,7 @@ class Report(models.Model):
     def refid(self):
         return f'lmr_{self.page.pid}_{self.pk}'
 
-    refid.short_description = 'شناسه ارجاع'
+    refid.short_description = 'شناسه‌ی ارجاع'
 
 
 class Tag(models.Model):
