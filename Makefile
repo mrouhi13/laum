@@ -12,6 +12,8 @@ init:
 	pipenv install --dev --three
 
 setup:
+	cp laum/settings.py.sample laum/settings.py
+	sed -i -e "s/SECRET_KEY = '.*'/SECRET_KEY = '_'/" laum/settings.py
 	pipenv run python ./manage.py migrate
 	pipenv run python ./manage.py collectstatic
 
