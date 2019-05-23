@@ -14,15 +14,21 @@ admin.site.index_title = 'داشبورد'
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
-    readonly_fields = ['pid', 'jalali_updated_on', 'jalali_created_on']
+    readonly_fields = ['link_to_page', 'jalali_updated_on', 'jalali_created_on']
     fieldsets = [
-        ('اطلاعات اصلی', {'fields': ['pid', 'title', 'subtitle', 'content', 'event', 'image', 'image_caption']}),
+        ('اطلاعات اصلی', {'fields': ['link_to_page', 'title', 'subtitle', 'content', 'event', 'image', 'image_caption']}),
         ('اطلاعات تکمیلی', {'fields': ['tag', 'reference', 'website', 'author', 'is_active']}),
         ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['title', 'author', 'is_active', 'jalali_updated_on', 'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['title', 'content', 'event', 'image_caption', 'tag__name', 'tag__keyword', 'website', 'author',
                      'reference']
+
+    def link_to_page(self, obj):
+        link = urls.reverse('web:page-detail', args=[obj.pid])
+        return mark_safe(f'<a href="{link}" target="_blank">{obj.pid}</a>')
+
+    link_to_page.short_description = 'شناسه‌ی عمومی'
 
 
 @admin.register(Report)
