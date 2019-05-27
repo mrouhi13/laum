@@ -1,10 +1,10 @@
 from django import urls
 from django.contrib import admin
-from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 
+from web.models import Page, Tag, Report, Setting
+from web.persian_editors import PersianEditors
 from web.utils.email import SendEmail
-from .models import Page, Tag, Report, Setting
 
 admin.site.site_header = 'پنل مدیریت لام'
 admin.site.site_title = 'پنل مدیریت لام'
@@ -14,9 +14,10 @@ admin.site.index_title = 'داشبورد'
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
-    readonly_fields = ['link_to_page', 'link_to_reports','jalali_updated_on', 'jalali_created_on']
+    readonly_fields = ['link_to_page', 'link_to_reports', 'jalali_updated_on', 'jalali_created_on']
     fieldsets = [
-        ('اطلاعات اصلی', {'fields': ['link_to_page', 'title', 'subtitle', 'content', 'event', 'image', 'image_caption']}),
+        ('اطلاعات اصلی',
+         {'fields': ['link_to_page', 'title', 'subtitle', 'content', 'event', 'image', 'image_caption']}),
         ('اطلاعات تکمیلی', {'fields': ['tag', 'reference', 'website', 'author', 'is_active', 'link_to_reports']}),
         ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['title', 'author', 'is_active', 'jalali_updated_on', 'jalali_created_on']
@@ -25,7 +26,7 @@ class PageAdmin(admin.ModelAdmin):
                      'reference']
 
     def link_to_page(self, obj):
-        link = urls.reverse('web:page-detail', args=[obj.pid])
+        link = urls.reverse(f'web:page-detail', args=[obj.pid])
         return mark_safe(f'<a href="{link}" target="_blank">{obj.pid}</a>')
 
     link_to_page.short_description = 'شناسه‌ی عمومی'
@@ -35,11 +36,22 @@ class PageAdmin(admin.ModelAdmin):
         reports_link = []
 
         for report in report_set:
-            link = urls.reverse('admin:web_report_change', args=[report.pk])
+            link = urls.reverse(f'admin:web_report_change', args=[report.pk])
             reports_link.append(f'<a href="{link}" target="_blank">{report.body[:15]}...</a>')
         return mark_safe('، '.join(reports_link))
 
     link_to_reports.short_description = 'گزارش‌ها'
+
+    def save_model(self, request, obj, form, change):
+        editor = PersianEditors(['space', 'number', 'arabic', 'punctuation_marks'])
+
+        obj.title = editor.run(obj.title)
+        obj.subtitle = editor.run(obj.subtitle)
+        obj.content = editor.run(obj.content)
+        obj.event = editor.run(obj.event)
+        obj.image_caption = editor.run(obj.image_caption)
+
+        super(PageAdmin, self).save_model(request, obj, form, change)
 
 
 @admin.register(Report)
@@ -53,7 +65,7 @@ class ReportAdmin(admin.ModelAdmin):
     search_fields = ['page__pid', 'body', 'reporter', 'description']
 
     def link_to_page(self, obj):
-        link = urls.reverse('admin:web_page_change', args=[obj.page.pk])
+        link = urls.reverse(f'admin:web_page_change', args=[obj.page.pk])
         return mark_safe(f'<a href="{link}" target="_blank">{obj.page.title}</a>')
 
     link_to_page.short_description = 'صفحه'
@@ -79,6 +91,14 @@ class ReportAdmin(admin.ModelAdmin):
 
         if is_first_change and not form.cleaned_data['description']:
             obj.description = '-'
+
+        editor = PersianEditors(['space'])
+        editor.escape_return = False
+        obj.body = editor.run(obj.body)
+
+        editor.set_editors(['space', 'number', 'arabic', 'punctuation_marks'])
+        editor.escape_return = True
+        obj.description = editor.run(obj.description)
 
         super(ReportAdmin, self).save_model(request, obj, form, change)
 
