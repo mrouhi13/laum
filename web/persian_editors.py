@@ -148,7 +148,6 @@ class PersianEditors(object):
 
     def run(self, original_text):
         self._set_original_text(original_text)
-        print(self.original_text)
         self._editing_text = self.original_text
 
         self._general_editor()

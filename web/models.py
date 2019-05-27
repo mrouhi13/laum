@@ -100,7 +100,7 @@ class Report(models.Model):
     IS_DENIED = 'denied'
     STATUS_CHOICES = (
         (IS_PENDING, _('در انتظار')),
-        (IS_ACCEPTED, _('نایید شده')),
+        (IS_ACCEPTED, _('تایید شده')),
         (IS_DENIED, _('رد شده')),
     )
 
