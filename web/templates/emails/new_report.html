@@ -1,5 +1,5 @@
 {% block subject %}
-    گزارش خطا برای صفحه «{{ report.page.title }}»
+    ثبت گزارش برای صفحه «{{ report.page.title }}»
 {% endblock subject %}
 {% block text_body %}
     دوست عزیز، این ایمیل به دلیل ثبت گزارش در صفحه «{{ report.page.title }}» ارسال شده است. تیم تولید محتوا در اسرع وقت
@@ -27,18 +27,18 @@
         <tr>
             <td style="padding:0 50px 25px;background-color:#FFF">
                 <div style="color:#353A40">
-                    <p>گزارش خطا برای صفحه «<a style="text-decoration:none;color:#07C"
+                    <p>ثبت گزارش برای صفحه «<a style="text-decoration:none;color:#07C"
                                                href="{{ base_url }}/{{ report.page.pid }}">{{ report.page.title }}</a>»
                     </p>
                 </div>
                 <div style="width:100%;background-color:#FAFAFB">
                     <div style="border-bottom:solid 1px #E4E6E8;padding:3em;line-height:2em;text-align:justify">
-                        <p>دوست عزیز،<br>این ایمیل به دلیل ثبت گزارش در صفحه «<strong>{{ report.page.title }}</strong>»
+                        <p>دوست عزیز،<br>این ایمیل به دلیل ثبت گزارش برای صفحه «<strong>{{ report.page.title }}</strong>»
                             ارسال
                             شده است.</p>
                         <p>تیم تولید محتوا در اسرع وقت به این گزارش رسیدگی خواهد کرد و پس از تایید، تغییرات قابل مشاهده
                             خواهد شد.</p>
-                        <p>کد ارجاع: {{ report.refid|default:'-' }}</p>
+                        <p style="font-size:12px;font-style:italic;color:rgb(158, 163, 169)">شناسه ارجاع: {{ report.refid|default:'-' }}</p>
                     </div>
                     <div style="color:#848d95;font-size:12px;font-style:italic;padding:1.5em;margin-bottom:1em">باتشکر از کمک شما در گسترش اطلاعات آزاد.</div>
                 </div>

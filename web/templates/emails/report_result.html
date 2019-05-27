@@ -2,7 +2,7 @@
     نتیجه گزارش برای صفحه «{{ report.page.title }}»
 {% endblock subject %}
 {% block text_body %}
-    دوست عزیز، این ایمیل به دلیل اعلام نتیجه گزارش ثبت شده در صفحه «{{ report.page.title }}» ارسال شده است.
+    دوست عزیز، این ایمیل به دلیل اعلام نتیجه گزارش ثبت شده برای صفحه «{{ report.page.title }}» ارسال شده است.
     {% if report.status == 'accepted' %}
         گزارش ارسالی شما تایید شد.
     {% elif report.status == 'denied' %}
@@ -37,7 +37,7 @@
                 </div>
                 <div style="width:100%;background-color:#FAFAFB">
                     <div style="border-bottom:solid 1px #E4E6E8;padding:3em;line-height:2em;text-align:justify">
-                        <p>دوست عزیز،<br>این ایمیل به دلیل اعلام نتیجه گزارش ثبت شده در صفحه
+                        <p>دوست عزیز،<br>این ایمیل به دلیل اعلام نتیجه گزارش ثبت شده برای صفحه
                             «<strong>{{ report.page.title }}</strong>» ارسال شده است.
                         </p>
                         <p>
@@ -45,14 +45,16 @@
                                 گزارش ارسالی شما <strong>تایید شد</strong>. شما می‌توانید تغییرات اعمال شده را از
                                 طریق لینک زیر ببینید.
                             {% elif report.status == 'denied' %}
-                                گزارش ارسالی شما <strong>رد شد</strong>.
+                                متاسفانه گزارش ارسالی شما <strong>رد شد</strong>.
                                 <br>
-                                توضیح: {{ report.description|default:'-' }}
+                                <span style="font-style:italic;color:rgb(108, 115, 122);font-size:14px">توضیحات: {{ report.description|default:'-' }}</span>
                             {% endif %}
                         </p>
-                        <p>کد ارجاع: {{ report.refid|default:'-' }}</p>
+                        <p style="font-size:12px;font-style:italic;color:rgb(158, 163, 169)">شناسه ارجاع: {{ report.refid|default:'-' }}</p>
                     </div>
-                    <div style="color:#848d95;font-size:12px;font-style:italic;padding:1.5em;margin-bottom:1em">باتشکر از کمک شما در گسترش اطلاعات آزاد.</div>
+                    <div style="color:#848d95;font-size:12px;font-style:italic;padding:1.5em;margin-bottom:1em">باتشکر
+                        از کمک شما در گسترش اطلاعات آزاد.
+                    </div>
                 </div>
                 <div>
                     <a style="margin:1em 0;color:#FFF;display:block;width:100%;text-align:center;padding:0.6em 0;background-color:#0095FF;border-radius:2px;text-decoration:none;border:1px solid #07C"

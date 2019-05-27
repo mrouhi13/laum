@@ -6,7 +6,7 @@ from django.views.generic import CreateView, DetailView, ListView, TemplateView
 from django.views.generic.edit import FormMixin
 
 from .forms import SearchForm, PageForm, ReportForm
-from .models import Page, Report
+from .models import Page, Report, Setting
 from .utils.email import SendEmail
 
 ERROR_400_TEMPLATE_NAME = 'errors/error_400.html'
@@ -51,10 +51,16 @@ class AjaxableResponseMixin(FormMixin):
             object_type = obj.__class__.__name__.lower()
             context = {object_type: obj}
             email_template = f'emails/new_{object_type}.html'
+            notification_email_template = f'emails/new_{object_type}_notification.html'
             to = form.cleaned_data.get('reporter') or form.cleaned_data.get('author')
 
-            if email_template:
-                SendEmail(self.request, context, template_name=email_template).send([to])
+            SendEmail(self.request, context, template_name=email_template).send([to])
+
+            try:
+                notification_email = Setting.objects.get(type=Setting.NOTIFICATION_EMAIL).content
+                SendEmail(self.request, context, template_name=notification_email_template).send([notification_email])
+            except Setting.DoesNotExist:
+                pass
 
             return JsonResponse({})
         else:
