@@ -178,6 +178,7 @@ class Setting(models.Model):
     DEFAULT_KEYWORDS = 'default_keywords'
     DEFAULT_DESCRIPTION = 'default_description'
     CONTACT_EMAIL = 'contact_email'
+    NOTIFICATION_EMAIL = 'notification_email'
     GOOGLE_ANALYTICS_ID = 'google_analytics_id'
     TYPE_CHOICES = (
         (SITE_SLOGAN_1, _('شعار ۱')),
@@ -185,6 +186,7 @@ class Setting(models.Model):
         (DEFAULT_KEYWORDS, _('کلید واژه‌های پیش‌فرض')),
         (DEFAULT_DESCRIPTION, _('توضیح پیش‌فرض')),
         (CONTACT_EMAIL, _('ایمیل ارتباطی')),
+        (NOTIFICATION_EMAIL, _('ایمیل اطلاع‌رسانی')),
         (GOOGLE_ANALYTICS_ID, _('شناسه‌ی Google Analytics'))
     )
     type = models.CharField(_('نوع'), max_length=32, choices=TYPE_CHOICES, unique=True,
