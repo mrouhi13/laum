@@ -1,4 +1,5 @@
 from django import urls
+from django.conf import settings
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
@@ -14,10 +15,10 @@ admin.site.index_title = 'داشبورد'
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
-    readonly_fields = ['link_to_page', 'link_to_reports', 'jalali_updated_on', 'jalali_created_on']
+    readonly_fields = ['image_tag', 'link_to_page', 'link_to_reports', 'jalali_updated_on', 'jalali_created_on']
     fieldsets = [
         ('اطلاعات اصلی',
-         {'fields': ['link_to_page', 'title', 'subtitle', 'content', 'event', 'image', 'image_caption']}),
+         {'fields': ['link_to_page', 'title', 'subtitle', 'content', 'event', 'image', 'image_tag', 'image_caption']}),
         ('اطلاعات تکمیلی', {'fields': ['tag', 'reference', 'website', 'author', 'is_active', 'link_to_reports']}),
         ('تاریخ‌ها', {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['title', 'author', 'is_active', 'jalali_updated_on', 'jalali_created_on']
@@ -41,6 +42,11 @@ class PageAdmin(admin.ModelAdmin):
         return mark_safe('، '.join(reports_link))
 
     link_to_reports.short_description = 'گزارش‌ها'
+
+    def image_tag(self, obj):
+        return mark_safe(f'<img src="{obj.image.url}" width=150 height=150>')
+
+    image_tag.short_description = 'نمایش تصویر'
 
     def save_model(self, request, obj, form, change):
         editor = PersianEditors(['space', 'number', 'arabic', 'punctuation_marks'])
