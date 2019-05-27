@@ -1,5 +1,4 @@
 from django import urls
-from django.conf import settings
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
