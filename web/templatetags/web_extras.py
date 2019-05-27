@@ -1,4 +1,3 @@
-import re
 from urllib.parse import urlencode
 
 from django import template
@@ -6,6 +5,7 @@ from django.template.defaultfilters import stringfilter
 
 from web import jalali
 from web.helpers import get_jalali_month_name
+from web.persian_editors import PersianEditors
 
 register = template.Library()
 
@@ -13,17 +13,10 @@ register = template.Library()
 @register.filter(name='to_persian')
 @stringfilter
 def convert_digits_to_persian(value):
-    persian_nums = ('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
-    original_text = str(value)
-    converted_text = ''
+    editor = PersianEditors(['number'])
+    editor.escape_return = False
 
-    for char in original_text:
-        if re.search(r'\d', char):
-            converted_text += persian_nums[int(char)]
-        else:
-            converted_text += char
-
-    return converted_text
+    return editor.run(value)
 
 
 @register.filter(name='to_jalali')
