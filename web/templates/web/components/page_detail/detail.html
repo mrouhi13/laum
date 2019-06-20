@@ -33,7 +33,7 @@
         </div>
         <div class="page-content">
             <p>{{ page.content }}</p>
-            {% for tag in page.tag.values %}
+            {% for tag in page.tags.values %}
                 <a class="ml-1" href="{% url 'web:page-list' %}?q={{ tag.keyword }}">
                     <span class="page-tag">
                         <small>#{{ tag.keyword }}</small>

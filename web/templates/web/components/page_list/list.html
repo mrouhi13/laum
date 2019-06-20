@@ -17,7 +17,7 @@
                         <p class="card-text content-body">
                             {{ page.content|truncatechars:40 }}</p>
                         <div class="d-flex content-tag">
-                            {% for tag in page.tag.values %}
+                            {% for tag in page.tags.values %}
                                 <small class="text-muted ml-2">#{{ tag.keyword }}</small>
                             {% endfor %}
                         </div>

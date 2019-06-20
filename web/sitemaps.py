@@ -5,8 +5,8 @@ from .models import Page
 
 
 class PageSitemap(Sitemap):
-    changefreq = 'daily'
     priority = 0.9
+    changefreq = 'daily'
     protocol = 'https'
 
     def items(self):

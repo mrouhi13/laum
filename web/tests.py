@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from .forms import SearchForm
 from .helpers import get_jalali_month_name
-from .models import Report, Page, generate_new_pid
+from .models import Report, Page, generate_pid
 from .templatetags.web_extras import convert_date_to_jalali as to_jalali, convert_digits_to_persian as to_persian, \
     convert_queryset_values_to_list as to_list
 
@@ -237,7 +237,7 @@ class PageModelTests(TestCase):
         """
         Generate a new pid with 13 characters length.
         """
-        new_pid = generate_new_pid()
+        new_pid = generate_pid()
 
         self.assertEqual(len(new_pid), 16)
 

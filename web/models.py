@@ -1,24 +1,56 @@
 import random
 import string
 
+from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
+from .helpers import swap_prefix
 from .templatetags.web_extras import convert_date_to_jalali as to_jalali, convert_digits_to_persian as to_persian
 
 
-def generate_new_pid(n=12):
+def generate_pid(n=12):
     new_pid = None
-    prefix_string = 'lmp_'
 
     while not new_pid:
         postfix_string = ''.join(random.choices(string.ascii_letters + string.digits, k=n))
-        new_pid = '%s%s' % (prefix_string, postfix_string)
+        new_pid = f'{settings.PID_PREFIX}_{postfix_string}'
 
-        if Page.objects.is_pid_exists(new_pid):
+        if Page.objects.is_pid_exist(new_pid):
             new_pid = None
 
     return new_pid
+
+
+@receiver(post_save, sender='web.Report')
+def generate_refid(sender, instance=None, created=False, **kwargs):
+    if created:
+        instance.refid = swap_prefix(f'{instance.page.pid}_{instance.pk}', settings.REFID_PREFIX)
+        instance.save()
+
+
+class BaseModel(models.Model):
+    updated_on = models.DateTimeField(_('تاریخ به‌روزرسانی'), auto_now=True)
+    created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
+
+    def jalali_updated_on(self):
+        jalali_date = to_jalali(self.updated_on.strftime('%Y-%m-%d'))
+        return to_persian(jalali_date)
+
+    jalali_updated_on.admin_order_field = 'updated_on'
+    jalali_updated_on.short_description = _('تاریخ به‌روزرسانی')
+
+    def jalali_created_on(self):
+        jalali_date = to_jalali(self.created_on.strftime('%Y-%m-%d'))
+        return to_persian(jalali_date)
+
+    jalali_created_on.admin_order_field = 'created_on'
+    jalali_created_on.short_description = _('تاریخ ایجاد')
+
+    class Meta:
+        abstract = True
 
 
 class PageManager(models.Manager):
@@ -44,158 +76,109 @@ class PageManager(models.Manager):
 
         return random_page
 
-    def is_pid_exists(self, pid):
+    def is_pid_exist(self, pid):
         return self.filter(pid=pid).exists()
 
 
-class Page(models.Model):
-    tag = models.ManyToManyField('Tag', verbose_name='برچسب‌ها', related_name='tags', related_query_name='tag',
-                                 blank=True)
-    pid = models.CharField(_('شناسه‌ی عمومی'), max_length=16, unique=True, default=generate_new_pid)
+class Page(BaseModel):
+    tags = models.ManyToManyField('Tag', verbose_name=_('برچسب‌ها'), related_name='tags', related_query_name='tag',
+                                  blank=True)
+    pid = models.CharField(_('شناسه‌ی عمومی'), max_length=16, unique=True, default=generate_pid)
     title = models.CharField(_('عنوان'), max_length=128)
     subtitle = models.CharField(_('زیرعنوان'), max_length=128, blank=True)
     content = models.TextField(_('محتوا'), max_length=1024)
     event = models.CharField(_('رویداد مهم'), max_length=128, blank=True,
-                             help_text='تاریخ یک رویداد مهم برای موضوع وارد شده به همراه محل وقوع.')
+                             help_text=_('تاریخ یک رویداد مهم برای موضوع وارد شده به همراه محل وقوع.'))
     image = models.ImageField(_('تصویر'), upload_to='images', blank=True)
     image_caption = models.CharField(_('توضیح تصویر'), max_length=128, blank=True,
-                                     help_text='مکان و موقعیت گرفتن عکس به همراه معرفی افراد حاضر در عکس.')
+                                     help_text=_('مکان و موقعیت گرفتن عکس به همراه معرفی افراد حاضر در عکس.'))
     reference = models.CharField(_('منبع'), max_length=128, blank=True,
-                                 help_text='نام کتاب، روزنامه، مجله یا آدرس سایت، بلاگ و... به همراه نام نویسنده')
+                                 help_text=_('نام کتاب، روزنامه، مجله یا آدرس سایت، بلاگ و... به همراه نام نویسنده'))
     website = models.URLField(_('وب‌سایت'), blank=True)
     author = models.EmailField(_('ایمیل نویسنده'), blank=True)
     is_active = models.BooleanField(_('فعال'), default=False,
-                                    help_text='مشخص می‌کند که این صفحه در لیست نتایج قابل دیدن باشد یا نه.')
-    updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
-    created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
+                                    help_text=_('مشخص می‌کند که این صفحه در لیست نتایج قابل دیدن باشد یا نه.'))
 
     objects = PageManager()
 
     class Meta:
-        verbose_name = 'صفحه'
-        verbose_name_plural = 'صفحه'
+        verbose_name = _('صفحه')
+        verbose_name_plural = _('صفحه')
         ordering = ['-created_on']
 
     def __str__(self):
         return self.title
 
-    def jalali_updated_on(self):
-        jalali_date = to_jalali(self.updated_on.strftime('%Y-%m-%d'))
-        return to_persian(jalali_date)
 
-    jalali_updated_on.admin_order_field = 'updated_on'
-    jalali_updated_on.short_description = 'آخرین به‌روزرسانی'
-
-    def jalali_created_on(self):
-        jalali_date = to_jalali(self.created_on.strftime('%Y-%m-%d'))
-        return to_persian(jalali_date)
-
-    jalali_created_on.admin_order_field = 'created_on'
-    jalali_created_on.short_description = 'تاریخ ایجاد'
-
-
-class Report(models.Model):
-    IS_PENDING = 'pending'
-    IS_ACCEPTED = 'accepted'
-    IS_DENIED = 'denied'
+class Report(BaseModel):
+    STATUS_IS_PENDING = 'pending'
+    STATUS_IS_ACCEPTED = 'accepted'
+    STATUS_IS_DENIED = 'denied'
     STATUS_CHOICES = (
-        (IS_PENDING, _('در انتظار')),
-        (IS_ACCEPTED, _('تایید شده')),
-        (IS_DENIED, _('رد شده')),
+        (STATUS_IS_PENDING, _('در انتظار')),
+        (STATUS_IS_ACCEPTED, _('تایید شده')),
+        (STATUS_IS_DENIED, _('رد شده')),
     )
 
-    page = models.ForeignKey('Page', to_field='pid', verbose_name='صفحه', on_delete=models.CASCADE)
+    page = models.ForeignKey('Page', to_field='pid', on_delete=models.CASCADE, related_name='reports',
+                             verbose_name=_('صفحه'), )
+    refid = models.CharField(_('شناسه‌ی ارجاع'), max_length=32, unique=True, null=True)
     body = models.TextField(_('متن گزارش'), max_length=1024)
     reporter = models.EmailField(_('ایمیل گزارش‌دهنده'))
     description = models.TextField(_('توضیحات'), max_length=1024, blank=True, help_text=_(
         'درصورتی که نیاز به یادآوری توضیحاتی در آینده وجود دارد در این قسمت وارد کنید.\
         هم‌چنین در صورت رد گزارش محتوای این فیلد برای کاربر ارسال می‌شود.'))
-    status = models.CharField(_('وضعیت رسیدگی'), max_length=32, choices=STATUS_CHOICES, default=IS_PENDING,
+    status = models.CharField(_('وضعیت رسیدگی'), max_length=32, choices=STATUS_CHOICES, default=STATUS_IS_PENDING,
                               help_text=_('در تعیین وضیعت رسیدگی دقت کنید. این قسمت تنها یک بار قابل تفییر است.'))
-    updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
-    created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
 
     class Meta:
-        verbose_name = 'گزارش'
-        verbose_name_plural = 'گزارش'
+        verbose_name = _('گزارش')
+        verbose_name_plural = _('گزارش')
+        ordering = ['-created_on']
 
     def __str__(self):
         return self.page.title
 
-    def jalali_updated_on(self):
-        jalali_date = to_jalali(self.updated_on.strftime('%Y-%m-%d'))
-        return to_persian(jalali_date)
 
-    jalali_updated_on.admin_order_field = 'updated_on'
-    jalali_updated_on.short_description = 'آخرین به‌روزرسانی'
-
-    def jalali_created_on(self):
-        jalali_date = to_jalali(self.created_on.strftime('%Y-%m-%d'))
-        return to_persian(jalali_date)
-
-    jalali_created_on.admin_order_field = 'created_on'
-    jalali_created_on.short_description = 'تاریخ ایجاد'
-
-    def refid(self):
-        return f'lmr_{self.page.pid}_{self.pk}'
-
-    refid.short_description = 'شناسه‌ی ارجاع'
-
-
-class Tag(models.Model):
+class Tag(BaseModel):
     name = models.CharField(_('نام'), max_length=50, unique=True)
     keyword = models.SlugField(_('کلیدواژه'), allow_unicode=True)
     is_active = models.BooleanField(_('فعال'), default=True,
-                                    help_text='مشخص می‌کند که این برچسب قابل استفاده باشد یا نه.')
-    updated_on = models.DateTimeField(_('آخرین به‌روزرسانی'), auto_now=True)
-    created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
+                                    help_text=_('مشخص می‌کند که این برچسب قابل استفاده باشد یا نه.'))
 
     class Meta:
-        verbose_name = 'برچسب'
-        verbose_name_plural = 'برچسب'
+        verbose_name = _('برچسب')
+        verbose_name_plural = _('برچسب')
+        ordering = ['-created_on']
 
     def __str__(self):
         return self.name
 
-    def jalali_updated_on(self):
-        jalali_date = to_jalali(self.updated_on.strftime('%Y-%m-%d'))
-        return to_persian(jalali_date)
 
-    jalali_updated_on.admin_order_field = 'updated_on'
-    jalali_updated_on.short_description = 'آخرین به‌روزرسانی'
-
-    def jalali_created_on(self):
-        jalali_date = to_jalali(self.created_on.strftime('%Y-%m-%d'))
-        return to_persian(jalali_date)
-
-    jalali_created_on.admin_order_field = 'created_on'
-    jalali_created_on.short_description = 'تاریخ ایجاد'
-
-
-class Setting(models.Model):
-    SITE_SLOGAN_1 = 'site_slogan_1'
-    SITE_SLOGAN_2 = 'site_slogan_2'
-    DEFAULT_KEYWORDS = 'default_keywords'
-    DEFAULT_DESCRIPTION = 'default_description'
-    CONTACT_EMAIL = 'contact_email'
-    NOTIFICATION_EMAIL = 'notification_email'
-    GOOGLE_ANALYTICS_ID = 'google_analytics_id'
-    TYPE_CHOICES = (
-        (SITE_SLOGAN_1, _('شعار ۱')),
-        (SITE_SLOGAN_2, _('شعار ۲')),
-        (DEFAULT_KEYWORDS, _('کلید واژه‌های پیش‌فرض')),
-        (DEFAULT_DESCRIPTION, _('توضیح پیش‌فرض')),
-        (CONTACT_EMAIL, _('ایمیل ارتباطی')),
-        (NOTIFICATION_EMAIL, _('ایمیل اطلاع‌رسانی')),
-        (GOOGLE_ANALYTICS_ID, _('شناسه‌ی Google Analytics'))
+class WebsiteSetting(models.Model):
+    SETTING_SITE_SLOGAN_1 = 'site_slogan_1'
+    SETTING_SITE_SLOGAN_2 = 'site_slogan_2'
+    SETTING_DEFAULT_KEYWORDS = 'default_keywords'
+    SETTING_DEFAULT_DESCRIPTION = 'default_description'
+    SETTING_CONTACT_EMAIL = 'contact_email'
+    SETTING_NOTIFICATION_EMAIL = 'notification_email'
+    SETTING_GOOGLE_ANALYTICS_ID = 'google_analytics_id'
+    SETTING_CHOICES = (
+        (SETTING_SITE_SLOGAN_1, _('شعار ۱')),
+        (SETTING_SITE_SLOGAN_2, _('شعار ۲')),
+        (SETTING_DEFAULT_KEYWORDS, _('کلید واژه‌های پیش‌فرض')),
+        (SETTING_DEFAULT_DESCRIPTION, _('توضیح پیش‌فرض')),
+        (SETTING_CONTACT_EMAIL, _('ایمیل ارتباطی')),
+        (SETTING_NOTIFICATION_EMAIL, _('ایمیل اطلاع‌رسانی')),
+        (SETTING_GOOGLE_ANALYTICS_ID, _('شناسه‌ی Google Analytics'))
     )
-    type = models.CharField(_('نوع'), max_length=32, choices=TYPE_CHOICES, unique=True,
-                            help_text=_('از هر نوع فقط یک نمونه می‌توانید ایجاد کنید.'))
+    setting = models.CharField(_('تنظیم'), max_length=32, choices=SETTING_CHOICES, unique=True,
+                               help_text=_('از هر تنطیم فقط یک نمونه می‌توانید ایجاد کنید.'))
     content = models.CharField(_('محتوا'), max_length=1024, help_text=_('محتوایی که در سایت نمایش داده می‌شود.'))
 
     class Meta:
-        verbose_name = 'تنظیم'
-        verbose_name_plural = 'تنظیمات'
+        verbose_name = _('تنظیم')
+        verbose_name_plural = _('تنظیمات وب سایت')
 
     def __str__(self):
-        return self.type
+        return self.setting
