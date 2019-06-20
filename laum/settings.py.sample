@@ -145,3 +145,33 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = ''
 
 SITE_ID = 1
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'WARNING'),
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'level': 'WARNING',
+        }
+    }
+}
+
+# Application Settings
+
+PID_PREFIX = 'lmp'
+
+REFID_PREFIX = 'lmr'

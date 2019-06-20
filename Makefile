@@ -21,7 +21,9 @@ activate:
 	pipenv shell -c
 
 test:
+	pipenv run coverage erase
 	pipenv run ./manage.py test
 	pipenv run coverage run ./manage.py test
+	pipenv run coverage report
 
 .PHONY: help activate test
