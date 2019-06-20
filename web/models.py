@@ -2,6 +2,8 @@ import random
 import string
 
 from django.conf import settings
+from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -29,6 +31,52 @@ def generate_refid(sender, instance=None, created=False, **kwargs):
     if created:
         instance.refid = swap_prefix(f'{instance.page.pid}_{instance.pk}', settings.REFID_PREFIX)
         instance.save()
+
+
+class UserManager(BaseUserManager):
+    use_in_migrations = True
+
+    def _create_user(self, email, password, **extra_fields):
+        """
+        Create and save a user with the given email and password.
+        """
+        if not email:
+            raise ValueError(_('ایمیل وارد نشده است.'))
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(email, password, **extra_fields)
+
+    def create_superuser(self, email, password, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError(_('برای کاربر مدیر is_staff باید فعال باشد.'))
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError(_('برای کاربر مدیر is_superuser باید فعال باشد.'))
+        return self._create_user(email, password, **extra_fields)
+
+
+class User(AbstractUser):
+    username = None
+    email = models.EmailField(_('Email'), unique=True,
+                              error_messages={'unique': _('کاربری با این ایمیل وجود دارد.')})
+
+    objects = UserManager()
+
+    EMAIL_FIELD = 'email'
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        verbose_name = _('کاربر')
+        verbose_name_plural = _('کاربران')
 
 
 class BaseModel(models.Model):
@@ -103,7 +151,7 @@ class Page(BaseModel):
 
     class Meta:
         verbose_name = _('صفحه')
-        verbose_name_plural = _('صفحه')
+        verbose_name_plural = _('صفحه‌ها')
         ordering = ['-created_on']
 
     def __str__(self):
@@ -133,7 +181,7 @@ class Report(BaseModel):
 
     class Meta:
         verbose_name = _('گزارش')
-        verbose_name_plural = _('گزارش')
+        verbose_name_plural = _('گزارش‌ها')
         ordering = ['-created_on']
 
     def __str__(self):
@@ -148,7 +196,7 @@ class Tag(BaseModel):
 
     class Meta:
         verbose_name = _('برچسب')
-        verbose_name_plural = _('برچسب')
+        verbose_name_plural = _('برچسب‌ها')
         ordering = ['-created_on']
 
     def __str__(self):

@@ -175,3 +175,5 @@ LOGGING = {
 PID_PREFIX = 'lmp'
 
 REFID_PREFIX = 'lmr'
+
+AUTH_USER_MODEL = 'web.User'
