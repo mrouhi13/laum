@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -57,7 +58,8 @@ class AjaxableResponseMixin(FormMixin):
             SendEmail(self.request, context, template_name=email_template).send([to])
 
             try:
-                notification_email = WebsiteSetting.objects.get(setting=WebsiteSetting.SETTING_NOTIFICATION_EMAIL).content
+                notification_email = WebsiteSetting.objects.get(
+                    setting=WebsiteSetting.SETTING_NOTIFICATION_EMAIL).content
                 SendEmail(self.request, context, template_name=notification_email_template).send([notification_email])
             except WebsiteSetting.DoesNotExist:
                 pass
@@ -94,7 +96,15 @@ class PageListView(ListView):
 
     def get_queryset(self):
         q = self.request.GET.get('q')
-        return Page.objects.filter(title__icontains=q, is_active=True)
+        all_active_page = Page.objects.filter(is_active=True)
+        result_by_title = all_active_page.filter(title__icontains=q)
+        result_by_tag = all_active_page.filter(tags__keyword__icontains=q)
+        result_by_subtitle = all_active_page.filter(subtitle__icontains=q)
+        result_by_other_fields = all_active_page.filter(
+            Q(content__icontains=q) | Q(event__icontains=q) | Q(image_caption__icontains=q))
+        all_results = result_by_title | result_by_tag | result_by_subtitle | result_by_other_fields
+
+        return all_results.distinct()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PageListView, self).get_context_data(**kwargs)
