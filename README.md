@@ -19,6 +19,6 @@ Majid Rouhi - mrouhi13@icloud.com
 
 Marzieh Alemi - marziehalemi1988@gmail.com
 
-[1]: https://www.laum.ir/about
+[1]: https://www.laum.ir/lmp_WiPcE4LjeyrB/
 [2]: https://www.gnu.org/licenses/gpl-3.0.en.html
 [3]: https://creativecommons.org/licenses/by/4.0/
