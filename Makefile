@@ -1,4 +1,4 @@
-help:
+help:  - make activate
 	@echo "Usage:"
 	@echo "    make help        show this message"
 	@echo "    make init        create virtual environment and install dependencies"
@@ -13,16 +13,16 @@ init:
 
 setup:
 	cp laum/settings.py.sample laum/settings.py
-	pipenv run python ./manage.py migrate
-	pipenv run python ./manage.py collectstatic
+	./manage.py migrate
+	./manage.py collectstatic
 
 activate:
-	pipenv shell -c
+	pipenv shell
 
 test:
-	pipenv run coverage erase
-	pipenv run ./manage.py test
-	pipenv run coverage run ./manage.py test
-	pipenv run coverage report
+	coverage erase
+	./manage.py test
+	coverage run ./manage.py test
+	coverage report
 
 .PHONY: help activate test

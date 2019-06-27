@@ -13,19 +13,20 @@ env:
   global:
     - PIPENV_VENV_IN_PROJECT=1
     - PIPENV_IGNORE_VIRTUALENVS=1
+    - PIPENV_VERBOSITY=-1
+    - DATABASE_NAME=laum
+    - DATABASE_USER=postgres
+    - DATABASE_PASSWORD=
+    - SECRET_KEY=_
 
 # command to install dependencies
 before_script:
-  - psql -c "CREATE DATABASE laum;" -U postgres
-  - export PIPENV_VERBOSITY=-1
-  - export PIPENV_IGNORE_VIRTUALENVS=1
-  - export DATABASE_NAME=laum
-  - export DATABASE_USER=postgres
-  - export DATABASE_PASSWORD=
+  - psql -c "CREATE DATABASE $DATABASE_NAME;" -U DATABASE_USER
   - make init
+  - make activate
   - make setup
 
 # command to run tests
 script: make test
 
-after_success: pipenv run codecov
+after_success: codecov
