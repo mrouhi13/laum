@@ -23,10 +23,9 @@ env:
 before_script:
   - psql -c "CREATE DATABASE $DATABASE_NAME;" -U $DATABASE_USER
   - make init
-  - make activate
   - make setup
 
 # command to run tests
 script: make test
 
-after_success: codecov
+after_success: pipenv run codecov
