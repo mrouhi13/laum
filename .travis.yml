@@ -16,6 +16,12 @@ env:
 
 # command to install dependencies
 before_script:
+  - psql -c "CREATE DATABASE laum;" -U postgres
+  - export PIPENV_VERBOSITY=-1
+  - export PIPENV_IGNORE_VIRTUALENVS=1
+  - export DATABASE_NAME=laum
+  - export DATABASE_USER=postgres
+  - export DATABASE_PASSWORD=
   - make init
   - make setup
 
