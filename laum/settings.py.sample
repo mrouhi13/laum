@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = os.environ.get('SECRET_KEY', 'SECRET_KEY not set.')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -86,8 +86,12 @@ WSGI_APPLICATION = 'laum.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DATABASE_NAME', 'DATABASE_NAME not set.'),
+        'USER': os.environ.get('DATABASE_USER', 'DATABASE_USER not set.'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'DATABASE_PASSWORD not set.'),
+        'HOST': 'localhost',
+        'PORT': ''
     }
 }
 
@@ -138,11 +142,34 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Mail server settings
 
 EMAIL_HOST = ''
+
 EMAIL_PORT = 587
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'EMAIL_HOST_USER not set.')
+
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'EMAIL_HOST_PASSWORD not set.')
+
 EMAIL_USE_TLS = True
+
 DEFAULT_FROM_EMAIL = ''
+
+SERVER_EMAIL = 'admin@laum.ir'
+
+# Application settings
+
+PID_PREFIX = 'lmp'
+
+REFID_PREFIX = 'lmr'
+
+AUTH_USER_MODEL = 'web.User'
+
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
+
+ADMINS = [('Majid', 'mrouhi13@gmail.com')]
 
 SITE_ID = 1
 
@@ -151,29 +178,25 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'file': {
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'WARNING'),
             'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+            'filename': 'error.log',
         },
-        'console': {
-            'class': 'logging.StreamHandler',
+        'mail_admins': {
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'WARNING'),
+            'class': 'django.utils.log.AdminEmailHandler',
         }
     },
     'loggers': {
         'django': {
-            'handlers': ['file', 'console'],
+            'handlers': ['mail_admins', 'file'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'WARNING'),
             'propagate': True,
         },
         'django.db.backends': {
-            'level': 'WARNING',
+            'handlers': ['mail_admins', 'file'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'WARNING'),
+            'propagate': True,
         }
     }
 }
-
-# Application Settings
-
-PID_PREFIX = 'lmp'
-
-REFID_PREFIX = 'lmr'
-
-AUTH_USER_MODEL = 'web.User'

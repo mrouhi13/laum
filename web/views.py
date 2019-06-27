@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -40,6 +40,7 @@ class AjaxableResponseMixin(FormMixin):
 
     def form_invalid(self, form):
         response = super().form_invalid(form)
+
         if self.request.is_ajax():
             return JsonResponse(form.errors, status=400)
         else:
@@ -47,6 +48,7 @@ class AjaxableResponseMixin(FormMixin):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+
         if self.request.is_ajax():
             obj = self.object
             object_type = obj.__class__.__name__.lower()
@@ -60,6 +62,7 @@ class AjaxableResponseMixin(FormMixin):
             try:
                 notification_email = WebsiteSetting.objects.get(
                     setting=WebsiteSetting.SETTING_NOTIFICATION_EMAIL).content
+
                 SendEmail(self.request, context, template_name=notification_email_template).send([notification_email])
             except WebsiteSetting.DoesNotExist:
                 pass
@@ -80,6 +83,7 @@ class IndexView(TemplateView):
         context['search_form'] = SearchForm
         context['page_form'] = PageForm
         context['random_pages'] = Page.objects.get_random_pages()
+
         return context
 
 
@@ -90,29 +94,29 @@ class PageListView(ListView):
 
     def get(self, request, *args, **kwargs):
         q = request.GET.get('q')
+
         if q:
             return super(PageListView, self).get(request, *args, **kwargs)
+
         return redirect(reverse('web:index'))
 
     def get_queryset(self):
         q = self.request.GET.get('q')
-        all_active_page = Page.objects.filter(is_active=True)
-        result_by_title = all_active_page.filter(title__icontains=q)
-        result_by_tag = all_active_page.filter(tags__keyword__icontains=q)
-        result_by_subtitle = all_active_page.filter(subtitle__icontains=q)
-        result_by_other_fields = all_active_page.filter(
-            Q(content__icontains=q) | Q(event__icontains=q) | Q(image_caption__icontains=q))
-        all_results = result_by_title | result_by_tag | result_by_subtitle | result_by_other_fields
+        vector = SearchVector('title', weight='A') \
+                 + SearchVector('subtitle', weight='B') \
+                 + SearchVector('tags__name', weight='C') \
+                 + SearchVector('content', 'event', 'image_caption', weight='D')
+        query = SearchQuery(q, search_type='plain')
+        rank = SearchRank(vector, query)
 
-        return all_results.distinct()
+        return Page.objects.annotate(rank=rank).filter(is_active=True, rank__gt=0).order_by('rank')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PageListView, self).get_context_data(**kwargs)
-
         q = self.request.GET.get('q')
-
         context['search_form'] = SearchForm(initial={'q': q})
         context['page_form'] = PageForm
+
         return context
 
 
@@ -123,6 +127,7 @@ class PageDetailView(DetailView):
 
     def get_object(self, queryset=None):
         pid = self.kwargs.get(self.slug_url_kwarg)
+
         return get_object_or_404(self.model, pid=pid, is_active=True)
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -131,6 +136,7 @@ class PageDetailView(DetailView):
         context['search_form'] = SearchForm(initial={'q': None})
         context['report_form'] = ReportForm(initial={'page': pid})
         context['page_form'] = PageForm
+
         return context
 
 

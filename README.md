@@ -4,10 +4,10 @@
 
 May 2018
 
-This project defines everything about in a paragraph, with the help of all people. [read more...][1]
+This project defines everything about in a paragraph, with the help of all people. It's not an encyclopedia, just a quick reference for have an insight into a subject. [read more...][1]
 
 # Technologies
-* Python/Django for backend developing
+* Python/Django for back-end developing
 * Postgres for database
 * Bootstrap, jQuery, Fontawesome and Pnotify for front-end developing
 

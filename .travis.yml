@@ -1,6 +1,9 @@
 dist: xenial
 language: python
 sudo: false
+services:
+  - postgresql
+
 python:
   - '3.5'
   - '3.6'
@@ -10,9 +13,15 @@ env:
   global:
     - PIPENV_VENV_IN_PROJECT=1
     - PIPENV_IGNORE_VIRTUALENVS=1
+    - PIPENV_VERBOSITY=-1
+    - DATABASE_NAME=laum
+    - DATABASE_USER=postgres
+    - DATABASE_PASSWORD=
+    - SECRET_KEY=_
 
 # command to install dependencies
 before_script:
+  - psql -c "CREATE DATABASE $DATABASE_NAME;" -U $DATABASE_USER
   - make init
   - make setup
 

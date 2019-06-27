@@ -103,26 +103,19 @@ class BaseModel(models.Model):
 
 class PageManager(models.Manager):
     def get_random_pages(self):
-        page_count = self.count()
-        random_page = list()
         all_pages = self.filter(is_active=True)
+        pages_sample_list = list(all_pages.values_list('pk', flat=True))
+        max_random_page_count = 3
 
-        if all_pages.count() <= 3:
-            random_page = list(all_pages)
-        else:
-            while len(random_page) < 3:
-                remaining_count = 3 - len(random_page)
-                random_ids = random.sample(range(1, page_count + 1), remaining_count)
+        if len(pages_sample_list) < 3:
+            max_random_page_count = len(pages_sample_list)
 
-                for i in random_ids:
-                    random_page += self.filter(id=i, is_active=True)
+        random_pages_id = random.sample(pages_sample_list, max_random_page_count)
+        random_pages_list = list(all_pages.filter(pk__in=random_pages_id))
 
-                    page_set = set(random_page)
-                    random_page = list(page_set)
+        random.shuffle(random_pages_list)
 
-        random.shuffle(random_page)
-
-        return random_page
+        return random_pages_list
 
     def is_pid_exist(self, pid):
         return self.filter(pid=pid).exists()
@@ -131,14 +124,14 @@ class PageManager(models.Manager):
 class Page(BaseModel):
     tags = models.ManyToManyField('Tag', verbose_name=_('برچسب‌ها'), related_name='tags', related_query_name='tag',
                                   blank=True)
-    pid = models.CharField(_('شناسه‌ی عمومی'), max_length=16, unique=True, default=generate_pid)
-    title = models.CharField(_('عنوان'), max_length=128)
-    subtitle = models.CharField(_('زیرعنوان'), max_length=128, blank=True)
-    content = models.TextField(_('محتوا'), max_length=1024)
+    pid = models.CharField(_('شناسه‌ی عمومی'), max_length=16, unique=True, default=generate_pid, db_index=True)
+    title = models.CharField(_('عنوان'), max_length=128, db_index=True)
+    subtitle = models.CharField(_('زیرعنوان'), max_length=128, blank=True, db_index=True)
+    content = models.TextField(_('محتوا'), max_length=1024, db_index=True)
     event = models.CharField(_('رویداد مهم'), max_length=128, blank=True,
-                             help_text=_('تاریخ یک رویداد مهم برای موضوع وارد شده به همراه محل وقوع.'))
+                             help_text=_('تاریخ یک رویداد مهم برای موضوع وارد شده به همراه محل وقوع.'), db_index=True)
     image = models.ImageField(_('تصویر'), upload_to='images', blank=True)
-    image_caption = models.CharField(_('توضیح تصویر'), max_length=128, blank=True,
+    image_caption = models.CharField(_('توضیح تصویر'), max_length=128, blank=True, db_index=True,
                                      help_text=_('مکان و موقعیت گرفتن عکس به همراه معرفی افراد حاضر در عکس.'))
     reference = models.CharField(_('منبع'), max_length=128, blank=True,
                                  help_text=_('نام کتاب، روزنامه، مجله یا آدرس سایت، بلاگ و... به همراه نام نویسنده'))
@@ -152,7 +145,6 @@ class Page(BaseModel):
     class Meta:
         verbose_name = _('صفحه')
         verbose_name_plural = _('صفحه‌ها')
-        ordering = ['-created_on']
 
     def __str__(self):
         return self.title
@@ -182,22 +174,20 @@ class Report(BaseModel):
     class Meta:
         verbose_name = _('گزارش')
         verbose_name_plural = _('گزارش‌ها')
-        ordering = ['-created_on']
 
     def __str__(self):
         return self.page.title
 
 
 class Tag(BaseModel):
-    name = models.CharField(_('نام'), max_length=50, unique=True)
-    keyword = models.SlugField(_('کلیدواژه'), allow_unicode=True)
+    name = models.CharField(_('نام'), max_length=50, unique=True, db_index=True)
+    keyword = models.SlugField(_('کلیدواژه'), allow_unicode=True, db_index=True)
     is_active = models.BooleanField(_('فعال'), default=True,
                                     help_text=_('مشخص می‌کند که این برچسب قابل استفاده باشد یا نه.'))
 
     class Meta:
         verbose_name = _('برچسب')
         verbose_name_plural = _('برچسب‌ها')
-        ordering = ['-created_on']
 
     def __str__(self):
         return self.name

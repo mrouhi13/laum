@@ -13,12 +13,11 @@ init:
 
 setup:
 	cp laum/settings.py.sample laum/settings.py
-	sed -i -e "s/SECRET_KEY = '.*'/SECRET_KEY = '_'/" laum/settings.py
 	pipenv run python ./manage.py migrate
 	pipenv run python ./manage.py collectstatic
 
 activate:
-	pipenv shell -c
+	pipenv shell
 
 test:
 	pipenv run coverage erase
