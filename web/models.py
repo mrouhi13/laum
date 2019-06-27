@@ -103,26 +103,19 @@ class BaseModel(models.Model):
 
 class PageManager(models.Manager):
     def get_random_pages(self):
-        page_count = self.count()
-        random_page = list()
         all_pages = self.filter(is_active=True)
+        pages_sample_list = list(all_pages.values_list('pk', flat=True))
+        max_random_page_count = 3
 
-        if all_pages.count() <= 3:
-            random_page = list(all_pages)
-        else:
-            while len(random_page) < 3:
-                remaining_count = 3 - len(random_page)
-                random_ids = random.sample(range(1, page_count + 1), remaining_count)
+        if len(pages_sample_list) < 3:
+            max_random_page_count = len(pages_sample_list)
 
-                for i in random_ids:
-                    random_page += self.filter(id=i, is_active=True)
+        random_pages_id = random.sample(pages_sample_list, max_random_page_count)
+        random_pages_list = list(all_pages.filter(pk__in=random_pages_id))
 
-                    page_set = set(random_page)
-                    random_page = list(page_set)
+        random.shuffle(random_pages_list)
 
-        random.shuffle(random_page)
-
-        return random_page
+        return random_pages_list
 
     def is_pid_exist(self, pid):
         return self.filter(pid=pid).exists()
