@@ -21,7 +21,7 @@ env:
 
 # command to install dependencies
 before_script:
-  - psql -c "CREATE DATABASE $DATABASE_NAME;" -U DATABASE_USER
+  - psql -c "CREATE DATABASE $DATABASE_NAME;" -U $DATABASE_USER
   - make init
   - make activate
   - make setup
