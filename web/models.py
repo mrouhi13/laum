@@ -41,7 +41,7 @@ class UserManager(BaseUserManager):
         Create and save a user with the given email and password.
         """
         if not email:
-            raise ValueError(_('ایمیل وارد نشده است.'))
+            raise ValueError(_('The given email must be set'))
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -57,16 +57,16 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         if extra_fields.get('is_staff') is not True:
-            raise ValueError(_('برای کاربر مدیر is_staff باید فعال باشد.'))
+            raise ValueError(_('Superuser must have is_staff=True.'))
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError(_('برای کاربر مدیر is_superuser باید فعال باشد.'))
+            raise ValueError(_('Superuser must have is_superuser=True.'))
         return self._create_user(email, password, **extra_fields)
 
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(_('Email'), unique=True,
-                              error_messages={'unique': _('کاربری با این ایمیل وجود دارد.')})
+    email = models.EmailField(_('email address'), unique=True,
+                              error_messages={'unique': _('A user with that email already exists.')})
 
     objects = UserManager()
 
@@ -75,27 +75,27 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     class Meta:
-        verbose_name = _('کاربر')
-        verbose_name_plural = _('کاربران')
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
 
 
 class BaseModel(models.Model):
-    updated_on = models.DateTimeField(_('تاریخ به‌روزرسانی'), auto_now=True)
-    created_on = models.DateTimeField(_('تاریخ ایجاد'), auto_now_add=True)
+    updated_on = models.DateTimeField(_('updated on'), auto_now=True)
+    created_on = models.DateTimeField(_('created on'), auto_now_add=True)
 
     def jalali_updated_on(self):
         jalali_date = to_jalali(self.updated_on.strftime('%Y-%m-%d'))
         return to_persian(jalali_date)
 
     jalali_updated_on.admin_order_field = 'updated_on'
-    jalali_updated_on.short_description = _('تاریخ به‌روزرسانی')
+    jalali_updated_on.short_description = _('updated on')
 
     def jalali_created_on(self):
         jalali_date = to_jalali(self.created_on.strftime('%Y-%m-%d'))
         return to_persian(jalali_date)
 
     jalali_created_on.admin_order_field = 'created_on'
-    jalali_created_on.short_description = _('تاریخ ایجاد')
+    jalali_created_on.short_description = _('created on')
 
     class Meta:
         abstract = True
@@ -122,29 +122,33 @@ class PageManager(models.Manager):
 
 
 class Page(BaseModel):
-    tags = models.ManyToManyField('Tag', verbose_name=_('برچسب‌ها'), related_name='tags', related_query_name='tag',
-                                  blank=True)
-    pid = models.CharField(_('شناسه‌ی عمومی'), max_length=16, unique=True, default=generate_pid, db_index=True)
-    title = models.CharField(_('عنوان'), max_length=128, db_index=True)
-    subtitle = models.CharField(_('زیرعنوان'), max_length=128, blank=True, db_index=True)
-    content = models.TextField(_('محتوا'), max_length=1024, db_index=True)
-    event = models.CharField(_('رویداد مهم'), max_length=128, blank=True,
-                             help_text=_('تاریخ یک رویداد مهم برای موضوع وارد شده به همراه محل وقوع.'), db_index=True)
-    image = models.ImageField(_('تصویر'), upload_to='images', blank=True)
-    image_caption = models.CharField(_('توضیح تصویر'), max_length=128, blank=True, db_index=True,
-                                     help_text=_('مکان و موقعیت گرفتن عکس به همراه معرفی افراد حاضر در عکس.'))
-    reference = models.CharField(_('منبع'), max_length=128, blank=True,
-                                 help_text=_('نام کتاب، روزنامه، مجله یا آدرس سایت، بلاگ و... به همراه نام نویسنده'))
-    website = models.URLField(_('وب‌سایت'), blank=True)
-    author = models.EmailField(_('ایمیل نویسنده'), blank=True)
-    is_active = models.BooleanField(_('فعال'), default=False,
-                                    help_text=_('مشخص می‌کند که این صفحه در لیست نتایج قابل دیدن باشد یا نه.'))
+    tags = models.ManyToManyField('Tag', verbose_name=_('tags'), related_name='tags',
+                                  related_query_name='tag', blank=True)
+    pid = models.CharField(_('public ID'), max_length=16, unique=True,
+                           default=generate_pid, db_index=True)
+    title = models.CharField(_('title'), max_length=128, db_index=True)
+    subtitle = models.CharField(_('subtitle'), max_length=128, blank=True, db_index=True)
+    content = models.TextField(_('content'), max_length=1024, db_index=True)
+    event = models.CharField(_('event'), max_length=128, blank=True,
+                             help_text=_('Date of an important event for the subject '
+                                         'entered along with the place of occurrence.'), db_index=True)
+    image = models.ImageField(_('image'), upload_to='images', blank=True)
+    image_caption = models.CharField(_('image caption'), max_length=128, blank=True,
+                                     db_index=True, help_text=_('A brief description of the location '
+                                                                'and history of the photo.'))
+    reference = models.CharField(_('reference'), max_length=128, blank=True,
+                                 help_text=_('The name of the book, newspaper, magazine '
+                                             'or website address, blog and ... along with the author\'s name.'))
+    website = models.URLField(_('website'), blank=True)
+    author = models.EmailField(_('author email'), blank=True)
+    is_active = models.BooleanField(_('active status'), default=False,
+                                    help_text=_('Designate whether the page is visible on the list of results.'))
 
     objects = PageManager()
 
     class Meta:
-        verbose_name = _('صفحه')
-        verbose_name_plural = _('صفحه‌ها')
+        verbose_name = _('page')
+        verbose_name_plural = _('pages')
 
     def __str__(self):
         return self.title
@@ -155,39 +159,41 @@ class Report(BaseModel):
     STATUS_IS_ACCEPTED = 'accepted'
     STATUS_IS_DENIED = 'denied'
     STATUS_CHOICES = (
-        (STATUS_IS_PENDING, _('در انتظار')),
-        (STATUS_IS_ACCEPTED, _('تایید شده')),
-        (STATUS_IS_DENIED, _('رد شده')),
+        (STATUS_IS_PENDING, _('Pending')),
+        (STATUS_IS_ACCEPTED, _('Accepted')),
+        (STATUS_IS_DENIED, _('Denied')),
     )
 
-    page = models.ForeignKey('Page', to_field='pid', on_delete=models.CASCADE, related_name='reports',
-                             verbose_name=_('صفحه'), )
-    refid = models.CharField(_('شناسه‌ی ارجاع'), max_length=32, unique=True, null=True)
-    body = models.TextField(_('متن گزارش'), max_length=1024)
-    reporter = models.EmailField(_('ایمیل گزارش‌دهنده'))
-    description = models.TextField(_('توضیحات'), max_length=1024, blank=True, help_text=_(
-        'درصورتی که نیاز به یادآوری توضیحاتی در آینده وجود دارد در این قسمت وارد کنید.\
-        هم‌چنین در صورت رد گزارش محتوای این فیلد برای کاربر ارسال می‌شود.'))
-    status = models.CharField(_('وضعیت رسیدگی'), max_length=32, choices=STATUS_CHOICES, default=STATUS_IS_PENDING,
-                              help_text=_('در تعیین وضیعت رسیدگی دقت کنید. این قسمت تنها یک بار قابل تفییر است.'))
+    page = models.ForeignKey('Page', to_field='pid', on_delete=models.CASCADE,
+                             related_name='reports', verbose_name=_('page'))
+    refid = models.CharField(_('reference ID'), max_length=32, unique=True, null=True)
+    body = models.TextField(_('body'), max_length=1024)
+    reporter = models.EmailField(_('reporter email'))
+    description = models.TextField(_('description'), max_length=1024, blank=True,
+                                   help_text=_('A description if need to recall in the future. '
+                                               'Also, if the report is denied, the content of this field will '
+                                               'be sent to the user.'))
+    status = models.CharField(_('status'), max_length=32, choices=STATUS_CHOICES,
+                              default=STATUS_IS_PENDING, help_text=_('Be careful when determining the status. '
+                                                                     'This field only is set once.'))
 
     class Meta:
-        verbose_name = _('گزارش')
-        verbose_name_plural = _('گزارش‌ها')
+        verbose_name = _('report')
+        verbose_name_plural = _('reports')
 
     def __str__(self):
         return self.page.title
 
 
 class Tag(BaseModel):
-    name = models.CharField(_('نام'), max_length=50, unique=True, db_index=True)
-    keyword = models.SlugField(_('کلیدواژه'), allow_unicode=True, db_index=True)
-    is_active = models.BooleanField(_('فعال'), default=True,
-                                    help_text=_('مشخص می‌کند که این برچسب قابل استفاده باشد یا نه.'))
+    name = models.CharField(_('name'), max_length=50, unique=True, db_index=True)
+    keyword = models.SlugField(_('keyword'), allow_unicode=True, db_index=True)
+    is_active = models.BooleanField(_('active status'), default=True,
+                                    help_text=_('Designate whether the tag can be used.'))
 
     class Meta:
-        verbose_name = _('برچسب')
-        verbose_name_plural = _('برچسب‌ها')
+        verbose_name = _('tag')
+        verbose_name_plural = _('tags')
 
     def __str__(self):
         return self.name
@@ -202,21 +208,22 @@ class WebsiteSetting(models.Model):
     SETTING_NOTIFICATION_EMAIL = 'notification_email'
     SETTING_GOOGLE_ANALYTICS_ID = 'google_analytics_id'
     SETTING_CHOICES = (
-        (SETTING_SITE_SLOGAN_1, _('شعار ۱')),
-        (SETTING_SITE_SLOGAN_2, _('شعار ۲')),
-        (SETTING_DEFAULT_KEYWORDS, _('کلید واژه‌های پیش‌فرض')),
-        (SETTING_DEFAULT_DESCRIPTION, _('توضیح پیش‌فرض')),
-        (SETTING_CONTACT_EMAIL, _('ایمیل ارتباطی')),
-        (SETTING_NOTIFICATION_EMAIL, _('ایمیل اطلاع‌رسانی')),
-        (SETTING_GOOGLE_ANALYTICS_ID, _('شناسه‌ی Google Analytics'))
+        (SETTING_SITE_SLOGAN_1, _('Site Slogan 1')),
+        (SETTING_SITE_SLOGAN_2, _('Site Slogan 2')),
+        (SETTING_DEFAULT_KEYWORDS, _('Default Keywords')),
+        (SETTING_DEFAULT_DESCRIPTION, _('Default Description')),
+        (SETTING_CONTACT_EMAIL, _('Contact Email')),
+        (SETTING_NOTIFICATION_EMAIL, _('Notification Email')),
+        (SETTING_GOOGLE_ANALYTICS_ID, _('Google Analytics ID'))
     )
-    setting = models.CharField(_('تنظیم'), max_length=32, choices=SETTING_CHOICES, unique=True,
-                               help_text=_('از هر تنطیم فقط یک نمونه می‌توانید ایجاد کنید.'))
-    content = models.CharField(_('محتوا'), max_length=1024, help_text=_('محتوایی که در سایت نمایش داده می‌شود.'))
+    setting = models.CharField(_('setting'), max_length=32, choices=SETTING_CHOICES,
+                               unique=True, help_text=_('Each setting can only be used once.'))
+    content = models.CharField(_('content'), max_length=1024,
+                               help_text=_('The content displayed on the site.'))
 
     class Meta:
-        verbose_name = _('تنظیم')
-        verbose_name_plural = _('تنظیمات وب سایت')
+        verbose_name = _('setting')
+        verbose_name_plural = _('website settings')
 
     def __str__(self):
         return self.setting

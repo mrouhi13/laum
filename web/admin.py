@@ -8,9 +8,9 @@ from web.models import User, Page, Tag, Report, WebsiteSetting
 from web.persian_editors import PersianEditors
 from web.utils.email import SendEmail
 
-admin.site.site_header = _('پنل مدیریت لام')
-admin.site.site_title = _('پنل مدیریت لام')
-admin.site.index_title = _('داشبورد')
+admin.site.site_header = _('Laum admin panel')
+admin.site.site_title = _('Laum admin panel')
+admin.site.index_title = _('Dashboard')
 
 
 @admin.register(User)
@@ -41,10 +41,10 @@ class PageAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
     readonly_fields = ['image_tag', 'link_to_page', 'link_to_reports', 'jalali_updated_on', 'jalali_created_on']
     fieldsets = [
-        (_('اطلاعات اصلی'),
+        (_('Main info'),
          {'fields': ['link_to_page', 'title', 'subtitle', 'content', 'event', 'image', 'image_tag', 'image_caption']}),
-        (_('اطلاعات تکمیلی'), {'fields': ['tags', 'reference', 'website', 'author', 'is_active', 'link_to_reports']}),
-        (_('تاریخ‌ها'), {'fields': ['jalali_updated_on', 'jalali_created_on']})]
+        (_('Further info'), {'fields': ['tags', 'reference', 'website', 'author', 'is_active', 'link_to_reports']}),
+        (_('Important dates'), {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['title', 'author', 'is_active', 'jalali_updated_on', 'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['title', 'content', 'event', 'image_caption', 'tag__name', 'tag__keyword', 'website', 'author',
@@ -55,7 +55,7 @@ class PageAdmin(admin.ModelAdmin):
         link = urls.reverse(f'web:page-detail', args=[obj.pid])
         return mark_safe(f'<a href="{link}" target="_blank">{obj.pid}</a>')
 
-    link_to_page.short_description = _('شناسه‌ی عمومی')
+    link_to_page.short_description = _('public ID')
 
     def link_to_reports(self, obj):
         reports = obj.reports.all()
@@ -66,12 +66,12 @@ class PageAdmin(admin.ModelAdmin):
             reports_link.append(f'<a href="{link}" target="_blank">{report.body[:15]}...</a>')
         return mark_safe('، '.join(reports_link))
 
-    link_to_reports.short_description = _('گزارش‌ها')
+    link_to_reports.short_description = _('reports')
 
     def image_tag(self, obj):
         return mark_safe(f'<img src="{obj.image.url}" width=150 height=150>')
 
-    image_tag.short_description = _('نمایش تصویر')
+    image_tag.short_description = _('image preview')
 
     def save_model(self, request, obj, form, change):
         editor = PersianEditors(['space', 'number', 'arabic', 'punctuation_marks'])
@@ -89,8 +89,8 @@ class PageAdmin(admin.ModelAdmin):
 class ReportAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
     fieldsets = [
-        (_('اطلاعات اصلی'), {'fields': ['link_to_page', 'refid', 'body', 'link_to_mail', 'description', 'status']}),
-        (_('تاریخ‌ها'), {'fields': ['jalali_updated_on', 'jalali_created_on']})]
+        (_('Main info'), {'fields': ['link_to_page', 'refid', 'body', 'link_to_mail', 'description', 'status']}),
+        (_('Important dates'), {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['page', 'link_to_mail', 'status', 'jalali_updated_on', 'jalali_created_on', 'refid']
     list_filter = ['status', 'updated_on', 'created_on']
     search_fields = ['page__pid', 'body', 'reporter', 'refid', 'description']
@@ -99,12 +99,12 @@ class ReportAdmin(admin.ModelAdmin):
         link = urls.reverse(f'admin:web_page_change', args=[obj.page.pk])
         return mark_safe(f'<a href="{link}" target="_blank">{obj.page.title}</a>')
 
-    link_to_page.short_description = _('صفحه')
+    link_to_page.short_description = _('page')
 
     def link_to_mail(self, obj):
         return mark_safe(f'<a href="mailto:{obj.reporter}">{obj.reporter}</a>')
 
-    link_to_mail.short_description = _('گزارش‌دهنده')
+    link_to_mail.short_description = _('reporter')
 
     def get_readonly_fields(self, request, obj=None):
         self.readonly_fields = ['link_to_page', 'body', 'refid', 'link_to_mail', 'jalali_updated_on',
@@ -143,8 +143,8 @@ class ReportAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     readonly_fields = ['jalali_updated_on', 'jalali_created_on']
-    fieldsets = [(_('اطلاعات اصلی'), {'fields': ['name', 'keyword', 'is_active']}),
-                 (_('تاریخ‌ها'), {'fields': ['jalali_updated_on', 'jalali_created_on']})]
+    fieldsets = [(_('Main info'), {'fields': ['name', 'keyword', 'is_active']}),
+                 (_('Important dates'), {'fields': ['jalali_updated_on', 'jalali_created_on']})]
     list_display = ['name', 'keyword', 'is_active', 'jalali_updated_on', 'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['name', 'keyword']
@@ -153,7 +153,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(WebsiteSetting)
 class WebsiteSettingAdmin(admin.ModelAdmin):
-    fieldsets = [(_('اطلاعات اصلی'), {'fields': ['setting', 'content']})]
+    fieldsets = [(_('Main info'), {'fields': ['setting', 'content']})]
     list_display = ['setting', 'content']
     list_filter = ['setting']
     search_fields = ['setting', 'content']
