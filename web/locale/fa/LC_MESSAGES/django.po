@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-28 07:20+0000\n"
+"POT-Creation-Date: 2019-06-28 13:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,37 +34,33 @@ msgstr "اطلاعات شخصی"
 msgid "Permissions"
 msgstr "اجازه‌ها"
 
-#: web/admin.py:25 web/admin.py:47 web/admin.py:93 web/admin.py:147
+#: web/admin.py:26 web/admin.py:50 web/admin.py:89 web/admin.py:153
 msgid "Important dates"
 msgstr "تاریخ‌های مهم"
 
-#: web/admin.py:44 web/admin.py:92 web/admin.py:146 web/admin.py:156
+#: web/admin.py:45 web/admin.py:88 web/admin.py:152 web/admin.py:164
 msgid "Main info"
 msgstr "اطلاعات اصلی"
 
-#: web/admin.py:46
+#: web/admin.py:48
 msgid "Further info"
 msgstr "اطلاعات تکمیلی"
 
-#: web/admin.py:58 web/models.py:127
+#: web/admin.py:65 web/models.py:127
 msgid "public ID"
 msgstr "شناسه‌ی عمومی"
 
-#: web/admin.py:69 web/models.py:182
-msgid "reports"
-msgstr "گزارش‌ها"
-
-#: web/admin.py:74
+#: web/admin.py:70
 msgid "image preview"
 msgstr "پیش‌نمایش تصویر"
 
-#: web/admin.py:102 web/models.py:150 web/models.py:168
+#: web/admin.py:103 web/models.py:150 web/models.py:168
 msgid "page"
 msgstr "صفحه"
 
-#: web/admin.py:107
-msgid "reporter"
-msgstr "گزارش‌دهنده"
+#: web/admin.py:108 web/models.py:171
+msgid "reporter email"
+msgstr "ایمیل گزارش‌دهنده"
 
 #: web/apps.py:7
 msgid "Laum Project"
@@ -242,10 +238,6 @@ msgstr "شناسه‌ی ارجاع"
 msgid "body"
 msgstr "متن"
 
-#: web/models.py:171
-msgid "reporter email"
-msgstr "ایمیل گزارش‌دهنده"
-
 #: web/models.py:172
 msgid "description"
 msgstr "توضیحات"
@@ -269,6 +261,10 @@ msgstr "مراقب باشید هنگام تعیین وضعیت. این فیلد 
 #: web/models.py:181
 msgid "report"
 msgstr "گزارش"
+
+#: web/models.py:182
+msgid "reports"
+msgstr "گزارش‌ها"
 
 #: web/models.py:189
 msgid "name"

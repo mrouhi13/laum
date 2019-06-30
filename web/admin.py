@@ -1,6 +1,6 @@
-from django import urls
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -17,56 +17,53 @@ admin.site.index_title = _('Dashboard')
 class UserAdmin(UserAdmin):
     date_hierarchy = 'date_joined'
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name')}),
+        (None, {'fields': ['email', 'password']}),
+        (_('Personal info'), {'fields': ['first_name', 'last_name']}),
         (_('Permissions'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+            'fields': ['is_active', 'is_staff', 'is_superuser', 'groups',
+                       'user_permissions'],
         }),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        (_('Important dates'), {'fields': ['last_login', 'date_joined']}),
     )
     add_fieldsets = (
         (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2'),
+            'classes': ['wide'],
+            'fields': ['email', 'password1', 'password2'],
         }),
     )
-    list_display = ('email', 'first_name', 'last_name', 'is_staff')
-    search_fields = ('first_name', 'last_name', 'email')
-    ordering = ('email',)
-    readonly_fields = ('last_login', 'date_joined')
+    list_display = ['email', 'first_name', 'last_name', 'is_staff']
+    search_fields = ['first_name', 'last_name', 'email']
+    ordering = ['email']
+    readonly_fields = ['last_login', 'date_joined']
 
 
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
-    readonly_fields = ['image_tag', 'link_to_page', 'link_to_reports', 'jalali_updated_on', 'jalali_created_on']
+    readonly_fields = ['links', 'image_tag', 'jalali_updated_on', 'jalali_created_on']
     fieldsets = [
-        (_('Main info'),
-         {'fields': ['link_to_page', 'title', 'subtitle', 'content', 'event', 'image', 'image_tag', 'image_caption']}),
-        (_('Further info'), {'fields': ['tags', 'reference', 'website', 'author', 'is_active', 'link_to_reports']}),
-        (_('Important dates'), {'fields': ['jalali_updated_on', 'jalali_created_on']})]
-    list_display = ['title', 'author', 'is_active', 'jalali_updated_on', 'jalali_created_on']
+        [_('Main info'),
+         {'fields': ['links', 'title', 'subtitle', 'content',
+                     'event', 'image', 'image_tag', 'image_caption']}],
+        [_('Further info'), {'fields': ['tags', 'reference', 'website',
+                                        'author', 'is_active']}],
+        [_('Important dates'), {'fields': ['jalali_updated_on', 'jalali_created_on']}]]
+    list_display = ['title', 'author', 'is_active', 'jalali_updated_on',
+                    'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
-    search_fields = ['title', 'content', 'event', 'image_caption', 'tag__name', 'tag__keyword', 'website', 'author',
-                     'reference']
+    search_fields = ['pid', 'title', 'content', 'event', 'image_caption',
+                     'tag__name', 'tag__keyword', 'website', 'author', 'reference']
     filter_horizontal = ['tags']
 
-    def link_to_page(self, obj):
-        link = urls.reverse(f'web:page-detail', args=[obj.pid])
-        return mark_safe(f'<a href="{link}" target="_blank">{obj.pid}</a>')
+    def links(self, obj):
+        page_link = reverse(f'web:page-detail', args=[obj.pid])
+        reports_link = f'{reverse("admin:web_report_changelist")}?q={obj.pid}'
+        report = _('reports')
 
-    link_to_page.short_description = _('public ID')
+        return mark_safe(f'<a href="{page_link}" target="_blank">{obj.pid}</a> /'
+                         f' <a href="{reports_link}" target="_blank">{report}</a>')
 
-    def link_to_reports(self, obj):
-        reports = obj.reports.all()
-        reports_link = []
-
-        for report in reports:
-            link = urls.reverse(f'admin:web_report_change', args=[report.pk])
-            reports_link.append(f'<a href="{link}" target="_blank">{report.body[:15]}...</a>')
-        return mark_safe('، '.join(reports_link))
-
-    link_to_reports.short_description = _('reports')
+    links.short_description = _('public ID')
 
     def image_tag(self, obj):
         return mark_safe(f'<img src="{obj.image.url}" width=150 height=150>')
@@ -89,35 +86,43 @@ class PageAdmin(admin.ModelAdmin):
 class ReportAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
     fieldsets = [
-        (_('Main info'), {'fields': ['link_to_page', 'refid', 'body', 'link_to_mail', 'description', 'status']}),
-        (_('Important dates'), {'fields': ['jalali_updated_on', 'jalali_created_on']})]
-    list_display = ['page', 'link_to_mail', 'status', 'jalali_updated_on', 'jalali_created_on', 'refid']
+        [_('Main info'), {'fields': ['view_page', 'send_email', 'refid', 'body', 'description', 'status']}],
+        [_('Important dates'), {'fields': ['jalali_updated_on', 'jalali_created_on']}]]
+    list_display = ['page', 'reporter', 'status', 'jalali_updated_on',
+                    'jalali_created_on', 'refid']
     list_filter = ['status', 'updated_on', 'created_on']
-    search_fields = ['page__pid', 'body', 'reporter', 'refid', 'description']
+    search_fields = ['page__pid', 'refid', 'body', 'reporter', 'refid', 'description']
 
-    def link_to_page(self, obj):
-        link = urls.reverse(f'admin:web_page_change', args=[obj.page.pk])
-        return mark_safe(f'<a href="{link}" target="_blank">{obj.page.title}</a>')
+    def view_page(self, obj):
+        link_to_admin_view = reverse(f'admin:web_page_change', args=[obj.page.pk])
+        link_to_site = reverse(f'web:page-detail', args=[obj.page.pid])
+        view_page = _('view page')
 
-    link_to_page.short_description = _('page')
+        return mark_safe(
+            f'<a href="{link_to_admin_view}" target="_blank">{obj.page}</a> / '
+            f'<a href="{link_to_site}" target="_blank">{view_page}</a>')
 
-    def link_to_mail(self, obj):
+    view_page.short_description = _('page')
+
+    def send_email(self, obj):
         return mark_safe(f'<a href="mailto:{obj.reporter}">{obj.reporter}</a>')
 
-    link_to_mail.short_description = _('reporter')
+    send_email.short_description = _('reporter email')
 
     def get_readonly_fields(self, request, obj=None):
-        self.readonly_fields = ['link_to_page', 'body', 'refid', 'link_to_mail', 'jalali_updated_on',
-                                'jalali_created_on']
+        self.readonly_fields = ['view_page', 'body', 'refid', 'send_email',
+                                'jalali_updated_on', 'jalali_created_on']
 
-        if not obj.status == Report.STATUS_IS_PENDING:
+        if obj and not obj.status == Report.STATUS_IS_PENDING:
             self.readonly_fields.extend(['description', 'status'])
+
         return self.readonly_fields
 
     def save_model(self, request, obj, form, change):
         is_first_change = False
 
-        if 'status' not in self.readonly_fields and not obj.status == Report.STATUS_IS_PENDING:
+        if 'status' not in self.readonly_fields and \
+                not obj.status == Report.STATUS_IS_PENDING:
             is_first_change = True
 
         if is_first_change and not form.cleaned_data['description']:
@@ -139,13 +144,18 @@ class ReportAdmin(admin.ModelAdmin):
             email_template = 'emails/report_result.html'
             SendEmail(request, context, email_template).send([to])
 
+    def has_add_permission(self, request):
+        return False
+
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     readonly_fields = ['jalali_updated_on', 'jalali_created_on']
     fieldsets = [(_('Main info'), {'fields': ['name', 'keyword', 'is_active']}),
-                 (_('Important dates'), {'fields': ['jalali_updated_on', 'jalali_created_on']})]
-    list_display = ['name', 'keyword', 'is_active', 'jalali_updated_on', 'jalali_created_on']
+                 (_('Important dates'), {'fields': ['jalali_updated_on',
+                                                    'jalali_created_on']})]
+    list_display = ['name', 'keyword', 'is_active', 'jalali_updated_on',
+                    'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['name', 'keyword']
     prepopulated_fields = {'keyword': ['name']}
