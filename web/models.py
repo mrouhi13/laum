@@ -197,33 +197,3 @@ class Tag(BaseModel):
 
     def __str__(self):
         return self.name
-
-
-class WebsiteSetting(models.Model):
-    SETTING_SITE_SLOGAN_1 = 'site_slogan_1'
-    SETTING_SITE_SLOGAN_2 = 'site_slogan_2'
-    SETTING_DEFAULT_KEYWORDS = 'default_keywords'
-    SETTING_DEFAULT_DESCRIPTION = 'default_description'
-    SETTING_CONTACT_EMAIL = 'contact_email'
-    SETTING_NOTIFICATION_EMAIL = 'notification_email'
-    SETTING_GOOGLE_ANALYTICS_ID = 'google_analytics_id'
-    SETTING_CHOICES = (
-        (SETTING_SITE_SLOGAN_1, _('Site Slogan 1')),
-        (SETTING_SITE_SLOGAN_2, _('Site Slogan 2')),
-        (SETTING_DEFAULT_KEYWORDS, _('Default Keywords')),
-        (SETTING_DEFAULT_DESCRIPTION, _('Default Description')),
-        (SETTING_CONTACT_EMAIL, _('Contact Email')),
-        (SETTING_NOTIFICATION_EMAIL, _('Notification Email')),
-        (SETTING_GOOGLE_ANALYTICS_ID, _('Google Analytics ID'))
-    )
-    setting = models.CharField(_('setting'), max_length=32, choices=SETTING_CHOICES,
-                               unique=True, help_text=_('Each setting can only be used once.'))
-    content = models.CharField(_('content'), max_length=1024,
-                               help_text=_('The content displayed on the site.'))
-
-    class Meta:
-        verbose_name = _('setting')
-        verbose_name_plural = _('website settings')
-
-    def __str__(self):
-        return self.setting

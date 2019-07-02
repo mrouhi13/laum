@@ -1,15 +1,19 @@
 from django.contrib.sites.shortcuts import get_current_site
 
-from .models import WebsiteSetting
+from django.conf import settings
 
 
 def site_settings(request):
-    settings = WebsiteSetting.objects.all()
     site = get_current_site(request)
     protocol = 'https' if request.is_secure() else 'http'
     base_url = f'{protocol}://{site.domain}'
-    data = {'site_name': site.name, 'base_url': base_url}
-    for item in settings:
-        data.update({item.setting: item.content})
+    static_url = base_url + getattr(settings, 'STATIC_URL', '')
 
-    return data
+    site_context = getattr(settings, 'SITE_CONTEXT', {})
+    site_context.update({
+        'SITE_NAME': site.name,
+        'BASE_URL': base_url,
+        'STATIC_URL': static_url
+    })
+
+    return site_context

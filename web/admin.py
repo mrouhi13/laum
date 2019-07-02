@@ -3,13 +3,13 @@ from django.contrib.auth.admin import UserAdmin
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from templated_mail.mail import BaseEmailMessage
 
-from web.models import User, Page, Tag, Report, WebsiteSetting
+from web.models import User, Page, Tag, Report
 from web.persian_editors import PersianEditors
-from web.utils.email import SendEmail
 
-admin.site.site_header = _('Laum admin panel')
-admin.site.site_title = _('Laum admin panel')
+admin.site.site_header = _('Laum Admin Panel')
+admin.site.site_title = _('Laum Admin Panel')
 admin.site.index_title = _('Dashboard')
 
 
@@ -139,10 +139,10 @@ class ReportAdmin(admin.ModelAdmin):
         super(ReportAdmin, self).save_model(request, obj, form, change)
 
         if is_first_change:
-            to = obj.reporter
             context = {'report': obj}
             email_template = 'emails/report_result.html'
-            SendEmail(request, context, email_template).send([to])
+            message = BaseEmailMessage(request, context, email_template)
+            message.send([obj.reporter])
 
     def has_add_permission(self, request):
         return False
@@ -159,11 +159,3 @@ class TagAdmin(admin.ModelAdmin):
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['name', 'keyword']
     prepopulated_fields = {'keyword': ['name']}
-
-
-@admin.register(WebsiteSetting)
-class WebsiteSettingAdmin(admin.ModelAdmin):
-    fieldsets = [(_('Main info'), {'fields': ['setting', 'content']})]
-    list_display = ['setting', 'content']
-    list_filter = ['setting']
-    search_fields = ['setting', 'content']

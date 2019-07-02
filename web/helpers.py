@@ -19,9 +19,9 @@ def get_jalali_month_name(month_number):
     return None
 
 
-def swap_prefix(string, new, before='_'):
-    new_string_exploded = string.split(before)
+def swap_prefix(string, new, delimiter='_'):
+    new_string_exploded = string.split(delimiter)
     new_string_exploded[0] = new
-    new_string = before.join(new_string_exploded)
+    new_string = delimiter.join(new_string_exploded)
 
     return new_string

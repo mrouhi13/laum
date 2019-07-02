@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -5,10 +6,10 @@ from django.urls import reverse
 from django.views import defaults
 from django.views.generic import CreateView, DetailView, ListView, TemplateView
 from django.views.generic.edit import FormMixin
+from templated_mail.mail import BaseEmailMessage
 
 from .forms import SearchForm, PageForm, ReportForm
-from .models import Page, Report, WebsiteSetting
-from .utils.email import SendEmail
+from .models import Page, Report
 
 ERROR_400_TEMPLATE_NAME = 'errors/error_400.html'
 ERROR_403_TEMPLATE_NAME = 'errors/error_403.html'
@@ -54,18 +55,13 @@ class AjaxableResponseMixin(FormMixin):
             object_type = obj.__class__.__name__.lower()
             context = {object_type: obj}
             email_template = f'emails/new_{object_type}.html'
-            notification_email_template = f'emails/new_{object_type}_notification.html'
             to = form.cleaned_data.get('reporter') or form.cleaned_data.get('author')
+            message = BaseEmailMessage(self.request, context, email_template)
+            message.send([to])
 
-            SendEmail(self.request, context, template_name=email_template).send([to])
-
-            try:
-                notification_email = WebsiteSetting.objects.get(
-                    setting=WebsiteSetting.SETTING_NOTIFICATION_EMAIL).content
-
-                SendEmail(self.request, context, template_name=notification_email_template).send([notification_email])
-            except WebsiteSetting.DoesNotExist:
-                pass
+            notification_email_template = f'emails/new_{object_type}_notification.html'
+            message.template_name = notification_email_template
+            message.send([a[1] for a in settings.ADMINS])
 
             return JsonResponse({})
         else:
