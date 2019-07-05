@@ -13,7 +13,7 @@ def google_analytics(context):
         {% google_analytics 'UA-111111111' %}
     """
 
-    google_analytics_id = context['GOOGLE_ANALYTICS_ID']
+    google_analytics_id = context.get('GOOGLE_ANALYTICS_ID', None)
 
     if not google_analytics_id:
         raise Exception('Google Analytics ID is required.')
