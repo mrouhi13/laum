@@ -18,6 +18,7 @@ env:
     - DATABASE_USER=postgres
     - DATABASE_PASSWORD=
     - SECRET_KEY=_
+    - GOOGLE_ANALYTICS_ID=UA-111111111
 
 # command to install dependencies
 before_script:

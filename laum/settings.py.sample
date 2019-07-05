@@ -187,7 +187,7 @@ SERVER_EMAIL = ''
 # Site settings
 
 SITE_CONTEXT = {
-    'GOOGLE_ANALYTICS_ID': '',
+    'GOOGLE_ANALYTICS_ID': os.environ.get('GOOGLE_ANALYTICS_ID', 'GOOGLE_ANALYTICS_ID not set.'),
     'SITE_SLOGAN_1': _(''),
     'SITE_SLOGAN_2': _(''),
     'KEYWORDS': _(''),
