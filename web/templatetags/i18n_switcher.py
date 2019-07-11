@@ -1,7 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 
-from laum.urls import switch_lang_code
+from laumproject.urls import switch_lang_code
 
 register = template.Library()
 

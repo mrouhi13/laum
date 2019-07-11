@@ -8,8 +8,8 @@ from templated_mail.mail import BaseEmailMessage
 from web.models import User, Page, Tag, Report
 from web.persian_editors import PersianEditors
 
-admin.site.site_header = _('Laum Admin Panel')
-admin.site.site_title = _('Laum Admin Panel')
+admin.site.site_header = _('Laum Project Admin Panel')
+admin.site.site_title = _('Laum Project Admin Panel')
 admin.site.index_title = _('Dashboard')
 
 

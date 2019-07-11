@@ -8,11 +8,11 @@ help:
 	@echo "    exit             leave virtual environment"
 
 init:
-	pip install pipenv
+	pip3 install pipenv --user
 	pipenv install --dev --three
 
 setup:
-	cp laum/settings.py.sample laum/settings.py
+	cp laumproject/settings.py.sample laumproject/settings.py
 	pipenv run python ./manage.py migrate
 	pipenv run python ./manage.py collectstatic
 	pipenv run python ./manage.py compilemessages

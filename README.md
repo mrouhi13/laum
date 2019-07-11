@@ -1,6 +1,6 @@
-# Laum
-[![build](https://travis-ci.org/mrouhi13/laum.svg?branch=master)](https://travis-ci.org/mrouhi13/laum)
-[![codecov](https://codecov.io/gh/mrouhi13/laum/branch/master/graph/badge.svg)](https://codecov.io/gh/mrouhi13/laum)
+# Laum Project
+[![build](https://travis-ci.org/mrouhi13/laumproject.svg?branch=master)](https://travis-ci.org/mrouhi13/laumproject)
+[![codecov](https://codecov.io/gh/mrouhi13/laumproject/branch/master/graph/badge.svg)](https://codecov.io/gh/mrouhi13/laumproject)
 
 May 2018
 
