@@ -196,7 +196,7 @@ msgid ""
 "The name of the book, newspaper, magazine or website address, blog and ... "
 "along with the author's name."
 msgstr ""
-"نام کتاب، روزنامه، مجله یا آدرس وب سایت، وبلاگ و ... همراه با نام نویسنده."
+"نام کتاب، روزنامه یا آدرس وب سایت، وبلاگ و ... همراه با نام نویسنده."
 
 #: web/models.py:142
 msgid "website"
