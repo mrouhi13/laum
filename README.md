@@ -12,7 +12,7 @@ This project defines everything about in a paragraph, with the help of all peopl
 * Bootstrap, jQuery, Fontawesome and Pnotify for front-end developing
 
 # License
-Laum is free and open source. Source code of Laum is licensed under a [GPL v3.0 license][2] and content on this project licensed under a [Creative Commons Attribution 4.0 International license][3].
+Laum Project is free and open source. Source code of Laum Project is licensed under a [GPL v3.0 license][2] and content on this project licensed under a [Creative Commons Attribution 4.0 International license][3].
 
 # Team
 Majid Rouhi - mrouhi13@icloud.com
