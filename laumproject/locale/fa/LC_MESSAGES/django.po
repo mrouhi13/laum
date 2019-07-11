@@ -18,10 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: laum/settings.py:178
+#: laumproject/settings.py:178
 msgid "English"
 msgstr "انگلیسی"
 
-#: laum/settings.py:179
+#: laumproject/settings.py:179
 msgid "فارسی"
 msgstr "Persian"

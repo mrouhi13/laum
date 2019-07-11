@@ -16,8 +16,8 @@ Insert the following code in the `head` section of your pages:
     <link rel="manifest" href="web/images/icons/site.webmanifest">
     <link rel="mask-icon" href="web/images/icons/safari-pinned-tab.svg" color="#022f53">
     <link rel="shortcut icon" href="web/images/icons/favicon.ico">
-    <meta name="apple-mobile-web-app-title" content="Laum">
-    <meta name="application-name" content="Laum">
+    <meta name="apple-mobile-web-app-title" content="Laum Project">
+    <meta name="application-name" content="Laum Project">
     <meta name="msapplication-TileColor" content="#022f53">
     <meta name="msapplication-TileImage" content="web/images/icons/mstile-144x144.png">
     <meta name="msapplication-config" content="web/images/icons/browserconfig.xml">
