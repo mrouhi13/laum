@@ -13,6 +13,7 @@ django-templated-mail = "*"
 pillow = "*"
 sorl-thumbnail = "*"
 psycopg2-binary = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.6"
