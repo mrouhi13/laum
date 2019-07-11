@@ -20,7 +20,7 @@ msgstr ""
 
 #: web/admin.py:11 web/admin.py:12
 msgid "Laum Project admin panel"
-msgstr "پنل مدیریت لام"
+msgstr "پنل مدیریت پروزه‌ی لام"
 
 #: web/admin.py:13
 msgid "Dashboard"
