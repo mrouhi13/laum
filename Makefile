@@ -8,7 +8,7 @@ help:
 	@echo "    exit             leave virtual environment"
 
 init:
-	pip3 install pipenv --user
+	pip3 install pipenv
 	pipenv install --dev --three
 
 setup:
