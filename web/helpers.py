@@ -11,7 +11,6 @@ def get_jalali_month_name(month_number):
 
             persian_names = (
                 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند')
-
             return persian_names[month_number - 1]
     except ValueError:
         pass
@@ -23,5 +22,4 @@ def swap_prefix(string, new, delimiter='_'):
     new_string_exploded = string.split(delimiter)
     new_string_exploded[0] = new
     new_string = delimiter.join(new_string_exploded)
-
     return new_string

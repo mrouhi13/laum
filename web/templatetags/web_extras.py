@@ -15,7 +15,6 @@ register = template.Library()
 def convert_digits_to_persian(value):
     editor = PersianEditors(['number'])
     editor.escape_return = False
-
     return editor.run(value)
 
 
@@ -29,7 +28,6 @@ def convert_date_to_jalali(date):
             month_name = get_jalali_month_name(m)
         except ValueError:
             return None
-
         return f'{d} {month_name}، {y}'
 
 

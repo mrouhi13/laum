@@ -19,7 +19,6 @@ def generate_pid(n=12):
     while not new_pid:
         postfix_string = ''.join(random.choices(string.ascii_letters + string.digits, k=n))
         new_pid = f'{settings.PID_PREFIX}_{postfix_string}'
-
         if Page.objects.is_pid_exist(new_pid):
             new_pid = None
 

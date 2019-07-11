@@ -79,7 +79,6 @@ class IndexView(TemplateView):
         context['search_form'] = SearchForm
         context['page_form'] = PageForm
         context['random_pages'] = Page.objects.get_random_pages()
-
         return context
 
 
@@ -90,10 +89,8 @@ class PageListView(ListView):
 
     def get(self, request, *args, **kwargs):
         q = request.GET.get('q')
-
         if q:
             return super(PageListView, self).get(request, *args, **kwargs)
-
         return redirect(reverse('web:index'))
 
     def get_queryset(self):
@@ -104,15 +101,13 @@ class PageListView(ListView):
                  + SearchVector('content', 'event', 'image_caption', weight='D')
         query = SearchQuery(q, search_type='plain')
         rank = SearchRank(vector, query)
-
         return Page.objects.annotate(rank=rank).filter(is_active=True, rank__gt=0).order_by('rank')
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(PageListView, self).get_context_data(**kwargs)
         q = self.request.GET.get('q')
+        context = super(PageListView, self).get_context_data(**kwargs)
         context['search_form'] = SearchForm(initial={'q': q})
         context['page_form'] = PageForm
-
         return context
 
 
@@ -123,16 +118,14 @@ class PageDetailView(DetailView):
 
     def get_object(self, queryset=None):
         pid = self.kwargs.get(self.slug_url_kwarg)
-
         return get_object_or_404(self.model, pid=pid, is_active=True)
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(PageDetailView, self).get_context_data(**kwargs)
         pid = self.kwargs.get(self.slug_url_kwarg)
+        context = super(PageDetailView, self).get_context_data(**kwargs)
         context['search_form'] = SearchForm(initial={'q': None})
         context['report_form'] = ReportForm(initial={'page': pid})
         context['page_form'] = PageForm
-
         return context
 
 

@@ -59,7 +59,6 @@ class PageAdmin(admin.ModelAdmin):
         page_link = reverse(f'web:page-detail', args=[obj.pid])
         reports_link = f'{reverse("admin:web_report_changelist")}?q={obj.pid}'
         report = _('reports')
-
         return mark_safe(f'<a href="{page_link}" target="_blank">{obj.pid}</a> /'
                          f' <a href="{reports_link}" target="_blank">{report}</a>')
 
@@ -97,7 +96,6 @@ class ReportAdmin(admin.ModelAdmin):
         link_to_admin_view = reverse(f'admin:web_page_change', args=[obj.page.pk])
         link_to_site = reverse(f'web:page-detail', args=[obj.page.pid])
         view_page = _('view page')
-
         return mark_safe(
             f'<a href="{link_to_admin_view}" target="_blank">{obj.page}</a> / '
             f'<a href="{link_to_site}" target="_blank">{view_page}</a>')
@@ -112,10 +110,8 @@ class ReportAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         self.readonly_fields = ['view_page', 'body', 'refid', 'send_email',
                                 'jalali_updated_on', 'jalali_created_on']
-
         if obj and not obj.status == Report.STATUS_IS_PENDING:
             self.readonly_fields.extend(['description', 'status'])
-
         return self.readonly_fields
 
     def save_model(self, request, obj, form, change):
