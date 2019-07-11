@@ -15,6 +15,7 @@ setup:
 	cp laum/settings.py.sample laum/settings.py
 	pipenv run python ./manage.py migrate
 	pipenv run python ./manage.py collectstatic
+	pipenv run python ./manage.py compilemessages
 
 activate:
 	pipenv shell

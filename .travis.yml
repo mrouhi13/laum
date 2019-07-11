@@ -19,6 +19,8 @@ env:
     - DATABASE_PASSWORD=
     - SECRET_KEY=_
     - GOOGLE_ANALYTICS_ID=UA-111111111
+    - EMAIL_HOST_USER='noreply@laum.ir'
+    - EMAIL_HOST_PASSWORD=1234QWer@
 
 # command to install dependencies
 before_script:
