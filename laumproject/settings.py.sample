@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'SECRET_KEY not set.')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -90,9 +90,9 @@ WSGI_APPLICATION = 'laumproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DATABASE_NAME', 'DATABASE_NAME not set.'),
-        'USER': os.environ.get('DATABASE_USER', 'DATABASE_USER not set.'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'DATABASE_PASSWORD not set.'),
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
         'HOST': 'localhost',
         'PORT': ''
     }
@@ -174,9 +174,9 @@ EMAIL_HOST = ''
 
 EMAIL_PORT = 587
 
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'EMAIL_HOST_USER not set.')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'EMAIL_HOST_PASSWORD not set.')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 EMAIL_USE_TLS = True
 
@@ -187,7 +187,7 @@ SERVER_EMAIL = ''
 # Site settings
 
 SITE_CONTEXT = {
-    'GOOGLE_ANALYTICS_ID': os.environ.get('GOOGLE_ANALYTICS_ID', 'GOOGLE_ANALYTICS_ID not set.'),
+    'GOOGLE_ANALYTICS_ID': os.environ.get('GOOGLE_ANALYTICS_ID'),
     'SITE_SLOGAN_1': _(''),
     'SITE_SLOGAN_2': _(''),
     'KEYWORDS': _(''),
