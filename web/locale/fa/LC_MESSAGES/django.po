@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: web/admin.py:11 web/admin.py:12
-msgid "Laum Project admin panel"
+msgid "Laum Project Admin Panel"
 msgstr "پنل مدیریت پروزه‌ی لام"
 
 #: web/admin.py:13

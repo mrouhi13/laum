@@ -214,7 +214,7 @@ LOGGING = {
         'file': {
             'level': os.getenv('DJANGO_LOG_LEVEL', 'WARNING'),
             'class': 'logging.FileHandler',
-            'filename': 'error.log',
+            'filename': 'log/error.log',
         },
         'mail_admins': {
             'level': os.getenv('DJANGO_LOG_LEVEL', 'WARNING'),
