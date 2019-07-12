@@ -317,6 +317,8 @@ footer li:first-child {
 
 .content-body {
     color: #353a40;
+    height: 70px;
+    text-align: right;
 }
 
 .content-tag {

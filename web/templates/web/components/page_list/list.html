@@ -15,10 +15,12 @@
                     </div>
                     <div class="card-body text-justify">
                         <p class="card-text content-body">
-                            {{ page.content|truncatechars:40 }}</p>
+                            {{ page.content|truncatechars:75 }}</p>
                         <div class="d-flex content-tag">
                             {% for tag in page.tags.values %}
-                                <small class="text-muted ml-2">#{{ tag.keyword }}</small>
+                                {% if forloop.counter <= 3 %}
+                                    <small class="text-muted ml-2">#{{ tag.keyword }}</small>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>
