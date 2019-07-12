@@ -52,7 +52,7 @@ class PageAdmin(admin.ModelAdmin):
                     'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['pid', 'title', 'content', 'event', 'image_caption',
-                     'tag__name', 'tag__keyword', 'website', 'author', 'reference']
+                     'tags__name', 'tags__keyword', 'website', 'author', 'reference']
     filter_horizontal = ['tags']
 
     def links(self, obj):
