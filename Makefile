@@ -12,7 +12,9 @@ init:
 	pipenv install --dev --three
 
 setup:
-	cp laumproject/settings.py.sample laumproject/settings.py
+    mkdir log
+    cp laumproject/settings.py.sample laumproject/settings.py
+    psql -c "CREATE DATABASE $DATABASE_NAME;" -U $DATABASE_USER
 	pipenv run python ./manage.py migrate
 	pipenv run python ./manage.py collectstatic
 	pipenv run python ./manage.py compilemessages
