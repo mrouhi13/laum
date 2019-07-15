@@ -95,11 +95,10 @@ class PageListView(ListView):
 
     def get_queryset(self):
         q = self.request.GET.get('q')
-        vector = SearchVector('title', weight='A') \
-                 + SearchVector('subtitle', weight='B') \
-                 + SearchVector('tags__name', weight='C') \
-                 + SearchVector('content', 'event', 'image_caption', weight='D')
         query = SearchQuery(q, search_type='plain')
+        vector = SearchVector('title', weight='A') + \
+                 SearchVector('subtitle', weight='B') + \
+                 SearchVector('content', 'event', 'image_caption', weight='D')
         rank = SearchRank(vector, query)
         return Page.objects.annotate(rank=rank).filter(is_active=True, rank__gt=0).order_by('-rank')
 
