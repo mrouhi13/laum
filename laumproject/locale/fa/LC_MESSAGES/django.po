@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-28 13:14+0000\n"
+"POT-Creation-Date: 2019-07-20 16:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,10 +18,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: laumproject/settings.py:178
+#: laumproject/settings.py:192
+msgid "تاریکی‌های خود را، این‌جا روشن کنید!"
+msgstr ""
+
+#: laumproject/settings.py:193
+msgid "این‌جا چراغی روشن است!"
+msgstr ""
+
+#: laumproject/settings.py:194
+msgid "کیست, چیست, کی"
+msgstr ""
+
+#: laumproject/settings.py:196
+msgid ""
+"در لام می‌توانید از هر چیزی بخوانید و روشن شوید؛ می‌توانید دانسته‌های خود را در "
+"لام به اشتراک بگذارید و دیگران را روشن کنید."
+msgstr ""
+
+#: laumproject/settings.py:215
 msgid "English"
 msgstr "انگلیسی"
 
-#: laumproject/settings.py:179
+#: laumproject/settings.py:216
 msgid "فارسی"
 msgstr "Persian"

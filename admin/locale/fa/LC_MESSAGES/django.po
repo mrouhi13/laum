@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-28 13:14+0000\n"
+"POT-Creation-Date: 2019-07-20 16:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,8 +27,6 @@ msgstr ""
 "ویرایش کنید."
 
 #: admin/templates/admin/auth/user/add_form.html:8
-#, fuzzy
-#| msgid "Enter a email and password."
 msgid "Enter a username and password."
 msgstr "ایمیل و رمز عبور را وارد کنید."
 
