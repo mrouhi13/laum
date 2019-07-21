@@ -100,7 +100,7 @@ class PageListView(ListView):
                  SearchVector('subtitle', weight='B') + \
                  SearchVector('content', 'event', 'image_caption', weight='D')
         rank = SearchRank(vector, query)
-        return Page.objects.annotate(rank=rank).filter(is_active=True, rank__gt=0).order_by('-rank')
+        return Page.objects.annotate(rank=rank).filter(is_active=True, rank__gte=0.01).order_by('-rank')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         q = self.request.GET.get('q')
