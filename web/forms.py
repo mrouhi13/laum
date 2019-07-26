@@ -10,7 +10,8 @@ class SearchForm(forms.Form):
     q.widget.attrs.update({'class': 'form-control input-search', 'dir': 'auto', 'aria-label': _('search')})
 
     def __init__(self, *args, **kwargs):
-        super(SearchForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
         initial = getattr(self, 'initial', None)
         if initial:
             self.fields['q'].widget.attrs.update({'class': 'form-control input-search input-search-inline'})
@@ -22,7 +23,8 @@ class PageForm(forms.ModelForm):
         fields = ['title', 'subtitle', 'event', 'content', 'image', 'image_caption', 'reference', 'author']
 
     def __init__(self, *args, **kwargs):
-        super(PageForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
         self.fields['title'].widget.attrs = {'class': 'form-control', 'placeholder': _('Chuck Palahniuk'),
                                              'min-length': 3, 'pattern': '.{3,64}'}
         self.fields['subtitle'].widget.attrs = {'class': 'form-control',
@@ -54,7 +56,8 @@ class ReportForm(forms.ModelForm):
         widgets = {'page': forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
-        super(ReportForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
         self.fields['body'].widget.attrs = {'class': 'form-control', 'placeholder': _(
             'e.g. In the image caption there is a typo in month name: "Jone" must be "June"'),
                                             'rows': 5, 'minlength': 20, 'maxlength': 1024}

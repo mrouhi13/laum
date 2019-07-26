@@ -54,13 +54,15 @@ class AjaxableResponseMixin(FormMixin):
             obj = self.object
             object_type = obj.__class__.__name__.lower()
             context = {object_type: obj}
+
+            # Send email notification to user
             email_template = f'emails/new_{object_type}.html'
             to = form.cleaned_data.get('reporter') or form.cleaned_data.get('author')
             message = BaseEmailMessage(self.request, context, email_template)
             message.send([to])
 
-            notification_email_template = f'emails/new_{object_type}_notification.html'
-            message.template_name = notification_email_template
+            # Send email notification to admins
+            message.template_name = f'emails/new_{object_type}_notification.html'
             message.send([a[1] for a in settings.ADMINS])
 
             return JsonResponse({})
@@ -75,7 +77,7 @@ class IndexView(TemplateView):
     template_name = 'web/pages/index.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['search_form'] = SearchForm
         context['page_form'] = PageForm
         context['random_pages'] = Page.objects.get_random_pages()
@@ -90,7 +92,7 @@ class PageListView(ListView):
     def get(self, request, *args, **kwargs):
         q = request.GET.get('q')
         if q:
-            return super(PageListView, self).get(request, *args, **kwargs)
+            return super().get(request, *args, **kwargs)
         return redirect(reverse('web:index'))
 
     def get_queryset(self):
@@ -100,11 +102,12 @@ class PageListView(ListView):
                  SearchVector('subtitle', weight='B') + \
                  SearchVector('content', 'event', 'image_caption', weight='D')
         rank = SearchRank(vector, query)
-        return Page.objects.annotate(rank=rank).filter(is_active=True, rank__gte=0.01).order_by('-rank')
+        return Page.objects.annotate(rank=rank).filter(
+            is_active=True, rank__gte=0.01).order_by('-rank')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         q = self.request.GET.get('q')
-        context = super(PageListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['search_form'] = SearchForm(initial={'q': q})
         context['page_form'] = PageForm
         return context
@@ -121,7 +124,7 @@ class PageDetailView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         pid = self.kwargs.get(self.slug_url_kwarg)
-        context = super(PageDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['search_form'] = SearchForm(initial={'q': None})
         context['report_form'] = ReportForm(initial={'page': pid})
         context['page_form'] = PageForm

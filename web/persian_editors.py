@@ -13,7 +13,7 @@ class PersianEditors(object):
                 "%s is an immutable attribute." % key
             )
         else:
-            super(PersianEditors, self).__setattr__(key, value)
+            super().__setattr__(key, value)
 
     def __init__(self, editors):
         self._editing_text = None
@@ -49,7 +49,7 @@ class PersianEditors(object):
         editing_text = self._editing_text
         punctuation_edited = ''
 
-        # Edit multi-space
+        # Remove space sequence
         while '  ' in editing_text:
             editing_text = editing_text.replace('  ', ' ')
 
@@ -60,7 +60,8 @@ class PersianEditors(object):
                     punctuation_edited = punctuation_edited[:-1]
 
                 try:
-                    if editing_text[i + 1] != ' ' and editing_text[i + 1] not in self._persian_punctuation_marks:
+                    if editing_text[i + 1] != ' ' and \
+                            editing_text[i + 1] not in self._persian_punctuation_marks:
                         char = f'{char} '
                 except IndexError:
                     pass

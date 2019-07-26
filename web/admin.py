@@ -58,9 +58,9 @@ class PageAdmin(admin.ModelAdmin):
     def links(self, obj):
         page_link = reverse(f'web:page-detail', args=[obj.pid])
         reports_link = f'{reverse("admin:web_report_changelist")}?q={obj.pid}'
-        report = _('reports')
+        reports = _('reports')
         return mark_safe(f'<a href="{page_link}" target="_blank">{obj.pid}</a> /'
-                         f' <a href="{reports_link}" target="_blank">{report}</a>')
+                         f' <a href="{reports_link}" target="_blank">{reports}</a>')
 
     links.short_description = _('public ID')
 
@@ -78,7 +78,7 @@ class PageAdmin(admin.ModelAdmin):
         obj.event = editor.run(obj.event)
         obj.image_caption = editor.run(obj.image_caption)
 
-        super(PageAdmin, self).save_model(request, obj, form, change)
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(Report)
@@ -132,9 +132,9 @@ class ReportAdmin(admin.ModelAdmin):
         editor.escape_return = True
         obj.description = editor.run(obj.description)
 
-        super(ReportAdmin, self).save_model(request, obj, form, change)
+        super().save_model(request, obj, form, change)
 
-        if is_first_change:
+        if is_first_change:  # Send email notification to user
             context = {'report': obj}
             email_template = 'emails/report_result.html'
             message = BaseEmailMessage(request, context, email_template)

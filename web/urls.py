@@ -20,7 +20,8 @@ urlpatterns = [
     path('page/create/', views.PageCreateView.as_view(), name='page-create'),
     path('report/create/', views.ReportCreateView.as_view(), name='report-create'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
-    path('robots.txt', TemplateView.as_view(template_name='web/robots.txt', content_type='text/plain')),
+    path('robots.txt', TemplateView.as_view(template_name='web/robots.txt',
+                                            content_type='text/plain')),
 ]
 
 # This is only needed when using runserver.
