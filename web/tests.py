@@ -6,8 +6,9 @@ from django.urls import reverse
 from .forms import SearchForm
 from .helpers import get_jalali_month_name
 from .models import Report, Page, generate_pid
-from .templatetags.web_extras import convert_date_to_jalali as to_jalali, convert_digits_to_persian as to_persian, \
-    convert_queryset_values_to_list as to_list
+from .templatetags.web_extras import (convert_date_to_jalali as to_jalali,
+                                      convert_digits_to_persian as to_persian,
+                                      convert_queryset_values_to_list as to_list)
 
 
 def create_test_page(n):
@@ -74,7 +75,8 @@ class PageListViewTests(TestCase):
 
     def test_search_with_result_with_exact_query_string(self):
         """
-        If result found, show the result else an appropriate message is displayed.
+        If result found, show the result else
+        an appropriate message is displayed.
         """
         create_test_page(4)
         create_test_active_page(4)
@@ -120,7 +122,8 @@ class PageDetailViewTests(TestCase):
         create_test_page(4)
         create_test_active_page(4)
 
-        page = self.client.get(reverse('web:page-list'), data={'q': 'pycharm'}).context['object_list']
+        page = self.client.get(reverse('web:page-list'),
+                               data={'q': 'pycharm'}).context['object_list']
         response = self.client.get(reverse('web:page-detail', args=(page[0].pid,)))
 
         self.assertEqual(response.status_code, 200)
@@ -432,37 +435,44 @@ class PageCreateApiTest(TestCase):
         """
         url = reverse('web:page-create')
         data = {}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Page.objects.count(), 0)
 
     def test_with_one_empty_required_field(self):
         """
-        Check required fields and return error if one or more is empty.
+        Check required fields and
+        return error if one or more is empty.
         """
         url = reverse('web:page-create')
         data = {'title': ''}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Page.objects.count(), 0)
 
     def test_with_one_filled_required_field(self):
         """
-        Check required fields and return error if one or more is empty.
+        Check required fields and
+        return error if one or more is empty.
         """
         url = reverse('web:page-create')
         data = {'title': 'test'}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Page.objects.count(), 0)
 
     def test_with_empty_required_field(self):
         """
-        Check required fields and return error if one or more is empty.
+        Check required fields and
+        return error if one or more is empty.
         """
         url = reverse('web:page-create')
         data = {'title': '', 'content': ''}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Page.objects.count(), 0)
 
@@ -474,7 +484,8 @@ class PageCreateApiTest(TestCase):
         data = {'title': 'test',
                 'content': 'cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed \
                 cras ornare arcu dui vivamus arcu felis bibendum ut'}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Page.objects.count(), 1)
 
@@ -486,19 +497,22 @@ class PageCreateApiTest(TestCase):
         data = {'title': 'test',
                 'content': 'cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed \
                 cras ornare arcu dui vivamus arcu felis bibendum ut', 'email': 'go.mezzo@icloud.com'}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Page.objects.count(), 1)
 
     def test_with_required_field_and_incorrect_email(self):
         """
-        Validate email and return 400 Bad Request status if not valid.
+        Validate email and
+        return 400 Bad Request status if not valid.
         """
         url = reverse('web:page-create')
         data = {'title': 'test',
                 'content': 'cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed \
                 cras ornare arcu dui vivamus arcu felis bibendum ut', 'author': 'go.mezzo'}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Page.objects.count(), 0)
 
@@ -510,37 +524,44 @@ class ReportApiTest(TestCase):
         """
         url = reverse('web:report-create')
         data = {}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Report.objects.count(), 0)
 
     def test_with_one_empty_required_field(self):
         """
-        Check required fields and return error if one or more is empty.
+        Check required fields and
+        return error if one or more is empty.
         """
         url = reverse('web:report-create')
         data = {'body': ''}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Report.objects.count(), 0)
 
     def test_with_one_filled_required_field(self):
         """
-        Check required fields and return error if one or more is empty.
+        Check required fields and
+        return error if one or more is empty.
         """
         url = reverse('web:report-create')
         data = {'body': 'cursus euismod quis viverra'}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Report.objects.count(), 0)
 
     def test_with_empty_required_field(self):
         """
-        Check required fields and return error if one or more is empty.
+        Check required fields and
+        return error if one or more is empty.
         """
         url = reverse('web:report-create')
         data = {'body': '', 'reporter': ''}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Report.objects.count(), 0)
 
@@ -553,8 +574,13 @@ class ReportApiTest(TestCase):
         page = Page.objects.filter(is_active=True).first()
 
         url = reverse('web:report-create')
-        data = {'page': page.pid, 'body': 'cursus euismod quis viverra', 'reporter': 'go.mezzo@icloud.com'}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        data = {
+            'page': page.pid,
+            'body': 'cursus euismod quis viverra',
+            'reporter': 'go.mezzo@icloud.com'
+        }
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Report.objects.count(), 1)
 
@@ -567,8 +593,13 @@ class ReportApiTest(TestCase):
         page = Page.objects.filter(is_active=False).first()
 
         url = reverse('web:report-create')
-        data = {'page': page.pid, 'body': 'cursus euismod quis viverra', 'reporter': 'go.mezzo@icloud.com'}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        data = {
+            'page': page.pid,
+            'body': 'cursus euismod quis viverra',
+            'reporter': 'go.mezzo@icloud.com'
+        }
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 404)
         self.assertEqual(Report.objects.count(), 0)
 
@@ -577,8 +608,12 @@ class ReportApiTest(TestCase):
         Create a page record if required field is filled.
         """
         url = reverse('web:report-create')
-        data = {'body': 'cursus euismod quis viverra', 'reporter': 'go.mezzo'}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        data = {
+            'body': 'cursus euismod quis viverra',
+            'reporter': 'go.mezzo'
+        }
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Report.objects.count(), 0)
 
@@ -587,7 +622,12 @@ class ReportApiTest(TestCase):
         Validate email and send a mail to author.
         """
         url = reverse('web:report-create')
-        data = {'page': '123', 'body': 'cursus euismod quis viverra', 'reporter': 'go.mezzo@icloud.com'}
-        response = self.client.post(url, data, enforce_csrf_checks=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        data = {
+            'page': '123',
+            'body': 'cursus euismod quis viverra',
+            'reporter': 'go.mezzo@icloud.com'
+        }
+        response = self.client.post(url, data, enforce_csrf_checks=True,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Report.objects.count(), 0)

@@ -10,7 +10,8 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from .helpers import swap_prefix
-from .templatetags.web_extras import convert_date_to_jalali as to_jalali, convert_digits_to_persian as to_persian
+from .templatetags.web_extras import (convert_date_to_jalali as to_jalali,
+                                      convert_digits_to_persian as to_persian)
 
 
 def generate_pid(n=12):
