@@ -4,7 +4,7 @@
 
 May 2018
 
-This project defines everything about in a paragraph, with the help of all people. It's not an encyclopedia, just a quick reference for have an insight into a subject. [read more...][1]
+This project defines everything in about one paragraph, with the help of all people. It's not an encyclopedia, just a quick reference for have an insight into a subject. [read more...][1]
 
 # Technologies
 * Python/Django for back-end developing

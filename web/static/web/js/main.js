@@ -111,7 +111,7 @@ function resizeImage() {
         data.append('image_caption', $('#id_image_caption').val());
         data.append('reference', $('#id_reference').val());
         data.append('author', $('#id_author').val());
-        console.log('data: ', data);
+
         $.ajax({
             type: 'POST',
             url: createPageUrl,
@@ -140,7 +140,6 @@ function resizeImage() {
                     myStack.type = 'error';
                 } else if (error.status === 400) {
                     $.each(error.responseJSON, function (key) {
-                        console.log('#' + key + '_tooltip_id');
                         $('#' + key + '_tooltip_id').show()
                     });
 
@@ -206,7 +205,6 @@ function resizeImage() {
                     myStack.type = 'error';
                 } else if (error.status === 400) {
                     $.each(error.responseJSON, function (key) {
-                        console.log('#' + key + '_tooltip_id');
                         $('#' + key + '_tooltip_id').show()
                     });
 
