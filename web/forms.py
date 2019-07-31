@@ -105,5 +105,5 @@ class ReportForm(forms.ModelForm):
     def clean_page(self):
         page = self.cleaned_data['page']
         if not page.is_active:
-            raise Http404
+            raise Http404  # TODO: Return JSON type, not HTML.
         return page

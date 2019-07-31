@@ -5,7 +5,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views import defaults
 from django.views.generic import CreateView, DetailView, ListView, TemplateView
-from django.views.generic.edit import FormMixin
 from templated_mail.mail import BaseEmailMessage
 
 from .forms import SearchForm, PageForm, ReportForm
@@ -33,7 +32,7 @@ def server_error(request, template_name=ERROR_500_TEMPLATE_NAME):
     return defaults.server_error(request, template_name)
 
 
-class AjaxableResponseMixin(FormMixin):
+class AjaxableResponseMixin:
     """
     Mixin to add AJAX support to a form.
     Must be used with an object-based FormView (e.g. CreateView)
@@ -41,7 +40,6 @@ class AjaxableResponseMixin(FormMixin):
 
     def form_invalid(self, form):
         response = super().form_invalid(form)
-
         if self.request.is_ajax():
             return JsonResponse(form.errors, status=400)
         else:
@@ -100,7 +98,7 @@ class PageListView(ListView):
         query = SearchQuery(q, search_type='plain')
         vector = SearchVector('title', weight='A') + \
                  SearchVector('subtitle', weight='B') + \
-                 SearchVector('content', 'event', 'image_caption', weight='D')
+                 SearchVector('content', 'event', 'image_caption', weight='D')  # TODO: Create `SearchVector` for tags.
         rank = SearchRank(vector, query)
         return Page.objects.annotate(rank=rank).filter(
             is_active=True, rank__gte=0.01).order_by('-rank')

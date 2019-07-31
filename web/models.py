@@ -16,20 +16,21 @@ from .templatetags.web_extras import (convert_date_to_jalali as to_jalali,
 
 def generate_pid(n=12):
     new_pid = None
-
     while not new_pid:
-        postfix_string = ''.join(random.choices(string.ascii_letters + string.digits, k=n))
+        postfix_string = ''.join(
+            random.choices(string.ascii_letters + string.digits, k=n)
+        )
         new_pid = f'{settings.PID_PREFIX}_{postfix_string}'
         if Page.objects.is_pid_exist(new_pid):
             new_pid = None
-
     return new_pid
 
 
 @receiver(post_save, sender='web.Report')
 def generate_refid(sender, instance=None, created=False, **kwargs):
     if created:
-        instance.refid = swap_prefix(f'{instance.page.pid}_{instance.pk}', settings.REFID_PREFIX)
+        instance.refid = swap_prefix(f'{instance.page.pid}_{instance.pk}',
+                                     settings.REFID_PREFIX)
         instance.save()
 
 
@@ -105,7 +106,7 @@ class PageManager(models.Manager):
     def get_random_pages(self):
         all_pages = self.filter(is_active=True)
         pages_sample_list = list(all_pages.values_list('pk', flat=True))
-        max_random_page_count = 3
+        max_random_page_count = 3  # TODO: Make this variable dynamic.
 
         if len(pages_sample_list) < 3:
             max_random_page_count = len(pages_sample_list)
