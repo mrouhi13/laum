@@ -26,7 +26,8 @@ class SearchForm(forms.Form):
 class PageForm(forms.ModelForm):
     class Meta:
         model = Page
-        fields = ['title', 'subtitle', 'event', 'content', 'image', 'image_caption', 'reference', 'author']
+        fields = ['title', 'subtitle', 'event', 'content', 'image',
+                  'image_caption', 'reference', 'author']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -91,7 +92,8 @@ class ReportForm(forms.ModelForm):
 
         self.fields['body'].widget.attrs = {
             'class': 'form-control',
-            'placeholder': _('e.g. In the image caption there is a typo in month name: "Jone" must be "June"'),
+            'placeholder': _('e.g. In the image caption there is a typo in '
+                             'month name: "Jone" must be "June"'),
             'rows': 5,
             'minlength': 20,
             'maxlength': 1024

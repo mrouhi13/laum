@@ -40,19 +40,22 @@ class UserAdmin(UserAdmin):
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
-    readonly_fields = ['links', 'image_tag', 'jalali_updated_on', 'jalali_created_on']
+    readonly_fields = ['links', 'image_tag', 'jalali_updated_on',
+                       'jalali_created_on']
     fieldsets = [
         [_('Main info'),
          {'fields': ['links', 'title', 'subtitle', 'content',
                      'event', 'image', 'image_tag', 'image_caption']}],
         [_('Further info'), {'fields': ['tags', 'reference', 'website',
                                         'author', 'is_active']}],
-        [_('Important dates'), {'fields': ['jalali_updated_on', 'jalali_created_on']}]]
+        [_('Important dates'), {'fields': ['jalali_updated_on',
+                                           'jalali_created_on']}]]
     list_display = ['title', 'author', 'is_active', 'jalali_updated_on',
                     'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['pid', 'title', 'content', 'event', 'image_caption',
-                     'tags__name', 'tags__keyword', 'website', 'author', 'reference']
+                     'tags__name', 'tags__keyword', 'website',
+                     'author', 'reference']
     filter_horizontal = ['tags']
 
     def links(self, obj):
@@ -70,7 +73,8 @@ class PageAdmin(admin.ModelAdmin):
     image_tag.short_description = _('image preview')
 
     def save_model(self, request, obj, form, change):
-        editor = PersianEditors(['space', 'number', 'arabic', 'punctuation_marks'])
+        editor = PersianEditors(['space', 'number',
+                                 'arabic', 'punctuation_marks'])
 
         obj.title = editor.run(obj.title)
         obj.subtitle = editor.run(obj.subtitle)
@@ -90,7 +94,8 @@ class ReportAdmin(admin.ModelAdmin):
     list_display = ['page', 'reporter', 'status', 'jalali_updated_on',
                     'jalali_created_on', 'refid']
     list_filter = ['status', 'updated_on', 'created_on']
-    search_fields = ['page__pid', 'refid', 'body', 'reporter', 'refid', 'description']
+    search_fields = ['page__pid', 'refid', 'body', 'reporter',
+                     'refid', 'description']
 
     def view_page(self, obj):
         link_to_admin_view = reverse(f'admin:web_page_change', args=[obj.page.pk])
