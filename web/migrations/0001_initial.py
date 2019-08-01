@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('updated_on', models.DateTimeField(auto_now=True, verbose_name='updated on')),
                 ('created_on', models.DateTimeField(auto_now_add=True, verbose_name='created on')),
-                ('name', models.CharField(db_index=True, max_length=50, unique=True, verbose_name='name')),
+                ('name', models.CharField(db_index=True, max_length=20, unique=True, verbose_name='name')),
                 ('keyword', models.SlugField(allow_unicode=True, verbose_name='keyword')),
                 ('is_active', models.BooleanField(default=True, help_text='Designate whether the tag can be used.', verbose_name='active status')),
             ],
