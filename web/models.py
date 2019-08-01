@@ -187,7 +187,7 @@ class Report(BaseModel):
 
 
 class Tag(BaseModel):
-    name = models.CharField(_('name'), max_length=50, unique=True, db_index=True)
+    name = models.CharField(_('name'), max_length=20, unique=True, db_index=True)
     keyword = models.SlugField(_('keyword'), allow_unicode=True, db_index=True)
     is_active = models.BooleanField(_('active status'), default=True,
                                     help_text=_('Designate whether the tag can be used.'))

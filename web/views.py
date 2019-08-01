@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.postgres.aggregates import StringAgg
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -47,7 +48,6 @@ class AjaxableResponseMixin:
 
     def form_valid(self, form):
         response = super().form_valid(form)
-
         if self.request.is_ajax():
             obj = self.object
             object_type = obj.__class__.__name__.lower()
@@ -98,7 +98,8 @@ class PageListView(ListView):
         query = SearchQuery(q, search_type='plain')
         vector = SearchVector('title', weight='A') + \
                  SearchVector('subtitle', weight='B') + \
-                 SearchVector('content', 'event', 'image_caption', weight='D')  # TODO: Create `SearchVector` for tags.
+                 SearchVector(StringAgg('tags__name', delimiter=' '), weight='C') + \
+                 SearchVector('content', 'event', 'image_caption', weight='D')
         rank = SearchRank(vector, query)
         return Page.objects.annotate(rank=rank).filter(
             is_active=True, rank__gte=0.01).order_by('-rank')
