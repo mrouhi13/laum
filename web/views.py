@@ -1,6 +1,4 @@
 from django.conf import settings
-from django.contrib.postgres.aggregates import StringAgg
-from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -95,14 +93,7 @@ class PageListView(ListView):
 
     def get_queryset(self):
         q = self.request.GET.get('q')
-        query = SearchQuery(q, search_type='plain')
-        vector = SearchVector('title', weight='A') + \
-                 SearchVector('subtitle', weight='B') + \
-                 SearchVector(StringAgg('tags__name', delimiter=' '), weight='C') + \
-                 SearchVector('content', 'event', 'image_caption', weight='D')
-        rank = SearchRank(vector, query)
-        return Page.objects.annotate(rank=rank).filter(
-            is_active=True, rank__gte=0.01).order_by('-rank')
+        return Page.objects.search(q)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         q = self.request.GET.get('q')

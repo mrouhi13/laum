@@ -4,6 +4,9 @@ import string
 from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.aggregates import StringAgg
+from django.contrib.postgres.search import (SearchQuery, SearchRank,
+                                            SearchVector)
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -103,6 +106,17 @@ class BaseModel(models.Model):
 
 
 class PageManager(models.Manager):
+
+    def search(self, text):
+        vector = SearchVector('title', weight='A') + \
+                 SearchVector('subtitle', weight='B') + \
+                 SearchVector(StringAgg('tags__name', delimiter=' '), weight='C') + \
+                 SearchVector('content', 'event', 'image_caption', weight='D')
+        query = SearchQuery(text, search_type='plain')
+        rank = SearchRank(vector, query)
+        return self.get_queryset().annotate(rank=rank).filter(rank__gte=0.01,
+                                                              is_active=True).order_by('-rank')
+
     def get_random_pages(self):
         all_pages = self.filter(is_active=True)
         pages_sample_list = list(all_pages.values_list('pk', flat=True))

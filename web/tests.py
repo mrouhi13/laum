@@ -32,6 +32,7 @@ def create_test_active_page(n):
 
 
 class IndexViewTests(TestCase):
+
     def test_index(self):
         """
         Nothing to display.
@@ -41,6 +42,7 @@ class IndexViewTests(TestCase):
 
 
 class PageListViewTests(TestCase):
+
     def test_search_without_query_string(self):
         """
         Redirect to index.
@@ -115,6 +117,7 @@ class PageListViewTests(TestCase):
 
 
 class PageDetailViewTests(TestCase):
+
     def test_page_with_id_exist(self):
         """
         If page found, show the content.
@@ -152,6 +155,7 @@ class PageDetailViewTests(TestCase):
 
 
 class SearchFormTest(TestCase):
+
     def test_without_data(self):
         """
         Return empty dict.
@@ -181,6 +185,7 @@ class SearchFormTest(TestCase):
 
 
 class PageModelTests(TestCase):
+
     def test_random_pages_with_no_page(self):
         """
         Return empty queryset.
@@ -246,6 +251,7 @@ class PageModelTests(TestCase):
 
 
 class ToPersianFilterTests(TestCase):
+
     def test_with_english_text_and_no_digits(self):
         """
         No change.
@@ -308,6 +314,7 @@ class ToPersianFilterTests(TestCase):
 
 
 class ToJalaliFilterTests(TestCase):
+
     def test_with_empty_date(self):
         """
         Return none.
@@ -342,6 +349,7 @@ class ToJalaliFilterTests(TestCase):
 
 
 class ToListFilterTests(TestCase):
+
     def test_with_none_queryset(self):
         data = to_list(None, 'id')
 
@@ -392,6 +400,7 @@ class ToListFilterTests(TestCase):
 
 
 class GetJalaliMonthNameTests(TestCase):
+
     def test_with_correct_month_number(self):
         data = get_jalali_month_name(1)
 
@@ -429,6 +438,7 @@ class GetJalaliMonthNameTests(TestCase):
 
 
 class PageCreateApiTest(TestCase):
+
     def test_with_no_required_field(self):
         """
         Check required fields.
@@ -518,6 +528,7 @@ class PageCreateApiTest(TestCase):
 
 
 class ReportApiTest(TestCase):
+
     def test_with_no_required_field(self):
         """
         Check required fields.

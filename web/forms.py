@@ -24,6 +24,7 @@ class SearchForm(forms.Form):
 
 
 class PageForm(forms.ModelForm):
+
     class Meta:
         model = Page
         fields = ['title', 'subtitle', 'event', 'content', 'image',
@@ -82,6 +83,7 @@ class PageForm(forms.ModelForm):
 
 
 class ReportForm(forms.ModelForm):
+
     class Meta:
         model = Report
         fields = ['page', 'body', 'reporter']
