@@ -114,8 +114,8 @@ class PageManager(models.Manager):
                  SearchVector('content', 'event', 'image_caption', weight='D')
         query = SearchQuery(text, search_type='plain')
         rank = SearchRank(vector, query)
-        return self.get_queryset().annotate(rank=rank).filter(rank__gte=0.01,
-                                                              is_active=True).order_by('-rank')
+        return self.get_queryset().annotate(
+            rank=rank).filter(rank__gte=0.01, is_active=True).order_by('-rank')
 
     def get_random_pages(self):
         all_pages = self.filter(is_active=True)
@@ -157,7 +157,8 @@ class Page(BaseModel):
     website = models.URLField(_('website'), blank=True)
     author = models.EmailField(_('author email'), blank=True)
     is_active = models.BooleanField(_('active status'), default=False,
-                                    help_text=_('Designate whether the page is visible on the list of results.'))
+                                    help_text=_('Designate whether the page '
+                                                'is visible on the list of results.'))
 
     objects = PageManager()
 

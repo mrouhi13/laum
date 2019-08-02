@@ -70,13 +70,14 @@ class AjaxableResponseMixin:
 
 
 class IndexView(TemplateView):
+    model = Page
     template_name = 'web/pages/index.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_form'] = SearchForm
         context['page_form'] = PageForm
-        context['random_pages'] = Page.objects.get_random_pages()
+        context['random_pages'] = self.model.objects.get_random_pages()
         return context
 
 
@@ -93,7 +94,7 @@ class PageListView(ListView):
 
     def get_queryset(self):
         q = self.request.GET.get('q')
-        return Page.objects.search(q)
+        return self.model.objects.search(q)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         q = self.request.GET.get('q')
