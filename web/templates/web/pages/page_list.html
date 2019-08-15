@@ -1,6 +1,8 @@
 {% extends 'web/base.html' %}
-{% block title %}{{ request.GET.q }} | جست‌وجوی {{ SITE_NAME }}{% endblock title %}
-{% block link_canonical %}{% url 'web:page-list' %}?{{ request.GET.urlencode }}{% endblock link_canonical %}
+{% block title %}{{ request.GET.q }} | جست‌وجوی
+    {{ SITE_NAME }}{% endblock title %}
+{% block link_canonical %}{% url 'web:page-list' %}?
+    {{ request.GET.urlencode }}{% endblock link_canonical %}
 {% block content %}
     {% include 'web/components/page_list/search.html' %}
     {% if object_list %}

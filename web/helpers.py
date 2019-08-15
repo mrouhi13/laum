@@ -10,7 +10,8 @@ def get_jalali_month_name(month_number):
                 month_number = 1
 
             persian_names = (
-                'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند')
+                'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+                'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند')
             return persian_names[month_number - 1]
     except ValueError:
         pass

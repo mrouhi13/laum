@@ -2,7 +2,8 @@
     ثبت گزارش برای صفحه «{{ report.page.title }}»
 {% endblock subject %}
 {% block text_body %}
-    گزارش جدیدی برای صفحه {{ report.page.title }} ثبت شده است. لطفا در اسرع وقت رسیدگی کنید.
+    گزارش جدیدی برای صفحه {{ report.page.title }} ثبت شده است. لطفا در اسرع وقت
+    رسیدگی کنید.
 {% endblock text_body %}
 {% block html_body %}
     <style>
@@ -14,26 +15,32 @@
     </style>
     <body dir=rtl
           style="margin:0;padding:0;background-color:#FAFAFB;font-family:Shabnam,sans-serif;font-size:16px;color:#6C737A">
-    <table border=0 cellpadding=0 cellspacing=0 style="margin:2em auto;width:600px">
+    <table border=0 cellpadding=0 cellspacing=0
+           style="margin:2em auto;width:600px">
         <tbody>
         <tr>
             <td style="padding:30px 50px 15px;background-color:#FFF">
                 <a href="{{ BASE_URL }}">
-                    <img src="{{ STATIC_URL }}/web/images/laum.logo.yellow.png" width=36 height=36>
+                    <img src="{{ STATIC_URL }}/web/images/laum.logo.yellow.png"
+                         width=36 height=36>
                 </a>
             </td>
         </tr>
         <tr>
             <td style="padding:0 50px 25px;background-color:#FFF">
                 <div style="color:#353A40">
-                    <p>ثبت گزارش برای صفحه «<a style="text-decoration:none;color:#07C"
-                                               href="{{ BASE_URL }}/{{ report.page.pid }}">{{ report.page.title }}</a>»
+                    <p>ثبت گزارش برای صفحه «<a
+                            style="text-decoration:none;color:#07C"
+                            href="{{ BASE_URL }}/{{ report.page.pid }}">{{ report.page.title }}</a>»
                     </p>
                 </div>
                 <div style="width:100%;background-color:#FAFAFB">
                     <div style="border-bottom:solid 1px #E4E6E8;padding:3em;line-height:2em;text-align:justify">
-                        <p>گزارش جدیدی برای صفحه «<strong>{{ report.page.title }}</strong>» ثبت شده است. لطفا در اسرع وقت رسیدگی کنید.</p>
-                        <p style="font-size:12px;font-style:italic;color:rgb(158, 163, 169)">شناسه ارجاع: {{ report.refid|default:'-' }}</p>
+                        <p>گزارش جدیدی برای صفحه
+                            «<strong>{{ report.page.title }}</strong>» ثبت شده
+                            است. لطفا در اسرع وقت رسیدگی کنید.</p>
+                        <p style="font-size:12px;font-style:italic;color:rgb(158, 163, 169)">
+                            شناسه ارجاع: {{ report.refid|default:'-' }}</p>
                     </div>
                     <div style="color:#848d95;font-size:12px;font-style:italic;padding:1.5em;margin-bottom:1em">
                         باتشکر از کمک شما در گسترش اطلاعات آزاد.
@@ -41,19 +48,24 @@
                 </div>
                 <div>
                     <a style="margin:1em 0;color:#FFF;display:block;width:100%;text-align:center;padding:0.6em 0;background-color:#0095FF;border-radius:2px;text-decoration:none;border:1px solid #07C"
-                       href="{{ BASE_URL }}/admin/web/report/{{ report.pk }}/change">مدیریت گزارش</a>
+                       href="{{ BASE_URL }}/admin/web/report/{{ report.pk }}/change">مدیریت
+                        گزارش</a>
                 </div>
             </td>
         </tr>
         <tr>
             <td style="padding:25px 16px;font-size:11px;line-height:1.36;color:#9EA3A9">
-                <img src="{{ STATIC_URL }}/web/images/laum.logo.yellow.png" width=24 height=24>
+                <img src="{{ STATIC_URL }}/web/images/laum.logo.yellow.png"
+                     width=24 height=24>
                 <p><strong>{{ SITE_NAME }}</strong>، تهران، ایران</p>
-                <p>دلیل دریافت این ایمیل ثبت گزارش جدید در {{ SITE_NAME }} می‌باشد.</p>
+                <p>دلیل دریافت این ایمیل ثبت گزارش جدید در {{ SITE_NAME }}
+                    می‌باشد.</p>
                 <p>
-                    <a style="color:#999;text-decoration:underline" href="{{ BASE_URL }}">قوانین ما</a>
+                    <a style="color:#999;text-decoration:underline"
+                       href="{{ BASE_URL }}">قوانین ما</a>
                     &nbsp;•&nbsp;
-                    <a style="color:#999;text-decoration:underline" href="mailto:{{ CONTACT_EMAIL }}">تماس با ما</a>
+                    <a style="color:#999;text-decoration:underline"
+                       href="mailto:{{ CONTACT_EMAIL }}">تماس با ما</a>
                 </p>
             </td>
         </tr>

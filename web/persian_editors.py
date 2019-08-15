@@ -61,7 +61,8 @@ class PersianEditors(object):
 
                 try:
                     if editing_text[i + 1] != ' ' and \
-                            editing_text[i + 1] not in self._persian_punctuation_marks:
+                            editing_text[
+                                i + 1] not in self._persian_punctuation_marks:
                         char = f'{char} '
                 except IndexError:
                     pass

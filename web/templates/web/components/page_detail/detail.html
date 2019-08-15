@@ -16,8 +16,10 @@
                 <div class="page-thumbnail">
                     {% thumbnail page.image '536x290' crop='center' as im %}
                         <div class="page-thumbnail">
-                            <img class="page-image" src="{{ im.url }}" width=auto
-                                 height={{ im.height }} title="{{ page.title }}" alt="{{ page.title }}">
+                            <img class="page-image" src="{{ im.url }}"
+                                 width=auto
+                                 height={{ im.height }} title="{{ page.title }}"
+                                 alt="{{ page.title }}">
                         </div>
                     {% empty %}
                         <div class="page-thumbnail" style="height: 250px">
@@ -34,7 +36,8 @@
         <div class="page-content">
             <p>{{ page.content }}</p>
             {% for tag in page.tags.values %}
-                <a class="ml-1" href="{% url 'web:page-list' %}?q={{ tag.name }}">
+                <a class="ml-1"
+                   href="{% url 'web:page-list' %}?q={{ tag.name }}">
                     <span class="page-tag">
                         <small>#{{ tag.keyword }}</small>
                     </span>
@@ -42,7 +45,8 @@
             {% endfor %}
         </div>
         <div class="page-footer">
-            <a class="page-report-link" data-toggle="modal" data-target="#reportModal">
+            <a class="page-report-link" data-toggle="modal"
+               data-target="#reportModal">
                 <i class="fas fa-edit"></i>
                 گزارش خطا
             </a>
@@ -56,7 +60,8 @@
             {% thumbnail page.image '410x410' crop='center' as im %}
                 <div class="page-thumbnail">
                     <img class="page-image" src="{{ im.url }}" width=auto
-                         height={{ im.height }} title="{{ page.title }}" alt="{{ page.title }}">
+                         height={{ im.height }} title="{{ page.title }}"
+                         alt="{{ page.title }}">
                 </div>
             {% empty %}
                 <div class="page-thumbnail" style="height: 250px">

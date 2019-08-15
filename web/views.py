@@ -19,7 +19,8 @@ def bad_request(request, exception, template_name=ERROR_400_TEMPLATE_NAME):
     return defaults.bad_request(request, exception, template_name)
 
 
-def permission_denied(request, exception, template_name=ERROR_403_TEMPLATE_NAME):
+def permission_denied(request, exception,
+                      template_name=ERROR_403_TEMPLATE_NAME):
     return defaults.permission_denied(request, exception, template_name)
 
 
@@ -53,7 +54,8 @@ class AjaxableResponseMixin:
 
             # Send email notification to user
             email_template = f'emails/new_{object_type}.html'
-            to = form.cleaned_data.get('reporter') or form.cleaned_data.get('author')
+            to = form.cleaned_data.get('reporter') or \
+                 form.cleaned_data.get('author')
             message = BaseEmailMessage(self.request, context, email_template)
             message.send([to])
 

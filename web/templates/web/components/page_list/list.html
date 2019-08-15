@@ -6,8 +6,10 @@
                 <div class="card mb-4 box-shadow">
                     <div class="position-relative thumbnail">
                         {% thumbnail page.image '290x290' crop='center' as im %}
-                            <img class="card-img-top portrait" src="{{ im.url }}" width=auto
-                                 height={{ im.height }} title="{{ page.title }}" alt="{{ page.title }}">
+                            <img class="card-img-top portrait"
+                                 src="{{ im.url }}" width=auto
+                                 height={{ im.height }} title="{{ page.title }}"
+                                 alt="{{ page.title }}">
                         {% empty %}
                             <i class="far fa-image fa-3x"></i>
                         {% endthumbnail %}

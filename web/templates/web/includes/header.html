@@ -2,8 +2,11 @@
 <header>
     <div class="navbar navbar-dark bg-dark">
         <div class="container d-flex justify-content-between">
-            <a href="{% url 'web:index' %}" class="navbar-brand d-flex align-items-center">
-                <img class=ml-2 width=30 height=30 src="{% static 'web/images/laumproject.logo.yellow.png' %}" itemprop=logo
+            <a href="{% url 'web:index' %}"
+               class="navbar-brand d-flex align-items-center">
+                <img class=ml-2 width=30 height=30
+                     src="{% static 'web/images/laumproject.logo.yellow.png' %}"
+                     itemprop=logo
                      title="{{ SITE_NAME }}" alt="{{ SITE_NAME }}">
                 <h1 class="navbar-title">{{ SITE_NAME }}</h1>&nbsp;
                 <div class=slogan-text>
@@ -11,7 +14,8 @@
                     <small>این‌جا روشن کنید!</small>
                 </div>
             </a>
-            <a class="nav-link text-right" style="cursor: pointer;color: #fff" data-toggle=modal
+            <a class="nav-link text-right" style="cursor: pointer;color: #fff"
+               data-toggle=modal
                data-target="#newPageModal">
                 <span class="position-relative fas-reglage">
                     <i class="fas fa-plus fa-sm"></i>

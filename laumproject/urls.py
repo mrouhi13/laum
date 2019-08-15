@@ -34,10 +34,8 @@ handler500 = views.server_error
 
 
 def switch_lang_code(path_, language):
-    # Get the supported language codes
     lang_codes = [c for (c, name) in settings.LANGUAGES]
 
-    # Validate the inputs
     if path_ == '':
         raise Exception('URL path for language switch is empty')
     elif path_[0] != '/':
@@ -45,14 +43,9 @@ def switch_lang_code(path_, language):
     elif language not in lang_codes:
         raise Exception('%s is not a supported language code' % language)
 
-    # Split the parts of the path
     parts = path_.split('/')
-
-    # Add or substitute the new language prefix
     if parts[1] in lang_codes:
         parts[1] = language
     else:
         parts[0] = '/' + language
-
-    # Return the full new path
     return '/'.join(parts)

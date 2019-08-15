@@ -69,7 +69,8 @@ class PageListViewTests(TestCase):
         create_test_page(4)
         create_test_active_page(4)
 
-        response = self.client.get(reverse('web:page-list'), data={'q': 'ubuntu'})
+        response = self.client.get(reverse('web:page-list'),
+                                   data={'q': 'ubuntu'})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['page_obj'].paginator.count, 0)
@@ -83,11 +84,13 @@ class PageListViewTests(TestCase):
         create_test_page(4)
         create_test_active_page(4)
 
-        response = self.client.get(reverse('web:page-list'), data={'q': 'Majid'})
+        response = self.client.get(reverse('web:page-list'),
+                                   data={'q': 'Majid'})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['page_obj'].paginator.count, 1)
-        self.assertQuerysetEqual(response.context['object_list'], ['<Page: Majid>'])
+        self.assertQuerysetEqual(response.context['object_list'],
+                                 ['<Page: Majid>'])
 
     # def test_search_with_result_with_partial_query_string(self):
     #     """
@@ -127,7 +130,8 @@ class PageDetailViewTests(TestCase):
 
         page = self.client.get(reverse('web:page-list'),
                                data={'q': 'pycharm'}).context['object_list']
-        response = self.client.get(reverse('web:page-detail', args=(page[0].pid,)))
+        response = self.client.get(
+            reverse('web:page-detail', args=(page[0].pid,)))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Pycharm')
@@ -506,7 +510,8 @@ class PageCreateApiTest(TestCase):
         url = reverse('web:page-create')
         data = {'title': 'test',
                 'content': 'cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed \
-                cras ornare arcu dui vivamus arcu felis bibendum ut', 'email': 'go.mezzo@icloud.com'}
+                cras ornare arcu dui vivamus arcu felis bibendum ut',
+                'email': 'go.mezzo@icloud.com'}
         response = self.client.post(url, data, enforce_csrf_checks=True,
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
@@ -520,7 +525,8 @@ class PageCreateApiTest(TestCase):
         url = reverse('web:page-create')
         data = {'title': 'test',
                 'content': 'cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed \
-                cras ornare arcu dui vivamus arcu felis bibendum ut', 'author': 'go.mezzo'}
+                cras ornare arcu dui vivamus arcu felis bibendum ut',
+                'author': 'go.mezzo'}
         response = self.client.post(url, data, enforce_csrf_checks=True,
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)

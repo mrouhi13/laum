@@ -3,7 +3,8 @@ from django import template
 register = template.Library()
 
 
-@register.inclusion_tag('web/includes/google_analytics.html', takes_context=True)
+@register.inclusion_tag('web/includes/google_analytics.html',
+                        takes_context=True)
 def google_analytics(context):
     """
     Add Google Analytics script.

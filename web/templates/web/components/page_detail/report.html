@@ -1,4 +1,5 @@
-<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModal"
+<div class="modal fade" id="reportModal" tabindex="-1" role="dialog"
+     aria-labelledby="reportModal"
      aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -14,20 +15,27 @@
                     <div class="form-group position-relative">
                         {{ report_form.body.label_tag }}
                         {{ report_form.body }}
-                        <div class="invalid-tooltip" id="body_tooltip_id">این فیلد لازم است و باید بیش‌تر از ۳ حرف
+                        <div class="invalid-tooltip" id="body_tooltip_id">این
+                            فیلد لازم است و باید بیش‌تر از ۳ حرف
                             باشد
                         </div>
                     </div>
                     <div class="form-group position-relative">
                         {{ report_form.reporter.label_tag }}
                         {{ report_form.reporter }}
-                        <div class="invalid-tooltip" id="reporter_tooltip_id">ایمیل معتبر وارد کنید</div>
+                        <div class="invalid-tooltip" id="reporter_tooltip_id">
+                            ایمیل معتبر وارد کنید
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     {{ report_form.page }}
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                    <button type="submit" class="btn btn-primary" id="submitReport">ارسال</button>
+                    <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">بستن
+                    </button>
+                    <button type="submit" class="btn btn-primary"
+                            id="submitReport">ارسال
+                    </button>
                 </div>
             </form>
         </div>

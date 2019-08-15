@@ -103,16 +103,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation'
+                '.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation'
+                '.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation'
+                '.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation'
+                '.NumericPasswordValidator',
     },
 ]
 
@@ -188,10 +192,10 @@ SERVER_EMAIL = ''
 
 SITE_CONTEXT = {
     'GOOGLE_ANALYTICS_ID': os.environ.get('GOOGLE_ANALYTICS_ID'),
-    'SITE_SLOGAN_1': _(''),
-    'SITE_SLOGAN_2': _(''),
-    'KEYWORDS': _(''),
-    'DESCRIPTION': _(''),
+    'SLOGAN_1': _(''),
+    'SLOGAN_2': _(''),
+    'META_KEYWORDS': _(''),
+    'META_DESCRIPTION': _(''),
     'CONTACT_EMAIL': ''
 }
 

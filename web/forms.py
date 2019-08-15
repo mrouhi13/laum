@@ -24,7 +24,6 @@ class SearchForm(forms.Form):
 
 
 class PageForm(forms.ModelForm):
-
     class Meta:
         model = Page
         fields = ['title', 'subtitle', 'event', 'content', 'image',
@@ -61,7 +60,8 @@ class PageForm(forms.ModelForm):
         }
         self.fields['content'].widget.attrs = {
             'class': 'form-control', 'placeholder': _(
-                'Charles Michael Palahniuk, who describes his work as transgressional fiction. '
+                'Charles Michael Palahniuk, '
+                'who describes his work as transgressional fiction. '
                 'He is the author of the award-winning novel Fight Club, '
                 'which also was made into a popular film of the same name.'),
             'pattern': '.{0}|.{3,64}',
@@ -83,7 +83,6 @@ class PageForm(forms.ModelForm):
 
 
 class ReportForm(forms.ModelForm):
-
     class Meta:
         model = Report
         fields = ['page', 'body', 'reporter']

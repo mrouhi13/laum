@@ -62,8 +62,9 @@ class PageAdmin(admin.ModelAdmin):
         page_link = reverse(f'web:page-detail', args=[obj.pid])
         reports_link = f'{reverse("admin:web_report_changelist")}?q={obj.pid}'
         reports = _('reports')
-        return mark_safe(f'<a href="{page_link}" target="_blank">{obj.pid}</a> /'
-                         f' <a href="{reports_link}" target="_blank">{reports}</a>')
+        return mark_safe(
+            f'<a href="{page_link}" target="_blank">{obj.pid}</a> /'
+            f' <a href="{reports_link}" target="_blank">{reports}</a>')
 
     links.short_description = _('public ID')
 
@@ -89,8 +90,11 @@ class PageAdmin(admin.ModelAdmin):
 class ReportAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
     fieldsets = [
-        [_('Main info'), {'fields': ['view_page', 'send_email', 'refid', 'body', 'description', 'status']}],
-        [_('Important dates'), {'fields': ['jalali_updated_on', 'jalali_created_on']}]]
+        [_('Main info'), {
+            'fields': ['view_page', 'send_email', 'refid', 'body',
+                       'description', 'status']}],
+        [_('Important dates'),
+         {'fields': ['jalali_updated_on', 'jalali_created_on']}]]
     list_display = ['page', 'reporter', 'status', 'jalali_updated_on',
                     'jalali_created_on', 'refid']
     list_filter = ['status', 'updated_on', 'created_on']
@@ -98,7 +102,8 @@ class ReportAdmin(admin.ModelAdmin):
                      'refid', 'description']
 
     def view_page(self, obj):
-        link_to_admin_view = reverse(f'admin:web_page_change', args=[obj.page.pk])
+        link_to_admin_view = reverse(f'admin:web_page_change',
+                                     args=[obj.page.pk])
         link_to_site = reverse(f'web:page-detail', args=[obj.page.pid])
         view_page = _('view page')
         return mark_safe(
@@ -152,9 +157,10 @@ class ReportAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     readonly_fields = ['jalali_updated_on', 'jalali_created_on']
-    fieldsets = [(_('Main info'), {'fields': ['name', 'keyword', 'is_active']}),
-                 (_('Important dates'), {'fields': ['jalali_updated_on',
-                                                    'jalali_created_on']})]
+    fieldsets = [
+        (_('Main info'), {'fields': ['name', 'keyword', 'is_active']}),
+        (_('Important dates'), {'fields': ['jalali_updated_on',
+                                           'jalali_created_on']})]
     list_display = ['name', 'keyword', 'is_active', 'jalali_updated_on',
                     'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
