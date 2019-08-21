@@ -123,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'fa-ir'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
@@ -203,9 +203,11 @@ SITE_ID = 1
 
 # Application settings
 
+GID_PREFIX = 'lmg'
+
 PID_PREFIX = 'lmp'
 
-REFID_PREFIX = 'lmr'
+RID_PREFIX = 'lmr'
 
 ADMINS = []
 

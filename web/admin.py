@@ -5,8 +5,9 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from templated_mail.mail import BaseEmailMessage
 
-from web.models import User, Page, Tag, Report
-from web.persian_editors import PersianEditors
+from .helpers import get_active_language
+from .models import User, Group, Page, Tag, Report
+from .persian_editors import PersianEditors
 
 admin.site.site_header = _('Laum Project administration')
 admin.site.site_title = _('Laum Project administration')
@@ -37,6 +38,24 @@ class UserAdmin(UserAdmin):
     readonly_fields = ['last_login', 'date_joined']
 
 
+@admin.register(Group)
+class GroupAdmin(admin.ModelAdmin):
+    date_hierarchy = 'created_on'
+    readonly_fields = ['gid', 'jalali_updated_on', 'jalali_created_on']
+    fieldsets = [
+        [_('Main info'),
+         {'fields': ['gid']}],
+        [_('Important dates'), {'fields': ['jalali_updated_on',
+                                           'jalali_created_on']}]]
+    list_display = ['gid', 'jalali_updated_on',
+                    'jalali_created_on']
+    list_filter = ['updated_on', 'created_on']
+    search_fields = ['gid']
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
@@ -44,8 +63,9 @@ class PageAdmin(admin.ModelAdmin):
                        'jalali_created_on']
     fieldsets = [
         [_('Main info'),
-         {'fields': ['links', 'title', 'subtitle', 'content',
-                     'event', 'image', 'image_tag', 'image_caption']}],
+         {'fields': ['group', 'links', 'title', 'subtitle',
+                     'content', 'event', 'image', 'image_tag',
+                     'image_caption']}],
         [_('Further info'), {'fields': ['tags', 'reference', 'website',
                                         'author', 'is_active']}],
         [_('Important dates'), {'fields': ['jalali_updated_on',
@@ -53,8 +73,8 @@ class PageAdmin(admin.ModelAdmin):
     list_display = ['title', 'author', 'is_active', 'jalali_updated_on',
                     'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
-    search_fields = ['pid', 'title', 'content', 'event', 'image_caption',
-                     'tags__name', 'tags__keyword', 'website',
+    search_fields = ['group', 'pid', 'title', 'content', 'event',
+                     'image_caption', 'tags__name', 'tags__keyword', 'website',
                      'author', 'reference']
     filter_horizontal = ['tags']
 
@@ -72,6 +92,9 @@ class PageAdmin(admin.ModelAdmin):
         return mark_safe(f'<img src="{obj.image.url}" width=150 height=150>')
 
     image_tag.short_description = _('image preview')
+
+    def get_queryset(self, request):
+        return Page.objects.filter(language=get_active_language())
 
     def save_model(self, request, obj, form, change):
         editor = PersianEditors(['space', 'number',
@@ -91,15 +114,15 @@ class ReportAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
     fieldsets = [
         [_('Main info'), {
-            'fields': ['view_page', 'send_email', 'refid', 'body',
+            'fields': ['view_page', 'send_email', 'rid', 'body',
                        'description', 'status']}],
         [_('Important dates'),
          {'fields': ['jalali_updated_on', 'jalali_created_on']}]]
     list_display = ['page', 'reporter', 'status', 'jalali_updated_on',
-                    'jalali_created_on', 'refid']
+                    'jalali_created_on', 'rid']
     list_filter = ['status', 'updated_on', 'created_on']
-    search_fields = ['page__pid', 'refid', 'body', 'reporter',
-                     'refid', 'description']
+    search_fields = ['page__pid', 'rid', 'body', 'reporter', 'rid',
+                     'description']
 
     def view_page(self, obj):
         link_to_admin_view = reverse(f'admin:web_page_change',
@@ -118,11 +141,14 @@ class ReportAdmin(admin.ModelAdmin):
     send_email.short_description = _('reporter email')
 
     def get_readonly_fields(self, request, obj=None):
-        self.readonly_fields = ['view_page', 'body', 'refid', 'send_email',
+        self.readonly_fields = ['view_page', 'body', 'rid', 'send_email',
                                 'jalali_updated_on', 'jalali_created_on']
         if obj and not obj.status == Report.STATUS_IS_PENDING:
             self.readonly_fields.extend(['description', 'status'])
         return self.readonly_fields
+
+    def get_queryset(self, request):
+        return Report.objects.filter(language=get_active_language())
 
     def save_model(self, request, obj, form, change):
         is_first_change = False
@@ -132,15 +158,15 @@ class ReportAdmin(admin.ModelAdmin):
             is_first_change = True
 
         if is_first_change and not form.cleaned_data['description']:
-            obj.description = '-'
+            obj.description = _('-')
 
-        editor = PersianEditors(['space'])
+        editor = PersianEditors(
+            ['space', 'number', 'arabic', 'punctuation_marks'])
+        obj.description = editor.run(obj.description)
+
+        editor.set_editors(['space'])
         editor.escape_return = False
         obj.body = editor.run(obj.body)
-
-        editor.set_editors(['space', 'number', 'arabic', 'punctuation_marks'])
-        editor.escape_return = True
-        obj.description = editor.run(obj.description)
 
         super().save_model(request, obj, form, change)
 
@@ -166,3 +192,6 @@ class TagAdmin(admin.ModelAdmin):
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['name', 'keyword']
     prepopulated_fields = {'keyword': ['name']}
+
+    def get_queryset(self, request):
+        return Tag.objects.filter(language=get_active_language())
