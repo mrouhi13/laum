@@ -2,7 +2,7 @@ from django import forms
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 
-from web.models import Page, Report
+from .models import Page, Report
 
 
 class SearchForm(forms.Form):

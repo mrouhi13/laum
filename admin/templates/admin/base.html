@@ -49,10 +49,10 @@
             {% block usertools %}
                 {% if has_permission %}
                     <div id="user-tools">
-                        {% if LANGUAGE_CODE in 'fa,fa-ir' %}
-                            <a href="{{ request|switch_i18n:'en' }}">English</a> |
-                        {% else %}
+                        {% if LANGUAGE_CODE in 'en,en-us' %}
                             <a href="{{ request|switch_i18n:'fa' }}">فارسی</a> |
+                        {% elif LANGUAGE_CODE in 'fa,fa-ir' %}
+                            <a href="{{ request|switch_i18n:'en' }}">English</a> |
                         {% endif %}
                         {% block welcome-msg %}
                             {% trans 'Welcome,' %}

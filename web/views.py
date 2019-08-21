@@ -54,13 +54,14 @@ class AjaxableResponseMixin:
 
             # Send email notification to user
             email_template = f'emails/new_{object_type}.html'
-            to = form.cleaned_data.get('reporter') or \
-                 form.cleaned_data.get('author')
+            to = form.cleaned_data.get('reporter') or form.cleaned_data.get(
+                'author')
             message = BaseEmailMessage(self.request, context, email_template)
             message.send([to])
 
             # Send email notification to admins
-            message.template_name = f'emails/new_{object_type}_notification.html'
+            message.template_name = \
+                f'emails/new_{object_type}_notification.html'
             message.send([a[1] for a in settings.ADMINS])
 
             return JsonResponse({})
@@ -113,7 +114,7 @@ class PageDetailView(DetailView):
 
     def get_object(self, queryset=None):
         pid = self.kwargs.get(self.slug_url_kwarg)
-        return get_object_or_404(self.model, pid=pid, is_active=True)
+        return get_object_or_404(self.model.objects.all_active(), pid=pid)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         pid = self.kwargs.get(self.slug_url_kwarg)

@@ -1,28 +1,30 @@
-import random
-import string
-
 from django.conf import settings
-from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-from django.contrib.postgres.aggregates import StringAgg
-from django.contrib.postgres.search import (SearchQuery, SearchRank,
-                                            SearchVector)
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
-from .helpers import swap_prefix
+from .helpers import swap_prefix, id_generator, get_active_language
+from .managers import UserManager, PageManager, GroupManager
 from .templatetags.web_extras import (convert_date_to_jalali as to_jalali,
                                       convert_digits_to_persian as to_persian)
 
 
-def generate_pid(n=12):
+def generate_gid():
+    new_gid = None
+    while not new_gid:
+        postfix_string = id_generator()
+        new_gid = f'{settings.GID_PREFIX}_{postfix_string}'
+        if Group.objects.is_gid_exist(new_gid):
+            new_gid = None
+    return new_gid
+
+
+def generate_pid():
     new_pid = None
     while not new_pid:
-        postfix_string = ''.join(
-            random.choices(string.ascii_letters + string.digits, k=n)
-        )
+        postfix_string = id_generator()
         new_pid = f'{settings.PID_PREFIX}_{postfix_string}'
         if Page.objects.is_pid_exist(new_pid):
             new_pid = None
@@ -30,41 +32,11 @@ def generate_pid(n=12):
 
 
 @receiver(post_save, sender='web.Report')
-def generate_refid(sender, instance=None, created=False, **kwargs):
+def generate_rid(sender, instance=None, created=False, **kwargs):
     if created:
-        instance.refid = swap_prefix(f'{instance.page.pid}_{instance.pk}',
-                                     settings.REFID_PREFIX)
+        instance.rid = swap_prefix(f'{instance.page.pid}_{instance.pk}',
+                                   settings.RID_PREFIX)
         instance.save()
-
-
-class UserManager(BaseUserManager):
-    use_in_migrations = True
-
-    def _create_user(self, email, password, **extra_fields):
-        """
-        Create and save a user with the given email and password.
-        """
-        if not email:
-            raise ValueError(_('The given email must be set'))
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_user(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, **extra_fields)
-
-    def create_superuser(self, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError(_('Superuser must have is_staff=True.'))
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError(_('Superuser must have is_superuser=True.'))
-        return self._create_user(email, password, **extra_fields)
 
 
 class User(AbstractUser):
@@ -85,6 +57,11 @@ class User(AbstractUser):
 
 
 class BaseModel(models.Model):
+    LANGUAGE_CHOICES = settings.LANGUAGES
+
+    language = models.CharField(_('language'), max_length=7, db_index=True,
+                                choices=LANGUAGE_CHOICES,
+                                default=get_active_language)
     updated_on = models.DateTimeField(_('updated on'), auto_now=True)
     created_on = models.DateTimeField(_('created on'), auto_now_add=True)
 
@@ -106,43 +83,28 @@ class BaseModel(models.Model):
         abstract = True
 
 
-class PageManager(models.Manager):
+class Group(BaseModel):
+    language = None
+    gid = models.CharField(_('global ID'), max_length=16, unique=True,
+                           default=generate_gid, db_index=True)
 
-    def search(self, text):
-        vector = SearchVector('title', weight='A') + \
-                 SearchVector('subtitle', weight='B') + \
-                 SearchVector(StringAgg('tags__name', delimiter=' '),
-                              weight='C') + \
-                 SearchVector('content', 'event', 'image_caption', weight='D')
-        query = SearchQuery(text, search_type='plain')
-        rank = SearchRank(vector, query)
-        return self.get_queryset().annotate(
-            rank=rank).filter(rank__gte=0.01, is_active=True).order_by('-rank')
+    objects = GroupManager()
 
-    def get_random_pages(self):
-        all_pages = self.filter(is_active=True)
-        pages_sample_list = list(all_pages.values_list('pk', flat=True))
-        max_random_page_count = 3  # TODO: Make this variable dynamic.
+    class Meta:
+        verbose_name = _('group')
+        verbose_name_plural = _('groups')
 
-        if len(pages_sample_list) < 3:
-            max_random_page_count = len(pages_sample_list)
-
-        random_pages_id = random.sample(pages_sample_list,
-                                        max_random_page_count)
-        random_pages_list = list(all_pages.filter(pk__in=random_pages_id))
-
-        random.shuffle(random_pages_list)
-
-        return random_pages_list
-
-    def is_pid_exist(self, pid):
-        return self.filter(pid=pid).exists()
+    def __str__(self):
+        return self.gid
 
 
 class Page(BaseModel):
-    tags = models.ManyToManyField('Tag', verbose_name=_('tags'),
+    group = models.ForeignKey('Group', to_field='gid', verbose_name=_('group'),
+                              on_delete=models.CASCADE, related_name='pages',
+                              null=True, blank=True)
+    tags = models.ManyToManyField('Tag', verbose_name=_('tags'), blank=True,
                                   related_name='tags',
-                                  related_query_name='tag', blank=True)
+                                  related_query_name='tag')
     pid = models.CharField(_('public ID'), max_length=16, unique=True,
                            default=generate_pid, db_index=True)
     title = models.CharField(_('title'), max_length=128, db_index=True)
@@ -163,19 +125,20 @@ class Page(BaseModel):
                                  help_text=_(
                                      'The name of the book, newspaper, '
                                      'magazine or website address, blog '
-                                     'and ... along with the author\'s name.'))
+                                     'and... along with the author\'s name.'))
     website = models.URLField(_('website'), blank=True)
     author = models.EmailField(_('author email'), blank=True)
     is_active = models.BooleanField(_('active status'), default=False,
-                                    help_text=_('Designate whether the page '
-                                                'is visible on the list of '
-                                                'results.'))
+                                    help_text=_(
+                                        'Designate whether this page can '
+                                        'include on the result list.'))
 
     objects = PageManager()
 
     class Meta:
         verbose_name = _('page')
         verbose_name_plural = _('pages')
+        unique_together = ('group', 'language')
 
     def __str__(self):
         return self.title
@@ -191,10 +154,10 @@ class Report(BaseModel):
         (STATUS_IS_DENIED, _('Denied')),
     )
 
-    page = models.ForeignKey('Page', to_field='pid', on_delete=models.CASCADE,
-                             related_name='reports', verbose_name=_('page'))
-    refid = models.CharField(_('reference ID'), max_length=32, unique=True,
-                             null=True)
+    page = models.ForeignKey('Page', to_field='pid', verbose_name=_('page'),
+                             on_delete=models.CASCADE, related_name='reports')
+    rid = models.CharField(_('reference ID'), max_length=32, unique=True,
+                           null=True, editable=False)
     body = models.TextField(_('body'), max_length=1024)
     reporter = models.EmailField(_('reporter email'))
     description = models.TextField(_('description'), max_length=1024,
@@ -222,8 +185,8 @@ class Tag(BaseModel):
     keyword = models.SlugField(_('keyword'), allow_unicode=True, db_index=True)
     is_active = models.BooleanField(_('active status'), default=True,
                                     help_text=_(
-                                        'Designate whether '
-                                        'the tag can be used.'))
+                                        'Designate whether this tag can '
+                                        'include on the result list.'))
 
     class Meta:
         verbose_name = _('tag')

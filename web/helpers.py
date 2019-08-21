@@ -1,3 +1,10 @@
+import random
+import string
+
+from django.conf import settings
+from django.utils.translation import get_language
+
+
 def get_jalali_month_name(month_number):
     try:
         if month_number is not None:
@@ -19,8 +26,19 @@ def get_jalali_month_name(month_number):
     return None
 
 
-def swap_prefix(string, new, delimiter='_'):
-    new_string_exploded = string.split(delimiter)
+def swap_prefix(string_, new, delimiter='_'):
+    new_string_exploded = string_.split(delimiter)
     new_string_exploded[0] = new
     new_string = delimiter.join(new_string_exploded)
     return new_string
+
+
+def id_generator(n=12):
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=n))
+
+
+def get_active_language():
+    language = get_language()
+    if not language:
+        language = settings.LANGUAGE_CODE
+    return language.split('-')[0]
