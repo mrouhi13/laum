@@ -7,7 +7,25 @@ from django.contrib.postgres.search import (SearchQuery, SearchRank,
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from .helpers import get_active_language
+from .helpers import get_active_lang
+
+
+class ActiveLanguageQueryset(models.QuerySet):
+    def active_language(self):
+        return self.filter(language=get_active_lang())
+
+
+class PageQueryset(ActiveLanguageQueryset):
+    def all_active(self):
+        return self.filter(is_active=True, language=get_active_lang())
+
+
+class ReportQueryset(ActiveLanguageQueryset):
+    pass
+
+
+class TagQueryset(ActiveLanguageQueryset):
+    pass
 
 
 class UserManager(BaseUserManager):
@@ -40,10 +58,23 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
+class GroupManager(models.Manager):
+
+    def is_gid_exist(self, gid):
+        return self.filter(gid=gid).exists()
+
+
 class PageManager(models.Manager):
 
+    def get_queryset(self):
+        return PageQueryset(model=self.model, using=self._db,
+                            hints=self._hints)
+
+    def active_language(self):
+        return self.get_queryset().active_language()
+
     def all_active(self):
-        return self.filter(is_active=True, language=get_active_language())
+        return self.get_queryset().all_active()
 
     def search(self, text):
         vector = SearchVector('title', weight='A') + \
@@ -76,7 +107,20 @@ class PageManager(models.Manager):
         return self.filter(pid=pid).exists()
 
 
-class GroupManager(models.Manager):
+class ReportManager(models.Manager):
 
-    def is_gid_exist(self, gid):
-        return self.filter(gid=gid).exists()
+    def get_queryset(self):
+        return PageQueryset(model=self.model, using=self._db,
+                            hints=self._hints)
+
+    def active_language(self):
+        return self.get_queryset().active_language()
+
+
+class TagManager(models.Manager):
+
+    def get_queryset(self):
+        return TagQueryset(model=self.model, using=self._db, hints=self._hints)
+
+    def active_language(self):
+        return self.get_queryset().active_language()
