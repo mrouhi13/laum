@@ -14,7 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import path, include
@@ -31,21 +30,3 @@ handler400 = views.bad_request
 handler403 = views.permission_denied
 handler404 = views.page_not_found
 handler500 = views.server_error
-
-
-def switch_lang_code(path_, language):
-    lang_codes = [c for (c, name) in settings.LANGUAGES]
-
-    if path_ == '':
-        raise Exception('URL path for language switch is empty')
-    elif path_[0] != '/':
-        raise Exception('URL path for language switch does not start with "/"')
-    elif language not in lang_codes:
-        raise Exception('%s is not a supported language code' % language)
-
-    parts = path_.split('/')
-    if parts[1] in lang_codes:
-        parts[1] = language
-    else:
-        parts[0] = '/' + language
-    return '/'.join(parts)

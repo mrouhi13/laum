@@ -9,7 +9,8 @@
     {% block extrastyle %}{% endblock %}
     {% if LANGUAGE_BIDI %}
         <link rel="stylesheet" type="text/css"
-              href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}"/>{% endif %}
+              href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static "admin/css/custom-rtl.css" %}"/>{% endif %}
     {% block extrahead %}{% endblock %}
     {% block responsive %}
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -49,11 +50,6 @@
             {% block usertools %}
                 {% if has_permission %}
                     <div id="user-tools">
-                        {% if LANGUAGE_CODE in 'en,en-us' %}
-                            <a href="{{ request|switch_i18n:'fa' }}">فارسی</a> |
-                        {% elif LANGUAGE_CODE in 'fa,fa-ir' %}
-                            <a href="{{ request|switch_i18n:'en' }}">English</a> |
-                        {% endif %}
                         {% block welcome-msg %}
                             {% trans 'Welcome,' %}
                             <strong>{% firstof user.get_short_name user.get_username %}</strong>.
@@ -72,6 +68,12 @@
                                 <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
                             {% endif %}
                             <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+                            |
+                            {% if LANGUAGE_CODE in 'en,en-us' %}
+                                <a href="{{ request|switch_i18n:'fa' }}">فارسی</a>
+                            {% elif LANGUAGE_CODE in 'fa,fa-ir' %}
+                                <a href="{{ request|switch_i18n:'en' }}">English</a>
+                            {% endif %}
                         {% endblock %}
                     </div>
                 {% endif %}

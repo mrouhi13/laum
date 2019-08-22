@@ -146,6 +146,10 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Locale settings
+
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+
 # User model
 
 AUTH_USER_MODEL = 'web.User'
@@ -245,5 +249,5 @@ LOGGING = {
 
 LANGUAGES = [
     ('en', _('English')),
-    ('fa', _('فارسی'))
+    ('fa', _('Persian'))
 ]
