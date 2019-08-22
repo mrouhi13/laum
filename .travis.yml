@@ -14,13 +14,11 @@ env:
     - PIPENV_VENV_IN_PROJECT=1
     - PIPENV_IGNORE_VIRTUALENVS=1
     - PIPENV_VERBOSITY=-1
-    - DATABASE_NAME=laumproject
+    - DATABASE_NAME=testdb
     - DATABASE_USER=postgres
     - DATABASE_PASSWORD=
     - SECRET_KEY=_
     - GOOGLE_ANALYTICS_ID=UA-111111111
-    - EMAIL_HOST_USER='noreply@laum.ir'
-    - EMAIL_HOST_PASSWORD=1234QWer@
 
 # command to install dependencies
 before_script:
