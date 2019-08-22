@@ -1,11 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.urls import reverse
-from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from templated_mail.mail import BaseEmailMessage
 
-from .helpers import get_active_language
 from .models import User, Group, Page, Tag, Report
 from .persian_editors import PersianEditors
 
@@ -14,28 +12,85 @@ admin.site.site_title = _('Laum Project administration')
 admin.site.index_title = _('Dashboard')
 
 
+class BaseModelAdmin(admin.ModelAdmin):
+    object_tools = ()
+
+    def get_object_tools(self, request):
+        """
+        Return a sequence containing the fields to be displayed on the
+        changelist.
+        """
+        return self.object_tools
+
+    def prepare_object_tools(self, obj):
+        object_tools_link = {}
+        for object_tool in self.object_tools:
+            callable_obj = getattr(self, object_tool)
+            url = callable_obj(obj)
+            if url:
+                if hasattr(callable_obj, 'short_description'):
+                    object_tools_link.update({
+                        callable_obj.short_description: url
+                    })
+                else:
+                    object_tools_link.update({
+                        callable_obj.__str__(): url
+                    })
+        return object_tools_link
+
+    def render_change_form(self, request, context, add=False, change=False,
+                           form_url='', obj=None):
+        context.update({
+            'object_tools': self.prepare_object_tools(obj)
+        })
+        return super().render_change_form(request, context, add, change,
+                                          form_url, obj)
+
+    def get_queryset(self, request):
+        return self.model.objects.active_language()
+
+
 @admin.register(User)
 class UserAdmin(UserAdmin):
     date_hierarchy = 'date_joined'
-    fieldsets = (
-        (None, {'fields': ['email', 'password']}),
-        (_('Personal info'), {'fields': ['first_name', 'last_name']}),
-        (_('Permissions'), {
+    fieldsets = [
+        [None, {
+            'fields': ['email', 'password']
+        }],
+        [_('Personal info'), {
+            'fields': ['first_name', 'last_name']
+        }],
+        [_('Permissions'), {
+            'classes': ['collapse'],
             'fields': ['is_active', 'is_staff', 'is_superuser', 'groups',
-                       'user_permissions'],
-        }),
-        (_('Important dates'), {'fields': ['last_login', 'date_joined']}),
-    )
+                       'user_permissions']
+        }],
+        [_('Important dates'), {
+            'fields': ['last_login', 'date_joined']
+        }],
+    ]
     add_fieldsets = (
         (None, {
             'classes': ['wide'],
             'fields': ['email', 'password1', 'password2'],
         }),
     )
-    list_display = ['email', 'first_name', 'last_name', 'is_staff']
+    list_display = ['email', 'first_name', 'last_name', 'is_staff',
+                    'is_superuser', 'is_active']
     search_fields = ['first_name', 'last_name', 'email']
-    ordering = ['email']
+    ordering = []
     readonly_fields = ['last_login', 'date_joined']
+    autocomplete_fields = ['groups']
+
+
+class PageInlineAdmin(admin.TabularInline):
+    model = Page
+    readonly_fields = ['pid', 'language', 'jalali_created_on']
+    fields = ['pid', 'language', 'jalali_created_on', 'is_active']
+    show_change_link = True
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(Group)
@@ -43,58 +98,80 @@ class GroupAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
     readonly_fields = ['gid', 'jalali_updated_on', 'jalali_created_on']
     fieldsets = [
-        [_('Main info'),
-         {'fields': ['gid']}],
-        [_('Important dates'), {'fields': ['jalali_updated_on',
-                                           'jalali_created_on']}]]
-    list_display = ['gid', 'jalali_updated_on',
-                    'jalali_created_on']
+        [_('Main info'), {
+            'fields': ['gid']
+        }],
+        [_('Important dates'), {
+            'fields': ['jalali_updated_on', 'jalali_created_on']
+        }]
+    ]
+    list_display = ['title', 'jalali_updated_on', 'jalali_created_on',
+                    'in_use']
     list_filter = ['updated_on', 'created_on']
-    search_fields = ['gid']
+    search_fields = ['gid', 'pages__pid', 'pages__title']
+    inlines = [PageInlineAdmin]
 
-    def has_change_permission(self, request, obj=None):
-        return False
+    def in_use(self, obj):
+        return bool(obj.pages.all().count())
+
+    in_use.boolean = True
+    in_use.short_description = _('In use?')
+
+    def title(self, obj):
+        return obj.__str__()
+
+    title.short_description = _('Title')
 
 
 @admin.register(Page)
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(BaseModelAdmin):
     date_hierarchy = 'created_on'
-    readonly_fields = ['links', 'image_tag', 'jalali_updated_on',
-                       'jalali_created_on']
+    readonly_fields = ['pid', 'jalali_updated_on', 'jalali_created_on']
     fieldsets = [
-        [_('Main info'),
-         {'fields': ['group', 'links', 'title', 'subtitle',
-                     'content', 'event', 'image', 'image_tag',
-                     'image_caption']}],
-        [_('Further info'), {'fields': ['tags', 'reference', 'website',
-                                        'author', 'is_active']}],
-        [_('Important dates'), {'fields': ['jalali_updated_on',
-                                           'jalali_created_on']}]]
-    list_display = ['title', 'author', 'is_active', 'jalali_updated_on',
-                    'jalali_created_on']
+        [_('Main info'), {
+            'fields': ['pid', 'group', 'title', 'subtitle', 'content', 'event',
+                       'image', 'image_caption']
+        }],
+        [_('Further info'), {
+            'classes': ['collapse'],
+            'fields': ['tags', 'reference', 'website', 'author', 'is_active']
+        }],
+        [_('Important dates'), {
+            'fields': ['jalali_updated_on', 'jalali_created_on']
+        }]
+    ]
+    list_display = ['title', 'author', 'jalali_created_on', 'has_group',
+                    'has_image', 'is_active']
     list_filter = ['is_active', 'updated_on', 'created_on']
-    search_fields = ['group', 'pid', 'title', 'content', 'event',
+    search_fields = ['group__gid', 'pid', 'title', 'content', 'event',
                      'image_caption', 'tags__name', 'tags__keyword', 'website',
                      'author', 'reference']
-    filter_horizontal = ['tags']
+    autocomplete_fields = ['group', 'tags']
+    object_tools = ['link_to_reports', 'link_to_group']
 
-    def links(self, obj):
-        page_link = reverse(f'web:page-detail', args=[obj.pid])
-        reports_link = f'{reverse("admin:web_report_changelist")}?q={obj.pid}'
-        reports = _('reports')
-        return mark_safe(
-            f'<a href="{page_link}" target="_blank">{obj.pid}</a> /'
-            f' <a href="{reports_link}" target="_blank">{reports}</a>')
+    def has_group(self, obj):
+        return bool(obj.group)
 
-    links.short_description = _('public ID')
+    has_group.boolean = True
+    has_group.short_description = _('Has group?')
 
-    def image_tag(self, obj):
-        return mark_safe(f'<img src="{obj.image.url}" width=150 height=150>')
+    def has_image(self, obj):
+        return bool(obj.image)
 
-    image_tag.short_description = _('image preview')
+    has_image.boolean = True
+    has_image.short_description = _('Has image?')
 
-    def get_queryset(self, request):
-        return Page.objects.filter(language=get_active_language())
+    def link_to_reports(self, obj):
+        return f'{reverse("admin:web_report_changelist")}?q={obj.pid}'
+
+    link_to_reports.short_description = _('View reports')
+
+    def link_to_group(self, obj):
+        if obj.group:
+            return reverse('admin:web_group_change', args=[obj.group.pk])
+        return None
+
+    link_to_group.short_description = _('Go to group')
 
     def save_model(self, request, obj, form, change):
         editor = PersianEditors(['space', 'number',
@@ -110,45 +187,41 @@ class PageAdmin(admin.ModelAdmin):
 
 
 @admin.register(Report)
-class ReportAdmin(admin.ModelAdmin):
+class ReportAdmin(BaseModelAdmin):
     date_hierarchy = 'created_on'
     fieldsets = [
         [_('Main info'), {
-            'fields': ['view_page', 'send_email', 'rid', 'body',
-                       'description', 'status']}],
+            'fields': ['page', 'rid', 'reporter', 'body']
+        }],
+        [_('Supervise info'), {
+            'fields': ['description', 'status']
+        }],
         [_('Important dates'),
-         {'fields': ['jalali_updated_on', 'jalali_created_on']}]]
-    list_display = ['page', 'reporter', 'status', 'jalali_updated_on',
-                    'jalali_created_on', 'rid']
+         {'fields': ['jalali_updated_on', 'jalali_created_on']
+          }]
+    ]
+    list_display = ['page', 'reporter', 'status', 'jalali_created_on']
     list_filter = ['status', 'updated_on', 'created_on']
-    search_fields = ['page__pid', 'rid', 'body', 'reporter', 'rid',
-                     'description']
+    search_fields = ['page__pid', 'page__title', 'rid', 'body', 'reporter',
+                     'rid', 'description']
+    object_tools = ['link_to_page', 'send_email']
 
-    def view_page(self, obj):
-        link_to_admin_view = reverse(f'admin:web_page_change',
-                                     args=[obj.page.pk])
-        link_to_site = reverse(f'web:page-detail', args=[obj.page.pid])
-        view_page = _('view page')
-        return mark_safe(
-            f'<a href="{link_to_admin_view}" target="_blank">{obj.page}</a> / '
-            f'<a href="{link_to_site}" target="_blank">{view_page}</a>')
+    def link_to_page(self, obj):
+        return reverse('admin:web_page_change', args=[obj.page.pk])
 
-    view_page.short_description = _('page')
+    link_to_page.short_description = _('Go to page')
 
     def send_email(self, obj):
-        return mark_safe(f'<a href="mailto:{obj.reporter}">{obj.reporter}</a>')
+        return f'mailto:{obj.reporter}'
 
-    send_email.short_description = _('reporter email')
+    send_email.short_description = _('Send email')
 
     def get_readonly_fields(self, request, obj=None):
-        self.readonly_fields = ['view_page', 'body', 'rid', 'send_email',
+        self.readonly_fields = ['page', 'rid', 'body', 'reporter',
                                 'jalali_updated_on', 'jalali_created_on']
         if obj and not obj.status == Report.STATUS_IS_PENDING:
             self.readonly_fields.extend(['description', 'status'])
         return self.readonly_fields
-
-    def get_queryset(self, request):
-        return Report.objects.filter(language=get_active_language())
 
     def save_model(self, request, obj, form, change):
         is_first_change = False
@@ -181,17 +254,26 @@ class ReportAdmin(admin.ModelAdmin):
 
 
 @admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BaseModelAdmin):
     readonly_fields = ['jalali_updated_on', 'jalali_created_on']
     fieldsets = [
         (_('Main info'), {'fields': ['name', 'keyword', 'is_active']}),
         (_('Important dates'), {'fields': ['jalali_updated_on',
                                            'jalali_created_on']})]
-    list_display = ['name', 'keyword', 'is_active', 'jalali_updated_on',
+    list_display = ['name', 'keyword', 'in_use', 'is_active',
                     'jalali_created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['name', 'keyword']
     prepopulated_fields = {'keyword': ['name']}
+    object_tools = ['link_to_pages']
 
-    def get_queryset(self, request):
-        return Tag.objects.filter(language=get_active_language())
+    def in_use(self, obj):
+        return bool(obj.pages.all().count())
+
+    in_use.boolean = True
+    in_use.short_description = _('In use?')
+
+    def link_to_pages(self, obj):
+        return f'{reverse("admin:web_page_changelist")}?q={obj.name}'
+
+    link_to_pages.short_description = _('Pages')
