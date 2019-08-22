@@ -3,10 +3,12 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from .helpers import swap_prefix, id_generator, get_active_language
-from .managers import UserManager, PageManager, GroupManager
+from .helpers import swap_prefix, id_generator, get_active_lang
+from .managers import UserManager, PageManager, GroupManager, ReportManager, \
+    TagManager
 from .templatetags.web_extras import (convert_date_to_jalali as to_jalali,
                                       convert_digits_to_persian as to_persian)
 
@@ -55,13 +57,17 @@ class User(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
+    def __str__(self):
+        full_name = self.get_full_name()
+        return full_name if full_name else self.get_username()
+
 
 class BaseModel(models.Model):
     LANGUAGE_CHOICES = settings.LANGUAGES
 
     language = models.CharField(_('language'), max_length=7, db_index=True,
                                 choices=LANGUAGE_CHOICES,
-                                default=get_active_language)
+                                default=get_active_lang)
     updated_on = models.DateTimeField(_('updated on'), auto_now=True)
     created_on = models.DateTimeField(_('created on'), auto_now_add=True)
 
@@ -85,8 +91,8 @@ class BaseModel(models.Model):
 
 class Group(BaseModel):
     language = None
-    gid = models.CharField(_('global ID'), max_length=16, unique=True,
-                           default=generate_gid, db_index=True)
+    gid = models.CharField(_('global ID'), max_length=16, primary_key=True,
+                           default=generate_gid, db_index=True, editable=False)
 
     objects = GroupManager()
 
@@ -95,15 +101,16 @@ class Group(BaseModel):
         verbose_name_plural = _('groups')
 
     def __str__(self):
-        return self.gid
+        page = self.pages.filter(language=get_active_lang()).first()
+        return page.title if page else self.gid
 
 
 class Page(BaseModel):
-    group = models.ForeignKey('Group', to_field='gid', verbose_name=_('group'),
+    group = models.ForeignKey('Group', verbose_name=_('group'),
                               on_delete=models.CASCADE, related_name='pages',
                               null=True, blank=True)
     tags = models.ManyToManyField('Tag', verbose_name=_('tags'), blank=True,
-                                  related_name='tags',
+                                  related_name='pages',
                                   related_query_name='tag')
     pid = models.CharField(_('public ID'), max_length=16, unique=True,
                            default=generate_pid, db_index=True)
@@ -143,6 +150,9 @@ class Page(BaseModel):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('web:page-detail', args=[self.pid])
+
 
 class Report(BaseModel):
     STATUS_IS_PENDING = 'pending'
@@ -171,12 +181,17 @@ class Report(BaseModel):
             'Be careful when determining the status. '
             'This field only is set once.'))
 
+    objects = ReportManager()
+
     class Meta:
         verbose_name = _('report')
         verbose_name_plural = _('reports')
 
     def __str__(self):
         return self.page.title
+
+    def get_absolute_url(self):
+        return reverse('web:page-detail', args=[self.page.pid])
 
 
 class Tag(BaseModel):
@@ -187,6 +202,8 @@ class Tag(BaseModel):
                                     help_text=_(
                                         'Designate whether this tag can '
                                         'include on the result list.'))
+
+    objects = TagManager()
 
     class Meta:
         verbose_name = _('tag')
