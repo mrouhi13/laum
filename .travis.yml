@@ -20,13 +20,22 @@ env:
     - SECRET_KEY=_
     - GOOGLE_ANALYTICS_ID=UA-111111111
 
-# command to install dependencies
+# command to install dependencies and setup project
 before_script:
   - psql -c "CREATE DATABASE $DATABASE_NAME;" -U $DATABASE_USER
-  - make init
-  - make setup
+  - pip3 install pipenv
+  - pipenv install --dev --three
+  - mkdir log
+  - cp laumproject/settings.py.sample laumproject/settings.py
+  - pipenv run python ./manage.py migrate
+  - pipenv run python ./manage.py collectstatic
+  - pipenv run python ./manage.py compilemessages
 
 # command to run tests
-script: make test
+script:
+  - pipenv run coverage erase
+  - pipenv run ./manage.py test
+  - pipenv run coverage run ./manage.py test
+  - pipenv run coverage report
 
 after_success: pipenv run codecov
