@@ -243,7 +243,7 @@ class ReportAdmin(BaseModelAdmin):
 
         super().save_model(request, obj, form, change)
 
-        if is_first_change:  # Send email notification to user
+        if is_first_change:  # Inform user with email
             context = {'report': obj}
             email_template = 'emails/report_result.html'
             message = BaseEmailMessage(request, context, email_template)

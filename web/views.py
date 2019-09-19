@@ -52,14 +52,14 @@ class AjaxableResponseMixin:
             object_type = obj.__class__.__name__.lower()
             context = {object_type: obj}
 
-            # Send email notification to user
+            # Inform user with a success email
             email_template = f'emails/new_{object_type}.html'
             to = form.cleaned_data.get('reporter') or form.cleaned_data.get(
                 'author')
             message = BaseEmailMessage(self.request, context, email_template)
             message.send([to])
 
-            # Send email notification to admins
+            # Inform admins with an email
             message.template_name = \
                 f'emails/new_{object_type}_notification.html'
             message.send([a[1] for a in settings.ADMINS])
