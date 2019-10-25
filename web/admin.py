@@ -56,27 +56,21 @@ class BaseModelAdmin(admin.ModelAdmin):
 class UserAdmin(UserAdmin):
     date_hierarchy = 'date_joined'
     fieldsets = [
-        [None, {
-            'fields': ['email', 'password']
-        }],
-        [_('Personal info'), {
-            'fields': ['first_name', 'last_name']
-        }],
+        [None, {'fields': ['email', 'password']}],
+        [_('Personal info'), {'fields': ['first_name', 'last_name']}],
         [_('Permissions'), {
             'classes': ['collapse'],
             'fields': ['is_active', 'is_staff', 'is_superuser', 'groups',
                        'user_permissions']
         }],
-        [_('Important dates'), {
-            'fields': ['last_login', 'date_joined']
-        }],
+        [_('Important dates'), {'fields': ['last_login', 'date_joined']}],
     ]
-    add_fieldsets = (
-        (None, {
+    add_fieldsets = [
+        [None, {
             'classes': ['wide'],
             'fields': ['email', 'password1', 'password2'],
-        }),
-    )
+        }],
+    ]
     list_display = ['email', 'first_name', 'last_name', 'is_staff',
                     'is_superuser', 'is_active']
     search_fields = ['first_name', 'last_name', 'email']
@@ -100,15 +94,10 @@ class GroupAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
     readonly_fields = ['gid', 'updated_on', 'created_on']
     fieldsets = [
-        [_('Main info'), {
-            'fields': ['gid']
-        }],
-        [_('Important dates'), {
-            'fields': ['updated_on', 'created_on']
-        }]
+        [_('Main info'), {'fields': ['gid']}],
+        [_('Important dates'), {'fields': ['updated_on', 'created_on']}]
     ]
-    list_display = ['title', 'updated_on', 'created_on',
-                    'in_use']
+    list_display = ['title', 'updated_on', 'created_on', 'in_use']
     list_filter = ['updated_on', 'created_on']
     search_fields = ['gid', 'pages__pid', 'pages__title']
     inlines = [PageInlineAdmin]
@@ -138,12 +127,10 @@ class PageAdmin(BaseModelAdmin):
             'classes': ['collapse'],
             'fields': ['tags', 'reference', 'website', 'author', 'is_active']
         }],
-        [_('Important dates'), {
-            'fields': ['updated_on', 'created_on']
-        }]
+        [_('Important dates'), {'fields': ['updated_on', 'created_on']}]
     ]
-    list_display = ['title', 'author', 'created_on', 'has_group',
-                    'has_image', 'is_active']
+    list_display = ['title', 'author', 'created_on', 'has_group', 'has_image',
+                    'is_active']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['group__gid', 'pid', 'title', 'content', 'event',
                      'image_caption', 'tags__name', 'tags__keyword', 'website',
@@ -192,15 +179,9 @@ class PageAdmin(BaseModelAdmin):
 class ReportAdmin(BaseModelAdmin):
     date_hierarchy = 'created_on'
     fieldsets = [
-        [_('Main info'), {
-            'fields': ['page', 'rid', 'reporter', 'body']
-        }],
-        [_('Supervise info'), {
-            'fields': ['description', 'status']
-        }],
-        [_('Important dates'),
-         {'fields': ['updated_on', 'created_on']
-          }]
+        [_('Main info'), {'fields': ['page', 'rid', 'reporter', 'body']}],
+        [_('Supervise info'), {'fields': ['description', 'status']}],
+        [_('Important dates'), {'fields': ['updated_on', 'created_on']}]
     ]
     list_display = ['page', 'reporter', 'status', 'created_on']
     list_filter = ['status', 'updated_on', 'created_on']
@@ -259,11 +240,10 @@ class ReportAdmin(BaseModelAdmin):
 class TagAdmin(BaseModelAdmin):
     readonly_fields = ['updated_on', 'created_on']
     fieldsets = [
-        (_('Main info'), {'fields': ['name', 'keyword', 'is_active']}),
-        (_('Important dates'), {'fields': ['updated_on',
-                                           'created_on']})]
-    list_display = ['name', 'keyword', 'in_use', 'is_active',
-                    'created_on']
+        [_('Main info'), {'fields': ['name', 'keyword', 'is_active']}],
+        [_('Important dates'), {'fields': ['updated_on', 'created_on']}]
+    ]
+    list_display = ['name', 'keyword', 'in_use', 'is_active', 'created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['name', 'keyword']
     prepopulated_fields = {'keyword': ['name']}

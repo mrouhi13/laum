@@ -2,9 +2,13 @@
 {% load web_extras %}
 {% block title %}{{ page.title }} | {{ SITE_NAME }}{% endblock title %}
 {% block meta_description %}
-    {{ page.content|truncatechars:250 }}{% endblock meta_description %}
+    {{ page.content|truncatechars:250 }}
+{% endblock meta_description %}
 {% block meta_keywords %}
-    {{ page.tags.values|to_list:'keyword'|join:',' }}{% endblock meta_keywords %}
+    {% for tag in page.tags.values %}
+        {{ tag.name }},
+    {% endfor %}
+{% endblock meta_keywords %}
 {% block link_canonical %}
     {% url 'web:page-detail' page.pid %}{% endblock link_canonical %}
 {% block content %}

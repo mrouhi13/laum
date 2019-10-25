@@ -16,16 +16,6 @@ def convert_digits_to_persian(value):
     return editor.run(value)
 
 
-@register.filter(name='to_list')
-def convert_queryset_values_to_list(queryset, field):
-    item_list = []
-    if queryset:
-        for item in queryset:
-            if field in item:
-                item_list.append(item[field])
-    return item_list
-
-
 @register.simple_tag(takes_context=True)
 def url_replace(context, **kwargs):
     query = context['request'].GET.dict()

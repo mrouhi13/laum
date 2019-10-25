@@ -3,9 +3,7 @@ from django.urls import reverse
 
 from .forms import SearchForm
 from .models import Report, Page, generate_pid
-from .templatetags.web_extras import (convert_digits_to_persian as to_persian,
-                                      convert_queryset_values_to_list
-                                      as to_list)
+from .templatetags.web_extras import convert_digits_to_persian as to_persian
 
 
 def create_test_page(n):
@@ -317,57 +315,6 @@ class ToPersianFilterTests(TestCase):
         result = to_persian(original_text)
 
         self.assertEqual(result, converted_text)
-
-
-class ToListFilterTests(TestCase):
-
-    def test_with_none_queryset(self):
-        data = to_list(None, 'id')
-
-        self.assertEqual(data, [])
-
-    def test_with_empty_queryset(self):
-        queryset = Page.objects.all()
-
-        data = to_list(queryset, 'id')
-
-        self.assertEqual(data, [])
-
-    def test_with_filled_queryset(self):
-        create_test_active_page(4)
-
-        queryset = Page.objects.all().values()
-
-        data = to_list(queryset, 'id')
-
-        self.assertEqual(data, list(queryset.values_list('id', flat=True)))
-
-    def test_with_none_field(self):
-        create_test_active_page(4)
-
-        queryset = Page.objects.all().values()
-
-        data = to_list(queryset, None)
-
-        self.assertEqual(data, [])
-
-    def test_with_empty_field(self):
-        create_test_active_page(4)
-
-        queryset = Page.objects.all().values()
-
-        data = to_list(queryset, '')
-
-        self.assertEqual(data, [])
-
-    def test_with_not_exist_field(self):
-        create_test_active_page(4)
-
-        queryset = Page.objects.all().values()
-
-        data = to_list(queryset, 'idd')
-
-        self.assertEqual(data, [])
 
 
 class PageCreateApiTest(TestCase):

@@ -102,7 +102,8 @@ class Page(BaseModel):
     subtitle = models.CharField(_('subtitle'), max_length=128, blank=True,
                                 db_index=True)
     content = models.TextField(_('content'), max_length=1024, db_index=True)
-    event = models.CharField(_('event'), max_length=128, blank=True,  # TODO: Rename this field to `event_date`
+    event = models.CharField(_('event'), max_length=128, blank=True,
+                             # TODO: Rename this field to `event_date`
                              help_text=_(
                                  'Date of an important event for the subject '
                                  'entered along with the place of '

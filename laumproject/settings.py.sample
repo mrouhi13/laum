@@ -146,6 +146,10 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Datetime format settings
+
+DATETIME_FORMAT = 'F d Y H:i:s e'
+
 # Locale settings
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
