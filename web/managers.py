@@ -10,22 +10,21 @@ from django.utils.translation import ugettext_lazy as _
 from .helpers import get_active_lang
 
 
-# TODO: Rename class name to `LanguageQueryset`
-class ActiveLanguageQueryset(models.QuerySet):
+class LanguageQueryset(models.QuerySet):
     def active_language(self):
         return self.filter(language=get_active_lang())
 
 
-class PageQueryset(ActiveLanguageQueryset):
+class PageQueryset(LanguageQueryset):
     def all_active(self):
         return self.filter(is_active=True, language=get_active_lang())
 
 
-class ReportQueryset(ActiveLanguageQueryset):
+class ReportQueryset(LanguageQueryset):
     pass
 
 
-class TagQueryset(ActiveLanguageQueryset):
+class TagQueryset(LanguageQueryset):
     pass
 
 
