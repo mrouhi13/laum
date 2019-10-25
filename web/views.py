@@ -32,6 +32,7 @@ def server_error(request, template_name=ERROR_500_TEMPLATE_NAME):
     return defaults.server_error(request, template_name)
 
 
+# TODO: Move this class to `mixins.py`
 class AjaxableResponseMixin:
     """
     Mixin to add AJAX support to a form.
