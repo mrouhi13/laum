@@ -1,15 +1,9 @@
-import datetime
-
 from django.test import TestCase
 from django.urls import reverse
 
 from .forms import SearchForm
-from .helpers import get_jalali_month_name
 from .models import Report, Page, generate_pid
-from .templatetags.web_extras import (convert_date_to_jalali as to_jalali,
-                                      convert_digits_to_persian as to_persian,
-                                      convert_queryset_values_to_list
-                                      as to_list)
+from .templatetags.web_extras import convert_digits_to_persian as to_persian
 
 
 def create_test_page(n):
@@ -321,130 +315,6 @@ class ToPersianFilterTests(TestCase):
         result = to_persian(original_text)
 
         self.assertEqual(result, converted_text)
-
-
-class ToJalaliFilterTests(TestCase):
-
-    def test_with_empty_date(self):
-        """
-        Return none.
-        """
-        date = ''
-        jalali_date = to_jalali(date)
-        self.assertEqual(jalali_date, None)
-
-    def test_with_none_date(self):
-        """
-        Return none.
-        """
-        date = None
-        jalali_date = to_jalali(date)
-        self.assertEqual(jalali_date, None)
-
-    def test_with_incorrect_date_format(self):
-        """
-        Return none.
-        """
-        date = '201822'
-        jalali_date = to_jalali(date)
-        self.assertEqual(jalali_date, None)
-
-    def test_with_correct_date_format(self):
-        """
-        Return date in Jalali format.
-        """
-        date = datetime.date(2019, 2, 2)
-        jalali_date = to_jalali(date)
-        self.assertEqual(jalali_date, '13 بهمن، 1397')
-
-
-class ToListFilterTests(TestCase):
-
-    def test_with_none_queryset(self):
-        data = to_list(None, 'id')
-
-        self.assertEqual(data, [])
-
-    def test_with_empty_queryset(self):
-        queryset = Page.objects.all()
-
-        data = to_list(queryset, 'id')
-
-        self.assertEqual(data, [])
-
-    def test_with_filled_queryset(self):
-        create_test_active_page(4)
-
-        queryset = Page.objects.all().values()
-
-        data = to_list(queryset, 'id')
-
-        self.assertEqual(data, list(queryset.values_list('id', flat=True)))
-
-    def test_with_none_field(self):
-        create_test_active_page(4)
-
-        queryset = Page.objects.all().values()
-
-        data = to_list(queryset, None)
-
-        self.assertEqual(data, [])
-
-    def test_with_empty_field(self):
-        create_test_active_page(4)
-
-        queryset = Page.objects.all().values()
-
-        data = to_list(queryset, '')
-
-        self.assertEqual(data, [])
-
-    def test_with_not_exist_field(self):
-        create_test_active_page(4)
-
-        queryset = Page.objects.all().values()
-
-        data = to_list(queryset, 'idd')
-
-        self.assertEqual(data, [])
-
-
-class GetJalaliMonthNameTests(TestCase):
-
-    def test_with_correct_month_number(self):
-        data = get_jalali_month_name(1)
-
-        self.assertEqual(data, 'فروردین')
-
-    def test_with_incorrect_month_number_1(self):
-        data = get_jalali_month_name(12)
-
-        self.assertEqual(data, 'اسفند')
-
-    def test_with_incorrect_month_number_2(self):
-        data = get_jalali_month_name(0)
-
-        self.assertEqual(data, 'فروردین')
-
-    def test_with_none_type(self):
-        data = get_jalali_month_name(None)
-
-        self.assertEqual(data, None)
-
-    def test_with_empty_string_type(self):
-        data = get_jalali_month_name('')
-
-        self.assertEqual(data, None)
-
-    def test_with_string_type_1(self):
-        data = get_jalali_month_name('11')
-
-        self.assertEqual(data, 'بهمن')
-
-    def test_with_string_type_2(self):
-        data = get_jalali_month_name('str')
-
-        self.assertEqual(data, None)
 
 
 class PageCreateApiTest(TestCase):

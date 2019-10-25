@@ -15,7 +15,7 @@ admin.site.index_title = _('Dashboard')
 class BaseModelAdmin(admin.ModelAdmin):
     object_tools = ()
 
-    def get_object_tools(self, request):
+    def get_object_tools(self):
         """
         Return a sequence containing the fields to be displayed on the
         changelist.
@@ -24,18 +24,20 @@ class BaseModelAdmin(admin.ModelAdmin):
 
     def prepare_object_tools(self, obj):
         object_tools_link = {}
-        for object_tool in self.object_tools:
-            callable_obj = getattr(self, object_tool)
-            url = callable_obj(obj)
-            if url:
-                if hasattr(callable_obj, 'short_description'):
-                    object_tools_link.update({
-                        callable_obj.short_description: url
-                    })
-                else:
-                    object_tools_link.update({
-                        callable_obj.__str__(): url
-                    })
+        if obj:
+            object_tools = self.get_object_tools()
+            for object_tool in object_tools:
+                callable_obj = getattr(self, object_tool)
+                url = callable_obj(obj)
+                if url:
+                    if hasattr(callable_obj, 'short_description'):
+                        object_tools_link.update({
+                            callable_obj.short_description: url
+                        })
+                    else:
+                        object_tools_link.update({
+                            callable_obj.__str__(): url
+                        })
         return object_tools_link
 
     def render_change_form(self, request, context, add=False, change=False,
@@ -54,27 +56,21 @@ class BaseModelAdmin(admin.ModelAdmin):
 class UserAdmin(UserAdmin):
     date_hierarchy = 'date_joined'
     fieldsets = [
-        [None, {
-            'fields': ['email', 'password']
-        }],
-        [_('Personal info'), {
-            'fields': ['first_name', 'last_name']
-        }],
+        [None, {'fields': ['email', 'password']}],
+        [_('Personal info'), {'fields': ['first_name', 'last_name']}],
         [_('Permissions'), {
             'classes': ['collapse'],
             'fields': ['is_active', 'is_staff', 'is_superuser', 'groups',
                        'user_permissions']
         }],
-        [_('Important dates'), {
-            'fields': ['last_login', 'date_joined']
-        }],
+        [_('Important dates'), {'fields': ['last_login', 'date_joined']}],
     ]
-    add_fieldsets = (
-        (None, {
+    add_fieldsets = [
+        [None, {
             'classes': ['wide'],
             'fields': ['email', 'password1', 'password2'],
-        }),
-    )
+        }],
+    ]
     list_display = ['email', 'first_name', 'last_name', 'is_staff',
                     'is_superuser', 'is_active']
     search_fields = ['first_name', 'last_name', 'email']
@@ -85,8 +81,8 @@ class UserAdmin(UserAdmin):
 
 class PageInlineAdmin(admin.TabularInline):
     model = Page
-    readonly_fields = ['pid', 'language', 'jalali_created_on']
-    fields = ['pid', 'language', 'jalali_created_on', 'is_active']
+    readonly_fields = ['pid', 'language', 'created_on']
+    fields = ['pid', 'language', 'created_on', 'is_active']
     show_change_link = True
 
     def has_add_permission(self, request, obj=None):
@@ -96,17 +92,12 @@ class PageInlineAdmin(admin.TabularInline):
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
-    readonly_fields = ['gid', 'jalali_updated_on', 'jalali_created_on']
+    readonly_fields = ['gid', 'updated_on', 'created_on']
     fieldsets = [
-        [_('Main info'), {
-            'fields': ['gid']
-        }],
-        [_('Important dates'), {
-            'fields': ['jalali_updated_on', 'jalali_created_on']
-        }]
+        [_('Main info'), {'fields': ['gid']}],
+        [_('Important dates'), {'fields': ['updated_on', 'created_on']}]
     ]
-    list_display = ['title', 'jalali_updated_on', 'jalali_created_on',
-                    'in_use']
+    list_display = ['title', 'updated_on', 'created_on', 'in_use']
     list_filter = ['updated_on', 'created_on']
     search_fields = ['gid', 'pages__pid', 'pages__title']
     inlines = [PageInlineAdmin]
@@ -126,7 +117,7 @@ class GroupAdmin(admin.ModelAdmin):
 @admin.register(Page)
 class PageAdmin(BaseModelAdmin):
     date_hierarchy = 'created_on'
-    readonly_fields = ['pid', 'jalali_updated_on', 'jalali_created_on']
+    readonly_fields = ['pid', 'updated_on', 'created_on']
     fieldsets = [
         [_('Main info'), {
             'fields': ['pid', 'group', 'title', 'subtitle', 'content', 'event',
@@ -136,12 +127,10 @@ class PageAdmin(BaseModelAdmin):
             'classes': ['collapse'],
             'fields': ['tags', 'reference', 'website', 'author', 'is_active']
         }],
-        [_('Important dates'), {
-            'fields': ['jalali_updated_on', 'jalali_created_on']
-        }]
+        [_('Important dates'), {'fields': ['updated_on', 'created_on']}]
     ]
-    list_display = ['title', 'author', 'jalali_created_on', 'has_group',
-                    'has_image', 'is_active']
+    list_display = ['title', 'author', 'created_on', 'has_group', 'has_image',
+                    'is_active']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['group__gid', 'pid', 'title', 'content', 'event',
                      'image_caption', 'tags__name', 'tags__keyword', 'website',
@@ -190,17 +179,11 @@ class PageAdmin(BaseModelAdmin):
 class ReportAdmin(BaseModelAdmin):
     date_hierarchy = 'created_on'
     fieldsets = [
-        [_('Main info'), {
-            'fields': ['page', 'rid', 'reporter', 'body']
-        }],
-        [_('Supervise info'), {
-            'fields': ['description', 'status']
-        }],
-        [_('Important dates'),
-         {'fields': ['jalali_updated_on', 'jalali_created_on']
-          }]
+        [_('Main info'), {'fields': ['page', 'rid', 'reporter', 'body']}],
+        [_('Supervise info'), {'fields': ['description', 'status']}],
+        [_('Important dates'), {'fields': ['updated_on', 'created_on']}]
     ]
-    list_display = ['page', 'reporter', 'status', 'jalali_created_on']
+    list_display = ['page', 'reporter', 'status', 'created_on']
     list_filter = ['status', 'updated_on', 'created_on']
     search_fields = ['page__pid', 'page__title', 'rid', 'body', 'reporter',
                      'rid', 'description']
@@ -218,7 +201,7 @@ class ReportAdmin(BaseModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         self.readonly_fields = ['page', 'rid', 'body', 'reporter',
-                                'jalali_updated_on', 'jalali_created_on']
+                                'updated_on', 'created_on']
         if obj and not obj.status == Report.STATUS_IS_PENDING:
             self.readonly_fields.extend(['description', 'status'])
         return self.readonly_fields
@@ -255,13 +238,12 @@ class ReportAdmin(BaseModelAdmin):
 
 @admin.register(Tag)
 class TagAdmin(BaseModelAdmin):
-    readonly_fields = ['jalali_updated_on', 'jalali_created_on']
+    readonly_fields = ['updated_on', 'created_on']
     fieldsets = [
-        (_('Main info'), {'fields': ['name', 'keyword', 'is_active']}),
-        (_('Important dates'), {'fields': ['jalali_updated_on',
-                                           'jalali_created_on']})]
-    list_display = ['name', 'keyword', 'in_use', 'is_active',
-                    'jalali_created_on']
+        [_('Main info'), {'fields': ['name', 'keyword', 'is_active']}],
+        [_('Important dates'), {'fields': ['updated_on', 'created_on']}]
+    ]
+    list_display = ['name', 'keyword', 'in_use', 'is_active', 'created_on']
     list_filter = ['is_active', 'updated_on', 'created_on']
     search_fields = ['name', 'keyword']
     prepopulated_fields = {'keyword': ['name']}

@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from .helpers import get_active_lang
 
 
+# TODO: Rename class name to `LanguageQueryset`
 class ActiveLanguageQueryset(models.QuerySet):
     def active_language(self):
         return self.filter(language=get_active_lang())

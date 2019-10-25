@@ -9,8 +9,6 @@ from django.utils.translation import ugettext_lazy as _
 from .helpers import swap_prefix, id_generator, get_active_lang
 from .managers import UserManager, PageManager, GroupManager, ReportManager, \
     TagManager
-from .templatetags.web_extras import (convert_date_to_jalali as to_jalali,
-                                      convert_digits_to_persian as to_persian)
 
 
 def generate_gid():
@@ -71,20 +69,6 @@ class BaseModel(models.Model):
     updated_on = models.DateTimeField(_('updated on'), auto_now=True)
     created_on = models.DateTimeField(_('created on'), auto_now_add=True)
 
-    def jalali_updated_on(self):
-        jalali_date = to_jalali(self.updated_on.strftime('%Y-%m-%d'))
-        return to_persian(jalali_date)
-
-    jalali_updated_on.admin_order_field = 'updated_on'
-    jalali_updated_on.short_description = _('updated on')
-
-    def jalali_created_on(self):
-        jalali_date = to_jalali(self.created_on.strftime('%Y-%m-%d'))
-        return to_persian(jalali_date)
-
-    jalali_created_on.admin_order_field = 'created_on'
-    jalali_created_on.short_description = _('created on')
-
     class Meta:
         abstract = True
 
@@ -119,6 +103,7 @@ class Page(BaseModel):
                                 db_index=True)
     content = models.TextField(_('content'), max_length=1024, db_index=True)
     event = models.CharField(_('event'), max_length=128, blank=True,
+                             # TODO: Rename this field to `event_date`
                              help_text=_(
                                  'Date of an important event for the subject '
                                  'entered along with the place of '
@@ -172,7 +157,7 @@ class Report(BaseModel):
     reporter = models.EmailField(_('reporter email'))
     description = models.TextField(_('description'), max_length=1024,
                                    blank=True, help_text=_(
-            'A description if need to recall in the future. '
+            'A description if need to remember in the future. '
             'Also, if the report is denied, the content of this field will '
             'be sent to the user.'))
     status = models.CharField(_('status'), max_length=32,
@@ -200,8 +185,9 @@ class Tag(BaseModel):
     keyword = models.SlugField(_('keyword'), allow_unicode=True, db_index=True)
     is_active = models.BooleanField(_('active status'), default=True,
                                     help_text=_(
-                                        'Designate whether this tag can '
-                                        'include on the result list.'))
+                                        'Designate whether pages related to '
+                                        'this tag can include on the result '
+                                        'list.'))
 
     objects = TagManager()
 
