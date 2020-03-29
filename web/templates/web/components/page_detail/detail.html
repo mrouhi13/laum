@@ -1,4 +1,4 @@
-{% load thumbnail web_extras %}
+{% load i18n thumbnail web_extras %}
 <div class="row justify-content-center content">
     <div class="col-lg-7 col-md-10 col-sm-12 text-right">
         <div class="page-header">
@@ -48,10 +48,10 @@
             <a class="page-report-link" data-toggle="modal"
                data-target="#reportModal">
                 <i class="fas fa-edit"></i>
-                گزارش خطا
+                {% trans 'Report Issue' %}
             </a>
             <span class="font-italic">
-                <small>(آخرین به‌روزرسانی {{ page.updated_on|date:'F d Y H:i:s e'|to_persian }})</small>
+                <small>({% trans 'Last Update at' %} {{ page.updated_on|date:'F d Y H:i:s e'|to_persian }})</small>
             </span>
         </div>
     </div>

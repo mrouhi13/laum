@@ -1,5 +1,6 @@
 {% extends 'web/base.html' %}
-{% block title %}{{ request.GET.q }} | جست‌وجوی
+{% load i18n %}
+{% block title %}{% trans 'Search for' %} {{ request.GET.q }} |
     {{ SITE_NAME }}{% endblock title %}
 {% block link_canonical %}{% url 'web:page-list' %}?
     {{ request.GET.urlencode }}{% endblock link_canonical %}

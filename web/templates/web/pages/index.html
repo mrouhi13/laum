@@ -1,5 +1,6 @@
 {% extends 'web/base.html' %}
-{% block title %}{{ SITE_NAME }} | {{ SLOGAN_1 }}{% endblock title %}
+{% load i18n %}
+{% block title %}{% trans SITE_NAME %} | {% trans SLOGAN %}{% endblock title %}
 {% block link_canonical %}{% url 'web:index' %}{% endblock link_canonical %}
 {% block content %}
     {% include 'web/components/index/search.html' %}

@@ -1,4 +1,4 @@
-{% load static %}
+{% load i18n static %}
 <footer>
     <div class=container>
         <div class=row>
@@ -12,23 +12,19 @@
             </div>
             <div class="col-sm-8 col-md-9 col-lg-10 mt-4">
                 <div class="text-right license-text">
-                    <p>لـام تحت مجوز <a
-                            href="https://creativecommons.org/licenses/by/4.0/"
-                            target=_blank> Creative
-                        Commons
-                        Attribution 4.0
-                        International license</a> فعالیت می‌کند.<br>بازنشر با
-                        ذکر نام و لینک به منبع آزاد است.</p>
+                    <p>{% blocktrans %}{{ SITE_NAME }} is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target=_blank> Creative Commons Attribution 4.0 International license</a>.<br>Republishing limited to using the {{ SITE_NAME }} name and link to source page.{% endblocktrans %}</p>
                 </div>
                 <div class=text-right>
                     <ul>
-                        <li class=footer-link><a
-                                href="{% url 'web:page-detail' 'lmp_WiPcE4LjeyrB' %}">درباره‌ی
-                            لام</a>
+                        <li class=footer-link>
+                            <a href="{% url 'web:page-detail' 'lmp_WiPcE4LjeyrB' %}">
+                                {% blocktrans %}About {{ SITE_NAME }}{% endblocktrans %}
+                            </a>
                         </li>
-                        <li class=footer-link><a
-                                href="mailto:{{ CONTACT_EMAIL }}">تماس با
-                            ما</a></li>
+                        <li class=footer-link>
+                            <a href="mailto:{{ CONTACT_EMAIL }}">
+                                {% trans 'Contact us' %}
+                            </a></li>
                     </ul>
                 </div>
             </div>

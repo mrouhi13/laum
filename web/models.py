@@ -123,7 +123,7 @@ class Page(BaseModel):
     is_active = models.BooleanField(_('active status'), default=False,
                                     help_text=_(
                                         'Designate whether this page can '
-                                        'include on the result list.'))
+                                        'include in the result list.'))
 
     objects = PageManager()
 
@@ -186,7 +186,7 @@ class Tag(BaseModel):
     is_active = models.BooleanField(_('active status'), default=True,
                                     help_text=_(
                                         'Designate whether pages related to '
-                                        'this tag can include on the result '
+                                        'this tag can include in the result '
                                         'list.'))
 
     objects = TagManager()

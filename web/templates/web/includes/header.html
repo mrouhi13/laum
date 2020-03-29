@@ -1,4 +1,4 @@
-{% load static %}
+{% load i18n static %}
 <header>
     <div class="navbar navbar-dark bg-dark">
         <div class="container d-flex justify-content-between">
@@ -10,8 +10,9 @@
                      title="{{ SITE_NAME }}" alt="{{ SITE_NAME }}">
                 <h1 class="navbar-title">{{ SITE_NAME }}</h1>&nbsp;
                 <div class=slogan-text>
-                    <small style="color: #cccccc;">تاریکی‌های خود را،</small>
-                    <small>این‌جا روشن کنید!</small>
+                    <small style="color: #cccccc;">
+                        {% blocktrans %}Turn on your darkness here!{% endblocktrans %}
+                    </small>
                 </div>
             </a>
             <a class="nav-link text-right" style="cursor: pointer;color: #fff"
@@ -20,7 +21,7 @@
                 <span class="position-relative fas-reglage">
                     <i class="fas fa-plus fa-sm"></i>
                 </span>
-                &nbsp;صفحه‌ی جدید
+                &nbsp;{% trans 'New Page' %}
             </a>
         </div>
     </div>

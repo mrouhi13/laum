@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="modal fade" id=newPageModal tabindex=-1 role=dialog
      aria-labelledby=newPageModal aria-hidden=true>
     <div class="modal-dialog modal-lg modal-dialog-centered" role=document>
@@ -7,7 +8,7 @@
                 <div class=modal-header>
                     <h5 class=modal-title>
                         <i class="far fa-file-alt fa-sm"></i>
-                        &nbsp;ایجاد صفحه‌ی جدید
+                        &nbsp;{% trans 'Create a New Page' %}
                     </h5>
                 </div>
                 <div class=modal-body>
@@ -16,15 +17,15 @@
                             <div class="form-group position-relative">
                                 {{ page_form.title.label_tag }}
                                 {{ page_form.title }}
-                                <div class=invalid-tooltip>این فیلد لازم است و
-                                    باید بیش‌تر از ۳ حرف باشد
+                                <div class=invalid-tooltip>
+                                    {% trans 'This field is required and at least 3 characters.' %}
                                 </div>
                             </div>
                             <div class="form-group position-relative">
                                 {{ page_form.subtitle.label_tag }}
                                 {{ page_form.subtitle }}
-                                <div class=invalid-tooltip>باید خالی یا بیش‌تر
-                                    از ۳ حرف باشد
+                                <div class=invalid-tooltip>
+                                    {% trans 'This field is optional or at least 3 characters.' %}
                                 </div>
                             </div>
                             <div class="form-group position-relative text-right">
@@ -33,12 +34,12 @@
                                 <small id=eventHelpLine class=text-muted>
                                     {{ page_form.event.help_text }}
                                 </small>
-                                <div class=invalid-tooltip>باید خالی یا بیش‌تر
-                                    از ۳ حرف باشد
+                                <div class=invalid-tooltip>
+                                    {% trans 'This field is optional or at least 3 characters.' %}
                                 </div>
                             </div>
                             <div class=form-group>
-                                <label for=id_image>آپلود تصویر:</label>
+                                <label for=id_image>{% trans 'Upload Image:' %}</label>
                                 <div class=custom-file>
                                     <label class="custom-file-label text-truncate direction-left"
                                            for=id_image></label>
@@ -52,8 +53,8 @@
                                        class=text-muted>
                                     {{ page_form.image_caption.help_text }}
                                 </small>
-                                <div class=invalid-tooltip>باید خالی یا بیش‌تر
-                                    از ۳ حرف باشد
+                                <div class=invalid-tooltip>
+                                    {% trans 'This field is optional or at least 3 characters.' %}
                                 </div>
                             </div>
                         </div>
@@ -61,8 +62,8 @@
                             <div class="form-group position-relative">
                                 {{ page_form.content.label_tag }}
                                 {{ page_form.content }}
-                                <div class=invalid-tooltip>این فیلد لازم است و
-                                    باید بیش‌تر از ۱۰۰ حرف باشد
+                                <div class=invalid-tooltip>
+                                    {% trans 'This field is required and at least 100 characters.' %}
                                 </div>
                             </div>
                         </div>
@@ -75,8 +76,8 @@
                                 <small id=referenceHelpLine class=text-muted>
                                     {{ page_form.reference.help_text }}
                                 </small>
-                                <div class=invalid-tooltip>باید خالی یا بیش‌تر
-                                    از ۳ حرف باشد
+                                <div class=invalid-tooltip>
+                                    {% trans 'This field is optional or at least 3 characters.' %}
                                 </div>
                             </div>
                         </div>
@@ -84,8 +85,8 @@
                             <div class="form-group position-relative">
                                 {{ page_form.author.label_tag }}
                                 {{ page_form.author }}
-                                <div class=invalid-tooltip>ایمیل معتبر وارد
-                                    کنید
+                                <div class=invalid-tooltip>
+                                    {% trans 'Email is not valid.' %}
                                 </div>
                             </div>
                         </div>
@@ -93,10 +94,10 @@
                 </div>
                 <div class=modal-footer>
                     <button type=button class="btn btn-secondary"
-                            data-dismiss=modal>بستن
+                            data-dismiss=modal>{% trans 'Close' %}
                     </button>
                     <button type=submit class="btn btn-primary" id=submitPage>
-                        ارسال
+                        {% trans 'Submit' %}
                     </button>
                 </div>
             </form>

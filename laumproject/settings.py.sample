@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
 
     # Locals
-    'web',
+    'web'
 ]
 
 MIDDLEWARE = [
@@ -129,7 +129,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -148,7 +148,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Datetime format settings
 
-DATETIME_FORMAT = 'F d Y H:i:s e'
+DATETIME_FORMAT = 'l, F d Y H:i:s e'
 
 # Locale settings
 
@@ -166,13 +166,9 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
 SECURE_HSTS_PRELOAD = True
 
-SECURE_CONTENT_TYPE_NOSNIFF = True
-
 SECURE_BROWSER_XSS_FILTER = True
 
 SECURE_SSL_REDIRECT = False
-
-X_FRAME_OPTIONS = 'DENY'
 
 CSRF_COOKIE_SECURE = True
 
@@ -195,29 +191,6 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = ''
 
 SERVER_EMAIL = ''
-
-# Site settings
-
-SITE_CONTEXT = {
-    'GOOGLE_ANALYTICS_ID': os.environ.get('GOOGLE_ANALYTICS_ID'),
-    'SLOGAN_1': _(''),
-    'SLOGAN_2': _(''),
-    'META_KEYWORDS': _(''),
-    'META_DESCRIPTION': _(''),
-    'CONTACT_EMAIL': ''
-}
-
-SITE_ID = 1
-
-# Application settings
-
-GID_PREFIX = 'lmg'
-
-PID_PREFIX = 'lmp'
-
-RID_PREFIX = 'lmr'
-
-ADMINS = []
 
 # Logging settings
 
@@ -255,3 +228,23 @@ LANGUAGES = [
     ('en', _('English')),
     ('fa', _('Persian'))
 ]
+
+# My settings
+
+SITE_CONTEXT = {
+    'GOOGLE_ANALYTICS_ID': os.environ.get('GOOGLE_ANALYTICS_ID'),
+    'SLOGAN': '',
+    'META_KEYWORDS': '',
+    'META_DESCRIPTION': '',
+    'CONTACT_EMAIL': ''
+}
+
+GID_PREFIX = 'lmg'
+
+PID_PREFIX = 'lmp'
+
+RID_PREFIX = 'lmr'
+
+SITE_ID = 1
+
+ADMINS = []

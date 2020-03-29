@@ -1,4 +1,4 @@
-{% load web_extras %}
+{% load i18n web_extras %}
 <section class="jumbotron text-center pt-4 pb-3">
     <form id=searchForm class="form-inline my-2 my-lg-0"
           action="{% url 'web:page-list' %}" autocomplete=off novalidate>
@@ -14,8 +14,7 @@
     </form>
     {% if object_list %}
         <div class="container position-relative result-count">
-            <small>{{ page_obj.paginator.count|to_persian }} نتیجه پیدا
-                شد.</small>
+            <small>{{ page_obj.paginator.count|to_persian }} {% trans 'results found.' %}</small>
         </div>
     {% endif %}
 </section>
