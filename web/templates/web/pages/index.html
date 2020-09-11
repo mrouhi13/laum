@@ -1,9 +1,0 @@
-{% extends 'web/base.html' %}
-{% load i18n %}
-{% block title %}{% trans SITE_NAME %} | {% trans SLOGAN %}{% endblock title %}
-{% block link_canonical %}{% url 'web:index' %}{% endblock link_canonical %}
-{% block content %}
-    {% include 'web/components/index/search.html' %}
-    {% include 'web/components/index/random_pages.html' %}
-    {{ block.super }}
-{% endblock content %}
