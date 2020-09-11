@@ -1,5 +1,0 @@
-Sitemap: https://laum.ir/sitemap.xml
-User-agent: *
-Disallow: /admin/
-Disallow: /page/create/
-Disallow: /report/create/
