@@ -1,4 +1,4 @@
-# Laum
+# Laum Project
 
 [![codecov](https://codecov.io/gh/mrouhi13/laum/branch/master/graph/badge.svg)](https://codecov.io/gh/mrouhi13/laum)
 
